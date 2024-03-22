@@ -101,11 +101,11 @@ with st.sidebar:
         """)
 
     with st.form("credentials_form"):
+        st.info("Locate connection information for your project in the [Graphlit Developer Portal](https://portal.graphlit.dev/)")
         st.session_state['organization_id'] = st.text_input("Organization ID")
         st.session_state['environment_id'] = st.text_input("Preview Environment ID")
         st.session_state['secret_key'] = st.text_input("Secret", type="password")
         submit_credentials = st.form_submit_button("Generate Token")
-        st.info("Locate connection information for your project in the [Graphlit Developer Portal](https://portal.graphlit.dev/)")
     
 if submit_credentials:
     if st.session_state['secret_key'] and st.session_state['environment_id'] and st.session_state['organization_id']:

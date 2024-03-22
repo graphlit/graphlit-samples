@@ -222,18 +222,20 @@ with st.sidebar:
         - **Step 2:** Fill in the website URI.
         - **Step 2:** Enter some text to search for.
         - **Step 3:** Click to generate LLM summary from search results.     
+        """)
 
-        - [Sign up for Graphlit](https://docs.graphlit.dev/getting-started/signup)            
-        - [API Reference](https://docs.graphlit.dev/graphlit-data-api/api-reference)     
-        - [More information](https://www.graphlit.com)      
+    st.markdown("""
+        [Sign up for Graphlit](https://docs.graphlit.dev/getting-started/signup)            
+        [API Reference](https://docs.graphlit.dev/graphlit-data-api/api-reference)     
+        [More information](https://www.graphlit.com)      
         """)
 
     with st.form("credentials_form"):
+        st.info("Locate connection information for your project in the [Graphlit Developer Portal](https://portal.graphlit.dev/)")
         st.session_state['organization_id'] = st.text_input("Organization ID")
         st.session_state['environment_id'] = st.text_input("Preview Environment ID")
         st.session_state['secret_key'] = st.text_input("Secret", type="password")
         submit_credentials = st.form_submit_button("Generate Token")
-        st.info("Locate connection information for your project in the [Graphlit Developer Portal](https://portal.graphlit.dev/)")
         
 if submit_credentials:
     if st.session_state['secret_key'] and st.session_state['environment_id'] and st.session_state['organization_id']:
