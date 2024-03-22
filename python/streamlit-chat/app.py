@@ -89,14 +89,6 @@ except:
     st.warning("You need to generate a token before prompting conversation.")
     
 with st.sidebar:
-    with st.form("credentials_form"):
-        st.image("https://graphlitplatform.blob.core.windows.net/samples/graphlit-logo.svg", width=128)
-        st.info("Locate connection information for your project in the [Graphlit Developer Portal](https://portal.graphlit.dev/)")
-        st.session_state['secret_key'] = st.text_input("Secret Key", type="password")
-        st.session_state['environment_id'] = st.text_input("Environment ID")
-        st.session_state['organization_id'] = st.text_input("Organization ID")
-        submit_credentials = st.form_submit_button("Generate Token")
-
     st.sidebar.info("""
         ### Demo Instructions
         After you have generated your token, you can start by entering the feed name and website URI you wish to summarize.
@@ -108,6 +100,14 @@ with st.sidebar:
         - [Sign up for Graphlit](https://docs.graphlit.dev/getting-started/signup)
         - [API Reference](https://docs.graphlit.dev/graphlit-data-api/api-reference)           
         """)
+
+    with st.form("credentials_form"):
+        st.image("https://graphlitplatform.blob.core.windows.net/samples/graphlit-logo.svg", width=256)
+        st.info("Locate connection information for your project in the [Graphlit Developer Portal](https://portal.graphlit.dev/)")
+        st.session_state['secret_key'] = st.text_input("Secret Key", type="password")
+        st.session_state['environment_id'] = st.text_input("Environment ID")
+        st.session_state['organization_id'] = st.text_input("Organization ID")
+        submit_credentials = st.form_submit_button("Generate Token")
     
 if submit_credentials:
     if st.session_state['secret_key'] and st.session_state['environment_id'] and st.session_state['organization_id']:
