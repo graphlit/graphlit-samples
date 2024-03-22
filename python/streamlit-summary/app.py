@@ -54,7 +54,9 @@ def list_feeds():
             results {
             id
             name
-            uri
+            web {
+                uri
+            }
             type
             readCount
             }
