@@ -74,12 +74,10 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 try:
-    if prompt := st.chat_input("What is up?"):
+    if prompt := st.chat_input("Ask me anything about your content."):
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user"):
             st.markdown(prompt)
-        with st.sidebar:
-            st.write("Conversation Id: {}".format(st.session_state["session_conversation_id"]))
         with st.chat_message("assistant"):
             result = prompt_conversation(prompt=prompt, conversation_id=st.session_state["session_conversation_id"])
             
@@ -87,7 +85,7 @@ try:
             st.markdown(response)
             st.session_state.messages.append({"role": "assistant", "content": response})
 except:
-    st.warning("You need to generate a token before prompting conversation.")
+    st.warning("You need to generate a token before chatting with your content.")
     
 with st.sidebar:
     st.info("""
