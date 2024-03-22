@@ -122,9 +122,8 @@ def create_specs():
     response = st.session_state['client'].request(query=mutation, variables=variables)
     st.session_state['specification_id'] = response['data']['createSpecification']['id']
 
-def generate_summary(id, search):
+def generate_summary(id):
     print(id)
-    print(search)
     # Define the GraphQL mutation
     mutation = """
     mutation SummarizeContents($summarizations: [SummarizationStrategyInput!]!, $filter: ContentFilter) {
@@ -156,12 +155,7 @@ def generate_summary(id, search):
         },
         "items": 5
         }
-    ],
-    "filter": {
-        "search": search,
-        "queryType": "SIMPLE",
-        "searchType": "HYBRID"
-    }
+    ]
     }
 
     response = st.session_state['client'].request(query=mutation, variables=variables)
@@ -198,19 +192,18 @@ if submit_data:
     else:
         st.error("Please generate a token and provide a URI.")
 
-search = st.text_input("Search text")
-submit_summary = st.button("Generate LLM summary from search results")
+submit_summary = st.button("Generate LLM summary from website")
 
 st.header("Website Summary")
 
 if submit_summary:
-    if st.session_state['token'] and search:
+    if st.session_state['token']:
         if st.session_state['specification_id']:
-            st.json(generate_summary(st.session_state['specification_id'], search))
+            st.json(generate_summary(st.session_state['specification_id']))
             st.success("Your summary was generated successfully.")
         else:
             create_specs()
-            st.json(generate_summary(st.session_state['specification_id'], search))
+            st.json(generate_summary(st.session_state['specification_id']))
             st.success("Your summary was generated successfully.")
     else:
         st.error("Please ensure you have a token and have provided a content filter.")
@@ -220,8 +213,7 @@ with st.sidebar:
         ### Demo Instructions
         - **Step 1:** Generate Graphlit project token.
         - **Step 2:** Fill in the website URI.
-        - **Step 3:** Enter some text to search for.
-        - **Step 4:** Click to generate LLM summary from search results.     
+        - **Step 3:** Click to generate LLM summary from website.     
         """)
 
     st.markdown("""
