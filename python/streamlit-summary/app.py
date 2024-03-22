@@ -248,7 +248,15 @@ with st.sidebar:
         st.session_state['environment_id'] = st.text_input("Environment ID")
         st.session_state['organization_id'] = st.text_input("Organization ID")
         submit_credentials = st.form_submit_button("Generate Token")
-    
+
+    st.sidebar.info("""
+        ### Demo Instructions                            
+
+        For more information:
+        - [Sign up for Graphlit](https://docs.graphlit.dev/getting-started/signup)
+        - [API Reference](https://docs.graphlit.dev/graphlit-data-api/api-reference)           
+        """)
+        
 if submit_credentials:
     if st.session_state['secret_key'] and st.session_state['environment_id'] and st.session_state['organization_id']:
         st.session_state['client'] = Graphlit(environment_id=st.session_state['environment_id'], organization_id=st.session_state['organization_id'], secret_key=st.session_state['secret_key'])

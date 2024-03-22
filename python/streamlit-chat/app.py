@@ -90,7 +90,7 @@ except:
     
 with st.sidebar:
     with st.form("credentials_form"):
-        st.image("https://graphlitplatform.blob.core.windows.net/samples/graphlit-logo.svg", width=256)
+        st.image("https://graphlitplatform.blob.core.windows.net/samples/graphlit-logo.svg", width=128)
         st.info("Locate connection information for your project in the [Graphlit Developer Portal](https://portal.graphlit.dev/)")
         st.session_state['secret_key'] = st.text_input("Secret Key", type="password")
         st.session_state['environment_id'] = st.text_input("Environment ID")
@@ -102,7 +102,11 @@ with st.sidebar:
         After you have generated your token, you can start by entering the feed name and website URI you wish to summarize.
         
         - **Step 1:** Enter your feed details and submit.
-        - **Step 2:** Use the "Generate LLM summary from search results" button to get your summary.        
+        - **Step 2:** Use the "Generate LLM summary from search results" button to get your summary.     
+
+        For more information:
+        - [Sign up for Graphlit](https://docs.graphlit.dev/getting-started/signup)
+        - [API Reference](https://docs.graphlit.dev/graphlit-data-api/api-reference)           
         """)
     
 if submit_credentials:
