@@ -88,7 +88,8 @@ except:
     st.warning("You need to generate a token before chatting with your content.")
     
 with st.sidebar:
-    st.info("""### Demo Instructions
+    st.info("""
+        ### Demo Instructions
         - **Step 1:** Generate Graphlit project token.
         - **Step 2:** Enter your feed details and submit.
         - **Step 3:** Click to generate LLM summary from search results.     
