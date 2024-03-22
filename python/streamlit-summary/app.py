@@ -10,8 +10,8 @@ if 'token' not in st.session_state:
     st.session_state['token'] = None
 if 'summary_result' not in st.session_state:
     st.session_state['summary_result'] = None
-if 'summarize_id' not in st.session_state:
-    st.session_state['summarize_id'] = None
+if 'specification_id' not in st.session_state:
+    st.session_state['specification_id'] = None
 if 'client' not in st.session_state:
     st.session_state['client'] = None
 if 'environment_id' not in st.session_state:
@@ -37,7 +37,8 @@ def send_request(name, uri):
         "feed": {
             "type": "WEB",
             "web": {
-                "uri": uri
+                "uri": uri,
+                "readLimit": 1
             },
             "name": uri
         }
@@ -53,22 +54,9 @@ def list_feeds():
             results {
             id
             name
-            creationDate
-            state
-            owner {
-                id
-            }
+            uri
             type
-            reddit {
-                subredditName
-            }
-            lastPostDate
-            lastReadDate
             readCount
-            schedulePolicy {
-                recurrenceType
-                repeatInterval
-            }
             }
         }
     }
@@ -120,19 +108,19 @@ def create_specs():
     variables = {
     "specification": {
         "type": "COMPLETION",
-        "serviceType": "AZURE_OPEN_AI",
-        "azureOpenAI": {
-        "model": "GPT35_TURBO_16K",
-        "temperature": 0.8,
-        "probability": 0.2
+        "serviceType": "ANTHROPIC",
+        "anthropic": {
+            "model": "CLAUDE_3_HAIKU",
+            "temperature": 0.3,
+            "probability": 0.2
         },
-        "name": "GPT-3.5 Turbo Summarization"
+        "name": "Claude 3 Haiku Summarization"
     }
     }
     
     # Convert the request to JSON format
     response = st.session_state['client'].request(query=mutation, variables=variables)
-    st.session_state['summarize_id'] = response['data']['createSpecification']['id']
+    st.session_state['specification_id'] = response['data']['createSpecification']['id']
 
 def generate_summary(id, search):
     print(id)
@@ -167,20 +155,6 @@ def generate_summary(id, search):
             "id": id
         },
         "items": 5
-        },
-        {
-        "type": "QUESTIONS",
-        "specification": {
-            "id": id
-        },
-        "items": 5
-        },
-        {
-        "type": "CUSTOM",
-        "specification": {
-            "id": id
-        },
-        "prompt": "Extract any named entities into JSON-LD format."
         }
     ],
     "filter": {
@@ -194,6 +168,7 @@ def generate_summary(id, search):
     print(response)
     return response
 
+st.image("https://graphlitplatform.blob.core.windows.net/samples/graphlit-logo.svg", width=128)
 st.title("Graphlit Platform")
 st.markdown("Summarize website.")
 
@@ -230,12 +205,12 @@ st.header("Website Summary")
 
 if submit_summary:
     if st.session_state['token'] and search:
-        if st.session_state['summarize_id']:
-            st.json(generate_summary(st.session_state['summarize_id'], search))
+        if st.session_state['specification_id']:
+            st.json(generate_summary(st.session_state['specification_id'], search))
             st.success("Your summary was generated successfully.")
         else:
             create_specs()
-            st.json(generate_summary(st.session_state['summarize_id'], search))
+            st.json(generate_summary(st.session_state['specification_id'], search))
             st.success("Your summary was generated successfully.")
     else:
         st.error("Please ensure you have a token and have provided a content filter.")
