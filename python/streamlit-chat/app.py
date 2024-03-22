@@ -89,7 +89,6 @@ except:
     st.warning("You need to generate a token before prompting conversation.")
     
 with st.sidebar:
-    st.image("https://graphlitplatform.blob.core.windows.net/samples/graphlit-logo.svg", width=128)
     st.info("""
         ### Demo Instructions
         After you have generated your token, you can start by entering the feed name and website URI you wish to summarize.
@@ -97,11 +96,9 @@ with st.sidebar:
         - **Step 1:** Enter your feed details and submit.
         - **Step 2:** Use the "Generate LLM summary from search results" button to get your summary.     
 
-        [Sign up for Graphlit](https://docs.graphlit.dev/getting-started/signup)
-            
-        [API Reference](https://docs.graphlit.dev/graphlit-data-api/api-reference)     
-        
-        [More information](https://www.graphlit.com)      
+        - [Sign up for Graphlit](https://docs.graphlit.dev/getting-started/signup)            
+        - [API Reference](https://docs.graphlit.dev/graphlit-data-api/api-reference)     
+        - [More information](https://www.graphlit.com)      
         """)
 
     with st.form("credentials_form"):
