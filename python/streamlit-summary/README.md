@@ -1,12 +1,14 @@
 # Graphlit Platform
 
-## Chat with content in your Graphlit project.
+## Ingest and summarize a website.
 
-You can view the Streamlit application [here](https://graphlit-samples-chat.streamlit.app/).
+You can view the Streamlit application [here](https://graphlit-samples-summary.streamlit.app/).
 
 ### Demo Instructions
 - **Step 1:** Generate Graphlit project token.
-- **Step 2:** Enter a prompt to ask about your content.
+- **Step 2:** Fill in the website URI.
+- **Step 3:** Enter some text to search for.
+- **Step 4:** Click to generate LLM summary from search results. 
 
 [Sign up for Graphlit](https://docs.graphlit.dev/getting-started/signup)            
 [API Reference](https://docs.graphlit.dev/graphlit-data-api/api-reference)     

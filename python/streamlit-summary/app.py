@@ -21,7 +21,7 @@ if 'organization_id' not in st.session_state:
 if 'secret_key' not in st.session_state:
     st.session_state['secret_key'] = ""
 
-def send_request(name, uri):
+def send_request(uri):
     url = 'https://data-scus.graphlit.io/api/v1/graphql'
     mutation = """
     mutation CreateFeed($feed: FeedInput!) {
@@ -193,7 +193,7 @@ if st.session_state['token']:
 
 if submit_data:
     if st.session_state['token'] and uri:
-        send_request(name, uri)
+        send_request(uri)
         st.success("Your website is now being ingested.")
     else:
         st.error("Please generate a token and provide a URI.")
@@ -220,8 +220,8 @@ with st.sidebar:
         ### Demo Instructions
         - **Step 1:** Generate Graphlit project token.
         - **Step 2:** Fill in the website URI.
-        - **Step 2:** Enter some text to search for.
-        - **Step 3:** Click to generate LLM summary from search results.     
+        - **Step 3:** Enter some text to search for.
+        - **Step 4:** Click to generate LLM summary from search results.     
         """)
 
     st.markdown("""
