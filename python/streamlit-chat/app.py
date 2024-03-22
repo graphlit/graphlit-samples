@@ -59,7 +59,8 @@ def prompt_conversation(prompt, conversation_id):
     response = st.session_state['client'].request(query=mutation, variables=variables)
     st.session_state['session_conversation_id'] = response['data']['promptConversation']['conversation']['id']
     return response
-
+       
+st.image("https://graphlitplatform.blob.core.windows.net/samples/graphlit-logo.svg", width=128)
 st.title("Graphlit Platform")
 st.markdown("Chat with content in your Graphlit project.")
 
