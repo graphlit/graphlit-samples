@@ -91,8 +91,7 @@ with st.sidebar:
     st.info("""
         ### Demo Instructions
         - **Step 1:** Generate Graphlit project token.
-        - **Step 2:** Enter your feed details and submit.
-        - **Step 3:** Click to generate LLM summary from search results.     
+        - **Step 2:** Enter a prompt to ask about your content.
 
         - [Sign up for Graphlit](https://docs.graphlit.dev/getting-started/signup)            
         - [API Reference](https://docs.graphlit.dev/graphlit-data-api/api-reference)     

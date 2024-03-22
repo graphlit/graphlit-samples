@@ -39,7 +39,7 @@ def send_request(name, uri):
             "web": {
                 "uri": uri
             },
-            "name": name
+            "name": uri
         }
     }
     response = st.session_state['client'].request(query=mutation, variables=variables)
@@ -202,7 +202,6 @@ if st.session_state['token'] is None:
     
 # Data feeding section
 with st.form("data_feed_form"):
-    name = st.text_input("Feed name")
     uri = st.text_input("Website URI")
     submit_data = st.form_submit_button("Submit")
 
@@ -227,7 +226,7 @@ if submit_data:
 search = st.text_input("Search text")
 submit_summary = st.button("Generate LLM summary from search results")
 
-st.header("Summary Result")
+st.header("Website Summary")
 
 if submit_summary:
     if st.session_state['token'] and search:
@@ -242,21 +241,24 @@ if submit_summary:
         st.error("Please ensure you have a token and have provided a content filter.")
     
 with st.sidebar:
-    st.sidebar.info("""
-        ### Demo Instructions                            
+    st.info("""
+        ### Demo Instructions
+        - **Step 1:** Generate Graphlit project token.
+        - **Step 2:** Fill in the website URI.
+        - **Step 2:** Enter some text to search for.
+        - **Step 3:** Click to generate LLM summary from search results.     
 
-        For more information:
-        - [Sign up for Graphlit](https://docs.graphlit.dev/getting-started/signup)
-        - [API Reference](https://docs.graphlit.dev/graphlit-data-api/api-reference)           
+        - [Sign up for Graphlit](https://docs.graphlit.dev/getting-started/signup)            
+        - [API Reference](https://docs.graphlit.dev/graphlit-data-api/api-reference)     
+        - [More information](https://www.graphlit.com)      
         """)
 
     with st.form("credentials_form"):
-        st.image("https://graphlitplatform.blob.core.windows.net/samples/graphlit-logo.svg", width=256)
-        st.info("Locate connection information for your project in the [Graphlit Developer Portal](https://portal.graphlit.dev/)")
-        st.session_state['secret_key'] = st.text_input("Secret Key", type="password")
-        st.session_state['environment_id'] = st.text_input("Environment ID")
         st.session_state['organization_id'] = st.text_input("Organization ID")
+        st.session_state['environment_id'] = st.text_input("Preview Environment ID")
+        st.session_state['secret_key'] = st.text_input("Secret", type="password")
         submit_credentials = st.form_submit_button("Generate Token")
+        st.info("Locate connection information for your project in the [Graphlit Developer Portal](https://portal.graphlit.dev/)")
         
 if submit_credentials:
     if st.session_state['secret_key'] and st.session_state['environment_id'] and st.session_state['organization_id']:
