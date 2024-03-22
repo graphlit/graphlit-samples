@@ -91,10 +91,9 @@ except:
 with st.sidebar:
     st.info("""
         ### Demo Instructions
-        After you have generated your token, you can start by entering the feed name and website URI you wish to summarize.
-        
-        - **Step 1:** Enter your feed details and submit.
-        - **Step 2:** Use the "Generate LLM summary from search results" button to get your summary.     
+        - **Step 1:** Generate Graphlit project token.
+        - **Step 2:** Enter your feed details and submit.
+        - **Step 3:** Click to generate LLM summary from search results.     
 
         - [Sign up for Graphlit](https://docs.graphlit.dev/getting-started/signup)            
         - [API Reference](https://docs.graphlit.dev/graphlit-data-api/api-reference)     
