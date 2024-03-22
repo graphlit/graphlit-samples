@@ -114,7 +114,8 @@ def create_specs():
         "anthropic": {
             "model": "CLAUDE_3_HAIKU",
             "temperature": 0.3,
-            "probability": 0.2
+            "probability": 0.2,
+            "completionTokenLimit": 2048
         },
         "name": "Claude 3 Haiku Summarization"
     }
