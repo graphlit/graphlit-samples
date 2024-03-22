@@ -2,6 +2,8 @@
 
 ## Chat with content in your Graphlit project.
 
+You can view the Streamlit application [here](https://graphlit-samples-chat.streamlit.app/).
+
 ### Demo Instructions
 - **Step 1:** Generate Graphlit project token.
 - **Step 2:** Enter a prompt to ask about your content.
