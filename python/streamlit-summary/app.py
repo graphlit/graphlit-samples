@@ -38,7 +38,7 @@ def send_request(uri):
             "type": "WEB",
             "web": {
                 "uri": uri,
-                "readLimit": 1
+                "readLimit": 10
             },
             "name": uri
         }
