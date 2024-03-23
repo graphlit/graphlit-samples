@@ -1,0 +1,5 @@
+Flask
+slack_sdk
+pyjwt
+gql[all]
+python-dotenv
