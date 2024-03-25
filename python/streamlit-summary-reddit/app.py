@@ -173,7 +173,7 @@ def generate_summary():
     },
     "summarizations": [
         {
-            "type": "SUMMARY",
+            "type": "QUESTIONS",
             "specification": {
                 "id": st.session_state["specification_id"]
             }
@@ -188,16 +188,16 @@ def generate_summary():
     if 'errors' in response and len(response['errors']) > 0:
         error_message = response['errors'][0]['message']
         st.error(error_message)
-        return "No summary was generated."
+        return "No questions were generated."
 
     if 'summarizeContents' in response['data'] and len(response['data']['summarizeContents']) > 0:
         return "\n\n".join(item['text'] for content in response['data']['summarizeContents'] for item in content['items'])
     
-    return "No summary was generated."
+    return "No questions were generated."
 
 st.image("https://graphlitplatform.blob.core.windows.net/samples/graphlit-logo.svg", width=128)
 st.title("Graphlit Platform")
-st.markdown("Generate summary of Reddit subreddit. Will read a maximum of 10 recent posts")
+st.markdown("Generate followup questions from Reddit subreddit. Will read a maximum of 10 recent posts")
 
 if st.session_state['token'] is None:
     st.info("To get started, generate a token to connect to your Graphlit project.")
@@ -274,7 +274,7 @@ with st.form("data_feed_form"):
                 else:
                     start_summary_time = time.time()
 
-                    with st.spinner('Generating Reddit summary... Please wait.'):
+                    with st.spinner('Generating Reddit followup questions... Please wait.'):
                         summary = generate_summary()
                         placeholder.markdown(summary)
 
@@ -283,7 +283,7 @@ with st.form("data_feed_form"):
                         current_time = datetime.now()
                         formatted_time = current_time.strftime("%H:%M:%S")
 
-                        st.success(f"Reddit summary generation took {summary_duration:.2f} seconds. Finished at {formatted_time} UTC.")
+                        st.success(f"Reddit followup question generation took {summary_duration:.2f} seconds. Finished at {formatted_time} UTC.")
         else:
             st.error("Please fill in all the connection information.")
 
@@ -292,7 +292,7 @@ with st.sidebar:
         ### Demo Instructions
         - **Step 1:** Generate Graphlit project token.
         - **Step 2:** Fill in the Reddit subreddit name.
-        - **Step 3:** Click to generate summary of recent Reddit subreddit posts using Claude 3 Haiku.     
+        - **Step 3:** Click to generate followup questions from recent Reddit subreddit posts using Claude 3 Haiku.     
         """)
 
     with st.form("credentials_form"):
