@@ -94,7 +94,7 @@ def delete_content():
 def create_content(uri):
     # Define the GraphQL mutation
     mutation = """
-    mutation IngestFile($uri: Url!, $workflow: EntityReferenceInput) {
+    mutation IngestFile($uri: URL!, $workflow: EntityReferenceInput) {
         ingestFile(uri: $uri, workflow: $workflow) {
             id
         }
