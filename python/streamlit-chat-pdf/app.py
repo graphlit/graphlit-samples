@@ -331,7 +331,7 @@ with st.form("data_content_form"):
     if submit_content and uri:
         st.session_state.messages = []
         st.session_state['content_done'] = False
-        
+
         if st.session_state['token']:
             st.session_state['uri'] = uri
             
@@ -402,51 +402,52 @@ with st.form("data_content_form"):
             st.error("Please fill in all the connection information.")
 
 if st.session_state['content_done'] == True:
-    if "messages" not in st.session_state:
-        st.session_state.messages = []
+    if st.session_state['token']:
+        if "messages" not in st.session_state:
+            st.session_state.messages = []
 
-    for message in st.session_state.messages:
-        with st.chat_message(message["role"]):
-            st.markdown(message["content"])
+        for message in st.session_state.messages:
+            with st.chat_message(message["role"]):
+                st.markdown(message["content"])
 
-    # Clean up previous session state
-    if st.session_state['conversation_id'] is not None:
-        with st.spinner('Deleting existing conversation... Please wait.'):
-            delete_conversation()
-        st.session_state["conversation_id"] = None
+        # Clean up previous session state
+        if st.session_state['conversation_id'] is not None:
+            with st.spinner('Deleting existing conversation... Please wait.'):
+                delete_conversation()
+            st.session_state["conversation_id"] = None
 
-    if st.session_state['specification_id'] is not None:
-        with st.spinner('Deleting existing specification... Please wait.'):
-            delete_specification()
-        st.session_state["specification_id"] = None
+        if st.session_state['specification_id'] is not None:
+            with st.spinner('Deleting existing specification... Please wait.'):
+                delete_specification()
+            st.session_state["specification_id"] = None
 
-    error_message = create_specification()
-
-    if error_message is not None:
-        st.error(f"Failed to create specification. {error_message}")
-    else:
-        error_message = create_conversation();
+        error_message = create_specification()
 
         if error_message is not None:
-            st.error(f"Failed to create conversation. {error_message}")
+            st.error(f"Failed to create specification. {error_message}")
+        else:
+            error_message = create_conversation();
 
-    try:
-        if prompt := st.chat_input("Ask me anything about this document."):
-            st.session_state.messages.append({"role": "user", "content": prompt})
-            
-            with st.chat_message("user"):
-                st.markdown(prompt)
-            
-            with st.chat_message("assistant"):
-                response, error_message = prompt_conversation(prompt)
+            if error_message is not None:
+                st.error(f"Failed to create conversation. {error_message}")
+
+        try:
+            if prompt := st.chat_input("Ask me anything about this document."):
+                st.session_state.messages.append({"role": "user", "content": prompt})
                 
-                if error_message is not None:
-                    st.error(f"Failed to prompt specification. {error_message}")
-                else:
-                    st.markdown(response)
-                    st.session_state.messages.append({"role": "assistant", "content": response})
-    except:
-        st.warning("You need to generate a token before chatting with your document.")
+                with st.chat_message("user"):
+                    st.markdown(prompt)
+                
+                with st.chat_message("assistant"):
+                    response, error_message = prompt_conversation(prompt)
+                    
+                    if error_message is not None:
+                        st.error(f"Failed to prompt specification. {error_message}")
+                    else:
+                        st.markdown(response)
+                        st.session_state.messages.append({"role": "assistant", "content": response})
+        except:
+            st.warning("You need to generate a token before chatting with your document.")
 
 with st.sidebar:
     st.info("""
