@@ -181,7 +181,7 @@ def publish_contents(prompt):
     publishContents(connector: $connector, publishPrompt: $publishPrompt, summarySpecification: $summarySpecification, publishSpecification: $publishSpecification, filter: $filter) {
         id
         name
-        markdown
+        text
     }
     }
     """
@@ -221,7 +221,7 @@ def publish_contents(prompt):
         return "No summary was generated."
 
     if 'publishContents' in response['data']:
-        return response['data']['publishContents']['markdown']
+        return response['data']['publishContents']['text']
     
     return "No summary was generated."
 
