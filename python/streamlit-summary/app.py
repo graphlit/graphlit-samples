@@ -1,7 +1,7 @@
 import streamlit as st
 import requests
 import jwt
-import datetime
+from datetime import datetime
 import json
 import time
 from graphlit_client import Graphlit
