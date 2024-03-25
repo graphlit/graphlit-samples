@@ -39,10 +39,10 @@ def create_feed(uri):
     """
     variables = {
         "feed": {
-            "type": "WEB",
-            "web": {
+            "type": "RSS",
+            "rss": {
                 "uri": uri,
-                "readLimit": 5
+                "readLimit": 1
             },
             "name": uri
         }
@@ -89,6 +89,58 @@ def delete_specification():
         "id": st.session_state['specification_id']
     }
     response = st.session_state['client'].request(query=query, variables=variables)
+
+def get_content_metadata_by_feed():
+    # Define the GraphQL mutation
+    query = """
+    query QueryContents($filter: ContentFilter) {
+        contents(filter: $filter) {
+            results {
+                id
+                state
+                audio {
+                    title
+                    keywords
+                    author
+                    episode
+                    episodeType
+                    series
+                    season
+                    copyright
+                    language
+                    genre
+                    duration
+                }            
+            }
+        }
+    }
+    """
+
+    # Define the variables for the mutation
+    variables = {
+        "filter": {
+            "types": [
+                "FILE"
+            ],
+            "fileTypes": [
+                "AUDIO"
+            ],
+            "feeds": [
+                {
+                    "id": st.session_state["feed_id"]
+                }
+            ]
+        }
+    }
+
+    response = st.session_state['client'].request(query=query, variables=variables)
+
+ #   st.json(response)
+
+    if 'results' in response['data']["contents"] and len(response['data']['contents']['results']) > 0:
+        return response['data']['contents']['results'][0]['audio']
+    
+    return None
 
 def is_feed_done():
     # Define the GraphQL mutation
@@ -163,7 +215,10 @@ def generate_summary():
     variables = {
     "filter": {
         "types": [
-            "PAGE"
+            "FILE"
+        ],
+        "fileTypes": [
+            "AUDIO"
         ],
         "feeds": [
             { 
@@ -173,7 +228,7 @@ def generate_summary():
     },
     "summarizations": [
         {
-            "type": "SUMMARY",
+            "type": "CHAPTERS",
             "specification": {
                 "id": st.session_state["specification_id"]
             }
@@ -197,26 +252,28 @@ def generate_summary():
 
 st.image("https://graphlitplatform.blob.core.windows.net/samples/graphlit-logo.svg", width=128)
 st.title("Graphlit Platform")
-st.markdown("Generate summary of website.")
+st.markdown("Generate chapters for latest podcast episode from RSS feed.")
 
 if st.session_state['token'] is None:
     st.info("To get started, generate a token to connect to your Graphlit project.")
 
-websites = {
-    "OpenAI Blog": "https://www.openai.com/blog",
-    "Anthropic News": "https://www.anthropic.com/news",
-    "Mistral News": "https://mistral.ai/news/",
-    "Groq Blog": "https://wow.groq.com/blog/"
+# A dictionary mapping podcast names to their RSS URIs
+podcasts = {
+#    "Lenny's Podcast": "https://api.substack.com/feed/podcast/10845.rss",
+    "Lex Fridman Podcast": "https://lexfridman.com/podcast/",
+    "Huberman Lab Podcast": "https://feeds.megaphone.fm/hubermanlab",
+    "TWiML Podcast": "https://feeds.megaphone.fm/MLN2155636147",
+    "AI in Business Podcast": "https://podcast.emerj.com/rss"
 }
     
 with st.form("data_feed_form"):
-    selected_website = st.selectbox("Select a Website:", options=list(websites.keys()))
+    selected_podcast = st.selectbox("Select a Podcast:", options=list(podcasts.keys()))
     
-    website_uri = st.text_input("Or enter your own Website URL", key='website_uri')
+    podcast_uri = st.text_input("Or enter your own Podcast RSS URL", key='podcast_uri')
 
-    is_custom_uri = websites[selected_website] == ""
+    is_custom_uri = podcasts[selected_podcast] == ""
 
-    uri = website_uri if is_custom_uri else websites[selected_website]
+    uri = podcast_uri if is_custom_uri else podcasts[selected_podcast]
 
     submit_data = st.form_submit_button("Submit")
 
@@ -243,7 +300,7 @@ with st.form("data_feed_form"):
                 start_time = time.time()
 
                 # Display spinner while processing
-                with st.spinner('Ingesting website... Please wait.'):
+                with st.spinner('Transcribing latest podcast... Please wait.'):
                     done = False
                     time.sleep(5)
                     while not done:
@@ -257,9 +314,34 @@ with st.form("data_feed_form"):
 
                 duration = time.time() - start_time
 
-                st.success(f"Website ingestion took {duration:.2f} seconds.")
+                st.success(f"Podcast transcription took {duration:.2f} seconds.")
 
-                st.markdown(f"**Website URI:** {uri}")
+                metadata = get_content_metadata_by_feed()
+
+#                st.json(metadata)
+
+                st.markdown(f"**Podcast URI:** {uri}")
+
+                if metadata is not None:
+                    podcast_title = metadata["title"]
+                    podcast_author = metadata["author"]
+                    podcast_episode = metadata["episode"]
+                    podcast_series = metadata["series"]
+                    podcast_duration = metadata["duration"]
+
+                    if podcast_title is not None:
+                        st.markdown(f"**Podcast:** {podcast_title}")
+
+                    if podcast_episode is not None:
+                        st.markdown(f"**Episode #{podcast_episode}**")
+
+                    if podcast_series is not None:
+                        st.markdown(f"**Series:** {podcast_series}")
+
+                    if podcast_author is not None:
+                        st.markdown(f"**Author:** {podcast_author}")
+
+                    st.markdown(f"**Duration:** {podcast_duration}")
 
                 placeholder = st.empty()
 
@@ -270,13 +352,13 @@ with st.form("data_feed_form"):
                 else:
                     start_chapters_time = time.time()
 
-                    with st.spinner('Generating website summary... Please wait.'):
+                    with st.spinner('Generating podcast chapters... Please wait.'):
                         summary = generate_summary()
                         placeholder.markdown(summary)
 
                         chapters_duration = time.time() - start_chapters_time
         
-                        st.success(f"Website summary generation took {chapters_duration:.2f} seconds.")
+                        st.success(f"Podcast chapter generation took {chapters_duration:.2f} seconds.")
         else:
             st.error("Please fill in all the connection information.")
 
@@ -284,8 +366,8 @@ with st.sidebar:
     st.info("""
         ### Demo Instructions
         - **Step 1:** Generate Graphlit project token.
-        - **Step 2:** Fill in the website URI.
-        - **Step 3:** Click to generate summary of website using Claude 3 Haiku.     
+        - **Step 2:** Select a podcast, or fill in the podcast RSS URL.
+        - **Step 3:** Click to generate chapters from latest podcast episode using Claude 3 Haiku.     
         """)
 
     with st.form("credentials_form"):
