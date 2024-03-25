@@ -404,6 +404,7 @@ with st.sidebar:
                 st.error("Please fill in all the connection information.")
 
     st.markdown("""
+        [Support on Discord](https://discord.gg/ygFmfjy3Qx)
         [Sign up for Graphlit](https://docs.graphlit.dev/getting-started/signup)            
         [API Reference](https://docs.graphlit.dev/graphlit-data-api/api-reference)     
         [More information](https://www.graphlit.com)      
