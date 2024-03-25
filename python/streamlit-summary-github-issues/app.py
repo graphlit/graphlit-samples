@@ -4,6 +4,7 @@ import jwt
 from datetime import datetime
 import json
 import time
+from urllib.parse import urlparse
 from graphlit_client import Graphlit
 
 # Initialize session state variables if not already done
@@ -26,7 +27,7 @@ if 'organization_id' not in st.session_state:
 if 'secret_key' not in st.session_state:
     st.session_state['secret_key'] = ""
 
-def create_feed(uri):
+def create_feed(owner, name):
     mutation = """
     mutation CreateFeed($feed: FeedInput!) {
         createFeed(feed: $feed) {
@@ -39,9 +40,13 @@ def create_feed(uri):
     """
     variables = {
         "feed": {
-            "type": "WEB",
-            "web": {
-                "uri": uri,
+            "type": "ISSUE",
+            "issue": {
+                "type": "GITHUB_ISSUES",
+                "github": {
+                    "repositoryOwner": owner,
+                    "repositoryName": name,
+                },
                 "readLimit": 10
             },
             "name": uri
@@ -147,38 +152,63 @@ def create_specification():
 
     return None
 
-def generate_summary():
+def parse_uri(url):
+    """
+    Extracts the GitHub repository owner and name from a given URL.
+
+    Parameters:
+    - url (str): The GitHub URL from which to extract the repository owner and name.
+
+    Returns:
+    - tuple: A tuple containing the repository owner and name, or (None, None) if not found.
+    """
+    # Parse the URL
+    parsed_url = urlparse(url)
+    
+    # Split the path into segments
+    path_segments = parsed_url.path.strip('/').split('/')
+    
+    # Ensure the URL is a GitHub URL and has at least two path segments (owner and repo name)
+    if 'github.com' in parsed_url.netloc and len(path_segments) >= 2:
+        return path_segments[0], path_segments[1]
+    
+    return None, None
+
+def publish_contents(prompt):
     # Define the GraphQL mutation
     mutation = """
-    mutation SummarizeContents($summarizations: [SummarizationStrategyInput!]!, $filter: ContentFilter) {
-    summarizeContents(summarizations: $summarizations, filter: $filter) {
-        items {
-            text
-        }
+    mutation PublishContents($publishPrompt: String!, $summarySpecification: EntityReference, $publishSpecification: EntityReference, $filter: ContentFilter) {
+    publishContents(publishPrompt: $publishPrompt, summarySpecification: $summarySpecification, publishSpecification: $publishSpecification, filter: $filter) {
+        id
+        name
+        markdown
     }
     }
     """
 
     # Define the variables for the mutation
     variables = {
-    "filter": {
-        "types": [
-            "PAGE"
-        ],
-        "feeds": [
-            { 
-                "id": st.session_state["feed_id"]
-            }
-        ]
-    },
-    "summarizations": [
-        {
-            "type": "SUMMARY",
-            "specification": {
-                "id": st.session_state["specification_id"]
-            }
+        "filter": {
+            "types": [
+                "ISSUE"
+            ],
+            "feeds": [
+                { 
+                    "id": st.session_state["feed_id"]
+                }
+            ]
+        },
+        "connector": {
+            "type": "TEXT",
+            "format": "MARKDOWN"
+        },
+        "publishPrompt": prompt,
+        "summarySpecification": {
+            "id": st.session_state["specification_id"]
+        },
+        "publishSpecification": {
+            "id": st.session_state["specification_id"]
         }
-    ]
     }
 
     response = st.session_state['client'].request(query=mutation, variables=variables)
@@ -190,33 +220,35 @@ def generate_summary():
         st.error(error_message)
         return "No summary was generated."
 
-    if 'summarizeContents' in response['data'] and len(response['data']['summarizeContents']) > 0:
-        return "\n\n".join(item['text'] for content in response['data']['summarizeContents'] for item in content['items'])
+    if 'publishContents' in response['data']:
+        return response['data']['publishContents']['markdown']
     
     return "No summary was generated."
 
 st.image("https://graphlitplatform.blob.core.windows.net/samples/graphlit-logo.svg", width=128)
 st.title("Graphlit Platform")
-st.markdown("Generate summary of website. Will scrape website, and read a maximum of 10 pages via sitemap.xml.")
+st.markdown("Generate custom summarization of GitHub Issues. Will read a maximum of 10 recent issues.")
 
 if st.session_state['token'] is None:
     st.info("To get started, generate a token to connect to your Graphlit project.")
 
 websites = {
-    "OpenAI Blog": "https://openai.com/blog", # can't have www.openai.com, otherwise nothing found in sitemap
-    "Anthropic News": "https://www.anthropic.com/news",
-    "Mistral News": "https://mistral.ai/news/",
-    "Groq Blog": "https://wow.groq.com/blog/"
+    "OpenAI TikToken": "https://github.com/openai/tiktoken/", # can't have www.openai.com, otherwise nothing found in sitemap
+    "OpenAI Whisper": "https://github.com/openai/whisper/",
+    "Mistral Transformer": "https://github.com/mistralai/mistral-src",
+    "Grok-1": "https://github.com/xai-org/grok-1/"
 }
     
 with st.form("data_feed_form"):
-    selected_website = st.selectbox("Select a Website:", options=list(websites.keys()))
+    selected_website = st.selectbox("Select a GitHub repo:", options=list(websites.keys()))
     
-    website_uri = st.text_input("Or enter your own Website URL", key='website_uri')
+    website_uri = st.text_input("Or enter your own public GitHub repo URL", key='website_uri')
 
-    is_custom_uri = websites[selected_website] == ""
+    uri = website_uri if website_uri else websites[selected_website]
 
-    uri = website_uri if is_custom_uri else websites[selected_website]
+    owner, name = parse_uri(uri)
+
+    prompt = st.text_input("Enter a prompt to generate a report about recent GitHub issues", key='prompt')
 
     submit_data = st.form_submit_button("Submit")
 
@@ -235,7 +267,7 @@ with st.form("data_feed_form"):
                     delete_specification()
                 st.session_state["specification_id"] = None
 
-            error_message = create_feed(uri)
+            error_message = create_feed(owner, name)
 
             if error_message is not None:
                 st.error(error_message)
@@ -243,7 +275,7 @@ with st.form("data_feed_form"):
                 start_time = time.time()
 
                 # Display spinner while processing
-                with st.spinner('Ingesting website... Please wait.'):
+                with st.spinner('Ingesting GitHub repo issues... Please wait.'):
                     done = False
                     time.sleep(5)
                     while not done:
@@ -260,9 +292,9 @@ with st.form("data_feed_form"):
                 current_time = datetime.now()
                 formatted_time = current_time.strftime("%H:%M:%S")
 
-                st.success(f"Website ingestion took {duration:.2f} seconds. Finished at {formatted_time} UTC.")
+                st.success(f"GitHub repo issues ingestion took {duration:.2f} seconds. Finished at {formatted_time} UTC.")
 
-                st.markdown(f"**Website URI:** {uri}")
+                st.markdown(f"**GitHub repo URI:** {uri}")
 
                 placeholder = st.empty()
 
@@ -273,8 +305,8 @@ with st.form("data_feed_form"):
                 else:
                     start_summary_time = time.time()
 
-                    with st.spinner('Generating website summary... Please wait.'):
-                        summary = generate_summary()
+                    with st.spinner('Publishing GitHub Issues report... Please wait.'):
+                        summary = publish_contents(prompt)
                         placeholder.markdown(summary)
 
                         summary_duration = time.time() - start_summary_time
@@ -282,7 +314,7 @@ with st.form("data_feed_form"):
                         current_time = datetime.now()
                         formatted_time = current_time.strftime("%H:%M:%S")
 
-                        st.success(f"Website summary generation took {summary_duration:.2f} seconds. Finished at {formatted_time} UTC.")
+                        st.success(f"GitHub Issues report generation took {summary_duration:.2f} seconds. Finished at {formatted_time} UTC.")
         else:
             st.error("Please fill in all the connection information.")
 
@@ -290,8 +322,8 @@ with st.sidebar:
     st.info("""
         ### Demo Instructions
         - **Step 1:** Generate Graphlit project token.
-        - **Step 2:** Fill in the website URI.
-        - **Step 3:** Click to generate summary of website using Claude 3 Haiku.     
+        - **Step 2:** Fill in the GitHub repo URI.
+        - **Step 3:** Click to generate report of recent GitHub Issues using [Anthropic](https://www.anthropic.com) Claude 3 Haiku LLM.     
         """)
 
     with st.form("credentials_form"):
