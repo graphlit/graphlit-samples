@@ -247,7 +247,7 @@ def delete_conversation():
 def create_conversation():
     # Define the GraphQL mutation
     mutation = """
-    mutation CreateConversation($conversation: ConversationInput) {
+    mutation CreateConversation($conversation: ConversationInput!) {
     createConversation(conversation: $conversation) {
         id
     }
@@ -405,12 +405,12 @@ with st.form("data_content_form"):
                     error_message = create_specification()
 
                     if error_message is not None:
-                        st.error(error_message)
+                        st.error(f"Failed to create specification. {error_message}")
                     else:
                         error_message = create_conversation();
 
                         if error_message is not None:
-                            st.error(error_message)
+                            st.error(f"Failed to create conversation. {error_message}")
         else:
             st.error("Please fill in all the connection information.")
 
@@ -433,7 +433,7 @@ if st.session_state['content_done'] == True:
                 response, error_message = prompt_conversation(prompt)
                 
                 if error_message is not None:
-                    st.error(error_message)
+                    st.error(f"Failed to prompt specification. {error_message}")
                 else:
                     st.markdown(response)
                     st.session_state.messages.append({"role": "assistant", "content": response})
