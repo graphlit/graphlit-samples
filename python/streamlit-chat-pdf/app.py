@@ -265,44 +265,43 @@ def create_conversation():
 
     # Send the GraphQL request with the JWT token in the headers
     response = st.session_state['client'].request(query=mutation, variables=variables)
+
+    if 'errors' in response and len(response['errors']) > 0:
+        error_message = response['errors'][0]['message']
+        return error_message
+
     st.session_state['conversation_id'] = response['data']['createConversation']['id']
-    return response
+
+    return None
 
 def prompt_conversation(prompt):
     # Define the GraphQL mutation
     mutation = """
     mutation PromptConversation($prompt: String!, $id: ID) {
     promptConversation(prompt: $prompt, id: $id) {
-        conversation {
-            id
-        }
         message {
-            role
-            author
             message
-            tokens
-            completionTime
         }
-        messageCount
     }
     }
     """
 
     # Define the variables for the mutation
-    if st.session_state['conversation_id']:
-        variables = {
-            "prompt": prompt,
-            "id": st.session_state['conversation_id']
-        }
-    else:
-        variables = {
-            "prompt": prompt
-            }
+    variables = {
+        "prompt": prompt,
+        "id": st.session_state['conversation_id']
+    }
 
     # Send the GraphQL request with the JWT token in the headers
     response = st.session_state['client'].request(query=mutation, variables=variables)
-    st.session_state['conversation_id'] = response['data']['promptConversation']['conversation']['id']
-    return response
+
+    if 'errors' in response and len(response['errors']) > 0:
+        error_message = response['errors'][0]['message']
+        return None, error_message
+
+    message = response['data']['promptConversation']['message']['message']
+
+    return message, None
        
 st.image("https://graphlitplatform.blob.core.windows.net/samples/graphlit-logo.svg", width=128)
 st.title("Graphlit Platform")
@@ -431,11 +430,13 @@ if st.session_state['content_done'] == True:
                 st.markdown(prompt)
             
             with st.chat_message("assistant"):
-                result = prompt_conversation(prompt)
+                response, error_message = prompt_conversation(prompt)
                 
-                response = result['data']['promptConversation']['message']['message']
-                st.markdown(response)
-                st.session_state.messages.append({"role": "assistant", "content": response})
+                if error_message is not None:
+                    st.error(error_message)
+                else:
+                    st.markdown(response)
+                    st.session_state.messages.append({"role": "assistant", "content": response})
     except:
         st.warning("You need to generate a token before chatting with your PDF.")
 
