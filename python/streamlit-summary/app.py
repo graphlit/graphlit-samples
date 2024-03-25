@@ -260,7 +260,7 @@ with st.form("data_feed_form"):
                 current_time = datetime.now()
                 formatted_time = current_time.strftime("%H:%M:%S")
 
-                st.success(f"Website ingestion took {duration:.2f} seconds. Finished at {formatted_time}.")
+                st.success(f"Website ingestion took {duration:.2f} seconds. Finished at {formatted_time} UTC.")
 
                 st.markdown(f"**Website URI:** {uri}")
 
@@ -282,7 +282,7 @@ with st.form("data_feed_form"):
                         current_time = datetime.now()
                         formatted_time = current_time.strftime("%H:%M:%S")
 
-                        st.success(f"Website summary generation took {chapters_duration:.2f} seconds. Finished at {formatted_time}.")
+                        st.success(f"Website summary generation took {chapters_duration:.2f} seconds. Finished at {formatted_time} UTC.")
         else:
             st.error("Please fill in all the connection information.")
 
