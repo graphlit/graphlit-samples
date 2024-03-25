@@ -214,9 +214,7 @@ with st.form("data_feed_form"):
     
     website_uri = st.text_input("Or enter your own Website URL", key='website_uri')
 
-    is_custom_uri = websites[selected_website] == ""
-
-    uri = website_uri if is_custom_uri else websites[selected_website]
+    uri = website_uri if website_uri else websites[selected_website]
 
     submit_data = st.form_submit_button("Submit")
 

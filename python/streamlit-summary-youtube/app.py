@@ -4,13 +4,14 @@ import jwt
 from datetime import datetime
 import json
 import time
+from urllib.parse import urlparse, parse_qs
 from graphlit_client import Graphlit
 
 # Initialize session state variables if not already done
 if 'token' not in st.session_state:
     st.session_state['token'] = None
-if 'uri' not in st.session_state:
-    st.session_state['uri'] = None
+if 'identifier' not in st.session_state:
+    st.session_state['identifier'] = None
 if 'specification_id' not in st.session_state:
     st.session_state['specification_id'] = None
 if 'feed_id' not in st.session_state:
@@ -26,7 +27,7 @@ if 'organization_id' not in st.session_state:
 if 'secret_key' not in st.session_state:
     st.session_state['secret_key'] = ""
 
-def create_feed(uri):
+def create_feed(identifier):
     mutation = """
     mutation CreateFeed($feed: FeedInput!) {
         createFeed(feed: $feed) {
@@ -39,12 +40,15 @@ def create_feed(uri):
     """
     variables = {
         "feed": {
-            "type": "RSS",
-            "rss": {
-                "uri": uri,
+            "type": "YOU_TUBE",
+            "youtube": {
+                "type": "VIDEO",
+                "videoIdentifiers": [
+                    identifier
+                ],
                 "readLimit": 1
             },
-            "name": uri
+            "name": identifier
         }
     }
     response = st.session_state['client'].request(query=mutation, variables=variables)
@@ -89,58 +93,6 @@ def delete_specification():
         "id": st.session_state['specification_id']
     }
     response = st.session_state['client'].request(query=query, variables=variables)
-
-def get_content_metadata_by_feed():
-    # Define the GraphQL mutation
-    query = """
-    query QueryContents($filter: ContentFilter) {
-        contents(filter: $filter) {
-            results {
-                id
-                state
-                audio {
-                    title
-                    keywords
-                    author
-                    episode
-                    episodeType
-                    series
-                    season
-                    copyright
-                    language
-                    genre
-                    duration
-                }            
-            }
-        }
-    }
-    """
-
-    # Define the variables for the mutation
-    variables = {
-        "filter": {
-            "types": [
-                "FILE"
-            ],
-            "fileTypes": [
-                "AUDIO"
-            ],
-            "feeds": [
-                {
-                    "id": st.session_state["feed_id"]
-                }
-            ]
-        }
-    }
-
-    response = st.session_state['client'].request(query=query, variables=variables)
-
- #   st.json(response)
-
-    if 'results' in response['data']["contents"] and len(response['data']['contents']['results']) > 0:
-        return response['data']['contents']['results'][0]['audio']
-    
-    return None
 
 def is_feed_done():
     # Define the GraphQL mutation
@@ -199,6 +151,31 @@ def create_specification():
 
     return None
 
+def parse_uri(url):
+    """
+    Extracts the YouTube video ID from a given URL.
+
+    Parameters:
+    - url (str): The URL from which to extract the video ID.
+
+    Returns:
+    - str: The extracted YouTube video ID, or None if not found.
+    """
+    # Parse the URL
+    parsed_url = urlparse(url)
+    
+    # Validate the netloc to ensure it's a YouTube URL
+    if 'youtube.com' in parsed_url.netloc:
+        # Parse the query string
+        query_string = parse_qs(parsed_url.query)
+        
+        # Get the video ID from the 'v' parameter
+        video_id = query_string.get('v')
+        
+        if video_id:
+            return video_id[0]
+    return None
+
 def generate_summary():
     # Define the GraphQL mutation
     mutation = """
@@ -216,9 +193,6 @@ def generate_summary():
     "filter": {
         "types": [
             "FILE"
-        ],
-        "fileTypes": [
-            "AUDIO"
         ],
         "feeds": [
             { 
@@ -246,39 +220,39 @@ def generate_summary():
         return "No summary was generated."
 
     if 'summarizeContents' in response['data'] and len(response['data']['summarizeContents']) > 0:
-        return "\n\n".join(item['text'] for item in response['data']['summarizeContents'][0]['items'])
+        return "\n\n".join(item['text'] for content in response['data']['summarizeContents'] for item in content['items'])
     
     return "No summary was generated."
 
 st.image("https://graphlitplatform.blob.core.windows.net/samples/graphlit-logo.svg", width=128)
 st.title("Graphlit Platform")
-st.markdown("Generate chapters for latest podcast episode from RSS feed.")
+st.markdown("Generate chapters of YouTube video.")
 
 if st.session_state['token'] is None:
     st.info("To get started, generate a token to connect to your Graphlit project.")
 
-# A dictionary mapping podcast names to their RSS URIs
-podcasts = {
-#    "Lenny's Podcast": "https://api.substack.com/feed/podcast/10845.rss",
-    "Lex Fridman Podcast": "https://lexfridman.com/podcast/",
-    "Huberman Lab Podcast": "https://feeds.megaphone.fm/hubermanlab",
-    "TWiML Podcast": "https://feeds.megaphone.fm/MLN2155636147",
-    "AI in Business Podcast": "https://podcast.emerj.com/rss"
+videos = {
+    "Lex Fridman: w/ Sam Altman": "jvqFAi7vkBc",
+    "Lex Fridman w/ Yan Lecun": "5t1vTLU7s40",
+    "Andrew Huberman w/ Dr. Cal Newport": "p4ZfkezDTXQ",
+    "60 Minutes: Geoffrey Hinton": "qrvK_KuIeJk"
 }
     
 with st.form("data_feed_form"):
-    selected_podcast = st.selectbox("Select a Podcast:", options=list(podcasts.keys()))
-    
-    podcast_uri = st.text_input("Or enter your own Podcast RSS URL", key='podcast_uri')
+    selected_video = st.selectbox("Select a YouTube video:", options=list(videos.keys()))
 
-    uri = podcast_uri if podcast_uri else podcasts[selected_podcast]
+    video_uri = st.text_input("Or enter your own YouTube video URL", key='video_uri')
+    video_identifier = parse_uri(video_uri)
+
+    # Assuming parse_uri returns None if no identifier is found
+    identifier = video_identifier if video_identifier else videos[selected_video]
 
     submit_data = st.form_submit_button("Submit")
 
     # Now, handle actions based on submit_data outside the form's scope
-    if submit_data and uri:
+    if submit_data and identifier:
         if st.session_state['token']:
-            st.session_state['uri'] = uri
+            st.session_state['identifier'] = identifier
             
             if st.session_state['feed_id'] is not None:
                 with st.spinner('Deleting existing feed... Please wait.'):
@@ -290,7 +264,7 @@ with st.form("data_feed_form"):
                     delete_specification()
                 st.session_state["specification_id"] = None
 
-            error_message = create_feed(uri)
+            error_message = create_feed(identifier)
 
             if error_message is not None:
                 st.error(error_message)
@@ -298,7 +272,7 @@ with st.form("data_feed_form"):
                 start_time = time.time()
 
                 # Display spinner while processing
-                with st.spinner('Ingesting and transcribing latest podcast... Please wait.'):
+                with st.spinner('Ingesting YouTube video... Please wait.'):
                     done = False
                     time.sleep(5)
                     while not done:
@@ -315,34 +289,9 @@ with st.form("data_feed_form"):
                 current_time = datetime.now()
                 formatted_time = current_time.strftime("%H:%M:%S")
 
-                st.success(f"Podcast ingestion and transcription took {duration:.2f} seconds. Finished at {formatted_time} UTC.")
+                st.success(f"YouTube video ingestion took {duration:.2f} seconds. Finished at {formatted_time} UTC.")
 
-                metadata = get_content_metadata_by_feed()
-
-#                st.json(metadata)
-
-                st.markdown(f"**Podcast URI:** {uri}")
-
-                if metadata is not None:
-                    podcast_title = metadata["title"]
-                    podcast_author = metadata["author"]
-                    podcast_episode = metadata["episode"]
-                    podcast_series = metadata["series"]
-                    podcast_duration = metadata["duration"]
-
-                    if podcast_title is not None:
-                        st.markdown(f"**Podcast:** {podcast_title}")
-
-                    if podcast_episode is not None:
-                        st.markdown(f"**Episode #{podcast_episode}**")
-
-                    if podcast_series is not None:
-                        st.markdown(f"**Series:** {podcast_series}")
-
-                    if podcast_author is not None:
-                        st.markdown(f"**Author:** {podcast_author}")
-
-                    st.markdown(f"**Duration:** {podcast_duration}")
+                st.markdown(f"**YouTube video identifier:** {identifier}")
 
                 placeholder = st.empty()
 
@@ -351,18 +300,18 @@ with st.form("data_feed_form"):
                 if error_message is not None:
                     st.error(error_message)
                 else:
-                    start_chapters_time = time.time()
+                    start_summary_time = time.time()
 
-                    with st.spinner('Generating podcast chapters... Please wait.'):
+                    with st.spinner('Generating YouTube video chapters... Please wait.'):
                         summary = generate_summary()
                         placeholder.markdown(summary)
 
-                        chapters_duration = time.time() - start_chapters_time
+                        summary_duration = time.time() - start_summary_time
         
                         current_time = datetime.now()
                         formatted_time = current_time.strftime("%H:%M:%S")
 
-                        st.success(f"Podcast chapter generation took {chapters_duration:.2f} seconds. Finished at {formatted_time} UTC.")
+                        st.success(f"YouTube video chapter generation took {summary_duration:.2f} seconds. Finished at {formatted_time} UTC.")
         else:
             st.error("Please fill in all the connection information.")
 
@@ -370,8 +319,8 @@ with st.sidebar:
     st.info("""
         ### Demo Instructions
         - **Step 1:** Generate Graphlit project token.
-        - **Step 2:** Select a podcast, or fill in the podcast RSS URL.
-        - **Step 3:** Click to generate chapters from latest podcast episode using Claude 3 Haiku.     
+        - **Step 2:** Fill in the YouTube video identifier.
+        - **Step 3:** Click to generate chapters from YouTube video using Claude 3 Haiku.     
         """)
 
     with st.form("credentials_form"):

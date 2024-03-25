@@ -1,6 +1,6 @@
 # Graphlit Platform
 
-## Ingest and summarize a website.
+## Ingest and generate chapters for a podcast episode.
 
 You can view the Streamlit application [here](https://graphlit-samples-summary-podcast-feed.streamlit.app/).
 

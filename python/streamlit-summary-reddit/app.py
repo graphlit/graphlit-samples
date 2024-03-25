@@ -215,9 +215,7 @@ with st.form("data_feed_form"):
     
     subreddit_name = st.text_input("Or enter your own Reddit subreddit name", key='subreddit_name')
 
-    is_custom_name = subreddits[selected_subreddit] == ""
-
-    name = subreddit_name if is_custom_name else subreddits[selected_subreddit]
+    name = subreddit_name if subreddit_name else subreddits[selected_subreddit]
 
     submit_data = st.form_submit_button("Submit")
 
