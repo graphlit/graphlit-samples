@@ -87,6 +87,7 @@ def get_content_metadata_by_feed():
                 state
                 audio {
                     title
+                    series
                     duration
                 }            
             }
@@ -342,10 +343,14 @@ with st.form("data_feed_form"):
 
                 if metadata is not None:
                     video_title = metadata["title"]
+                    video_series = metadata["series"]
                     video_duration = metadata["duration"]
 
                     if video_title is not None:
                         st.markdown(f"**Video:** {video_title}")
+
+                    if video_series is not None:
+                        st.markdown(f"**Channel:** {video_series}")
 
                     st.markdown(f"**Duration:** {video_duration}")
 
