@@ -227,7 +227,7 @@ def publish_contents(prompt):
 
 st.image("https://graphlitplatform.blob.core.windows.net/samples/graphlit-logo.svg", width=128)
 st.title("Graphlit Platform")
-st.markdown("Generate custom summarization of GitHub Issues. Will read a maximum of 10 recent issues.")
+st.markdown("Generate a report of GitHub Issues. Will read a maximum of 10 recent issues.")
 
 if st.session_state['token'] is None:
     st.info("To get started, generate a token to connect to your Graphlit project.")
