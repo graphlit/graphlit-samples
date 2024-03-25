@@ -42,7 +42,7 @@ def create_feed(uri):
             "type": "WEB",
             "web": {
                 "uri": uri,
-                "readLimit": 5
+                "readLimit": 10
             },
             "name": uri
         }
@@ -197,7 +197,7 @@ def generate_summary():
 
 st.image("https://graphlitplatform.blob.core.windows.net/samples/graphlit-logo.svg", width=128)
 st.title("Graphlit Platform")
-st.markdown("Generate summary of website.")
+st.markdown("Generate summary of website. Will scrape website, and read a maximum of 10 pages via sitemap.xml.")
 
 if st.session_state['token'] is None:
     st.info("To get started, generate a token to connect to your Graphlit project.")
