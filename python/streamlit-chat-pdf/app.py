@@ -445,7 +445,7 @@ with st.sidebar:
         ### Demo Instructions
         - **Step 1:** Generate Graphlit project token.
         - **Step 2:** Select a PDF, or fill in your own PDF URL.
-        - **Step 3:** Enter a prompt to ask about your PDF.
+        - **Step 3:** Enter a prompt to ask about your PDF using [Anthropic](https://www.anthropic.com) Claude 3 Haiku LLM.
         """)
 
     with st.form("credentials_form"):
