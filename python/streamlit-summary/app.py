@@ -191,7 +191,7 @@ def generate_summary():
         return "No summary was generated."
 
     if 'summarizeContents' in response['data'] and len(response['data']['summarizeContents']) > 0:
-        return "\n\n".join(item['text'] for item in response['data']['summarizeContents'][0]['items'])
+        return "\n\n".join(item['text'] for content in response['data']['summarizeContents'] for item in content['items'])
     
     return "No summary was generated."
 
