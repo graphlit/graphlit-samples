@@ -25,6 +25,8 @@ if 'organization_id' not in st.session_state:
     st.session_state['organization_id'] = ""
 if 'secret_key' not in st.session_state:
     st.session_state['secret_key'] = ""
+if 'content_done' not in st.session_state:
+    st.session_state['content_done'] = None
 
 def get_content_metadata():
     # Define the GraphQL mutation
