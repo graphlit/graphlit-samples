@@ -242,7 +242,7 @@ websites = {
 with st.form("data_feed_form"):
     selected_website = st.selectbox("Select a GitHub repo:", options=list(websites.keys()))
     
-    website_uri = st.text_input("Or enter your own public GitHub repo URL", key='website_uri')
+    website_uri = st.text_input("Or enter your own public GitHub repo URL: (private repos are supported via API using PAT)", key='website_uri')
 
     uri = website_uri if website_uri else websites[selected_website]
 
