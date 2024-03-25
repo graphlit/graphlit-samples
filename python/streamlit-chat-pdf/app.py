@@ -320,9 +320,9 @@ pdfs = {
 with st.form("data_content_form"):
     selected_pdf = st.selectbox("Select a PDF:", options=list(pdfs.keys()))
     
-    pdf_uri = st.text_input("Or enter your own PDF URL", key='pdf_uri')
+    document_uri = st.text_input("Or enter your own URL to a file (i.e. PDF, DOCX, PPTX, MD)", key='pdf_uri')
 
-    uri = pdf_uri if pdf_uri else pdfs[selected_pdf]
+    uri = document_uri if document_uri else pdfs[selected_pdf]
 
     submit_content = st.form_submit_button("Submit")
 
@@ -423,7 +423,7 @@ if st.session_state['content_done'] == True:
             st.markdown(message["content"])
 
     try:
-        if prompt := st.chat_input("Ask me anything about this PDF."):
+        if prompt := st.chat_input("Ask me anything about this document."):
             st.session_state.messages.append({"role": "user", "content": prompt})
             
             with st.chat_message("user"):
@@ -438,14 +438,14 @@ if st.session_state['content_done'] == True:
                     st.markdown(response)
                     st.session_state.messages.append({"role": "assistant", "content": response})
     except:
-        st.warning("You need to generate a token before chatting with your PDF.")
+        st.warning("You need to generate a token before chatting with your document.")
 
 with st.sidebar:
     st.info("""
         ### Demo Instructions
         - **Step 1:** Generate Graphlit project token.
-        - **Step 2:** Select a PDF, or fill in your own PDF URL.
-        - **Step 3:** Enter a prompt to ask about your PDF using [Anthropic](https://www.anthropic.com) Claude 3 Haiku LLM.
+        - **Step 2:** Select a PDF, or fill in your own document URL.
+        - **Step 3:** Enter a prompt to ask about the document using [Anthropic](https://www.anthropic.com) Claude 3 Haiku LLM.
         """)
 
     with st.form("credentials_form"):
