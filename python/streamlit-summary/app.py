@@ -257,7 +257,10 @@ with st.form("data_feed_form"):
 
                 duration = time.time() - start_time
 
-                st.success(f"Website ingestion took {duration:.2f} seconds.")
+                current_time = datetime.now()
+                formatted_time = current_time.strftime("%H:%M:%S")
+
+                st.success(f"Website ingestion took {duration:.2f} seconds. Finished at {formatted_time}.")
 
                 st.markdown(f"**Website URI:** {uri}")
 
@@ -276,7 +279,10 @@ with st.form("data_feed_form"):
 
                         chapters_duration = time.time() - start_chapters_time
         
-                        st.success(f"Website summary generation took {chapters_duration:.2f} seconds.")
+                        current_time = datetime.now()
+                        formatted_time = current_time.strftime("%H:%M:%S")
+
+                        st.success(f"Website summary generation took {chapters_duration:.2f} seconds. Finished at {formatted_time}.")
         else:
             st.error("Please fill in all the connection information.")
 

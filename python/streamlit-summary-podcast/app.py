@@ -300,7 +300,7 @@ with st.form("data_feed_form"):
                 start_time = time.time()
 
                 # Display spinner while processing
-                with st.spinner('Transcribing latest podcast... Please wait.'):
+                with st.spinner('Ingesting and transcribing latest podcast... Please wait.'):
                     done = False
                     time.sleep(5)
                     while not done:
@@ -314,7 +314,10 @@ with st.form("data_feed_form"):
 
                 duration = time.time() - start_time
 
-                st.success(f"Podcast transcription took {duration:.2f} seconds.")
+                current_time = datetime.now()
+                formatted_time = current_time.strftime("%H:%M:%S")
+
+                st.success(f"Podcast ingestion and transcription took {duration:.2f} seconds. Finished at {formatted_time}.")
 
                 metadata = get_content_metadata_by_feed()
 
@@ -358,7 +361,10 @@ with st.form("data_feed_form"):
 
                         chapters_duration = time.time() - start_chapters_time
         
-                        st.success(f"Podcast chapter generation took {chapters_duration:.2f} seconds.")
+                        current_time = datetime.now()
+                        formatted_time = current_time.strftime("%H:%M:%S")
+
+                        st.success(f"Podcast chapter generation took {chapters_duration:.2f} seconds. Finished at {formatted_time}.")
         else:
             st.error("Please fill in all the connection information.")
 
