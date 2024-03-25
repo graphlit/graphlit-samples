@@ -177,7 +177,7 @@ def parse_uri(url):
 def publish_contents(prompt):
     # Define the GraphQL mutation
     mutation = """
-    mutation PublishContents($connector: ContentPublishingConnectorInput!, $publishPrompt: String!, $summarySpecification: EntityReference, $publishSpecification: EntityReference, $filter: ContentFilter) {
+    mutation PublishContents($connector: ContentPublishingConnectorInput!, $publishPrompt: String!, $summarySpecification: EntityReferenceInput, $publishSpecification: EntityReferenceInput, $filter: ContentFilter) {
     publishContents(connector: $connector, publishPrompt: $publishPrompt, summarySpecification: $summarySpecification, publishSpecification: $publishSpecification, filter: $filter) {
         id
         name
