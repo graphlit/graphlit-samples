@@ -91,7 +91,7 @@ def delete_content():
     }
     response = st.session_state['client'].request(query=query, variables=variables)
 
-def create_content(uri):
+def ingest_file(uri):
     # Define the GraphQL mutation
     mutation = """
     mutation IngestFile($uri: URL!, $workflow: EntityReferenceInput) {
@@ -356,12 +356,12 @@ with st.form("data_content_form"):
             error_message = create_workflow()
 
             if error_message is not None:
-                st.error(error_message)
+                st.error(f"Failed to create workflow. {error_message}")
             else:
-                error_message = create_content(uri)
+                error_message = ingest_file(uri)
 
                 if error_message is not None:
-                    st.error(error_message)
+                    st.error(f"Failed to ingest file [{uri}]. {error_message}")
                 else:
                     start_time = time.time()
 
