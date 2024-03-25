@@ -2,7 +2,7 @@
 
 ## Ingest and summarize a website.
 
-You can view the Streamlit application [here](https://graphlit-samples-summary-podcast.streamlit.app/).
+You can view the Streamlit application [here](https://graphlit-samples-summary-podcast-feed.streamlit.app/).
 
 ### Demo Instructions
 - **Step 1:** Generate Graphlit project token.

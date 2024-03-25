@@ -1,13 +1,13 @@
 # Graphlit Platform
 
-## Ingest and summarize a website.
+## Ingest and summarize a Reddit subreddit.
 
-You can view the Streamlit application [here](https://graphlit-samples-summary-web-feed.streamlit.app/).
+You can view the Streamlit application [here](https://graphlit-samples-summary-reddit-feed.streamlit.app/).
 
 ### Demo Instructions
 - **Step 1:** Generate Graphlit project token.
-- **Step 2:** Fill in the website URI.
-- **Step 3:** Click to generate summary of website using Claude 3 Haiku.     
+- **Step 2:** Fill in the Reddit subreddit name.
+- **Step 3:** Click to generate summary of recent Reddit subreddit posts using Claude 3 Haiku.     
 
 [Sign up for Graphlit](https://docs.graphlit.dev/getting-started/signup)            
 [API Reference](https://docs.graphlit.dev/graphlit-data-api/api-reference)     

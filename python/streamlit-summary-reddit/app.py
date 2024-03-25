@@ -9,8 +9,8 @@ from graphlit_client import Graphlit
 # Initialize session state variables if not already done
 if 'token' not in st.session_state:
     st.session_state['token'] = None
-if 'uri' not in st.session_state:
-    st.session_state['uri'] = None
+if 'name' not in st.session_state:
+    st.session_state['name'] = None
 if 'specification_id' not in st.session_state:
     st.session_state['specification_id'] = None
 if 'feed_id' not in st.session_state:
@@ -26,7 +26,7 @@ if 'organization_id' not in st.session_state:
 if 'secret_key' not in st.session_state:
     st.session_state['secret_key'] = ""
 
-def create_feed(uri):
+def create_feed(name):
     mutation = """
     mutation CreateFeed($feed: FeedInput!) {
         createFeed(feed: $feed) {
@@ -39,12 +39,12 @@ def create_feed(uri):
     """
     variables = {
         "feed": {
-            "type": "WEB",
-            "web": {
-                "uri": uri,
+            "type": "REDDIT",
+            "reddit": {
+                "subredditName": name,
                 "readLimit": 10
             },
-            "name": uri
+            "name": name
         }
     }
     response = st.session_state['client'].request(query=mutation, variables=variables)
@@ -163,7 +163,7 @@ def generate_summary():
     variables = {
     "filter": {
         "types": [
-            "PAGE"
+            "POST"
         ],
         "feeds": [
             { 
@@ -197,33 +197,34 @@ def generate_summary():
 
 st.image("https://graphlitplatform.blob.core.windows.net/samples/graphlit-logo.svg", width=128)
 st.title("Graphlit Platform")
-st.markdown("Generate summary of website. Will scrape website, and read a maximum of 10 pages via sitemap.xml.")
+st.markdown("Generate summary of Reddit subreddit. Will read a maximum of 10 recent posts")
 
 if st.session_state['token'] is None:
     st.info("To get started, generate a token to connect to your Graphlit project.")
 
-websites = {
-    "OpenAI Blog": "https://openai.com/blog", # can't have www.openai.com, otherwise nothing found in sitemap
-    "Anthropic News": "https://www.anthropic.com/news",
-    "Mistral News": "https://mistral.ai/news/",
-    "Groq Blog": "https://wow.groq.com/blog/"
+subreddits = {
+    "r/openai": "openai",
+    "r/anthropic": "anthropic",
+    "r/mistralai": "MistralAI",
+    "r/llmdevs": "llmdevs",
+    "r/chatgptcoding": "chatgptcoding",
 }
     
 with st.form("data_feed_form"):
-    selected_website = st.selectbox("Select a Website:", options=list(websites.keys()))
+    selected_subreddit = st.selectbox("Select a Reddit subreddit:", options=list(subreddits.keys()))
     
-    website_uri = st.text_input("Or enter your own Website URL", key='website_uri')
+    subreddit_name = st.text_input("Or enter your own Reddit subreddit name", key='subreddit_name')
 
-    is_custom_uri = websites[selected_website] == ""
+    is_custom_name = subreddits[selected_subreddit] == ""
 
-    uri = website_uri if is_custom_uri else websites[selected_website]
+    name = subreddit_name if is_custom_name else subreddits[selected_subreddit]
 
     submit_data = st.form_submit_button("Submit")
 
     # Now, handle actions based on submit_data outside the form's scope
-    if submit_data and uri:
+    if submit_data and name:
         if st.session_state['token']:
-            st.session_state['uri'] = uri
+            st.session_state['name'] = name
             
             if st.session_state['feed_id'] is not None:
                 with st.spinner('Deleting existing feed... Please wait.'):
@@ -235,7 +236,7 @@ with st.form("data_feed_form"):
                     delete_specification()
                 st.session_state["specification_id"] = None
 
-            error_message = create_feed(uri)
+            error_message = create_feed(name)
 
             if error_message is not None:
                 st.error(error_message)
@@ -243,7 +244,7 @@ with st.form("data_feed_form"):
                 start_time = time.time()
 
                 # Display spinner while processing
-                with st.spinner('Ingesting website... Please wait.'):
+                with st.spinner('Ingesting Reddit... Please wait.'):
                     done = False
                     time.sleep(5)
                     while not done:
@@ -260,9 +261,9 @@ with st.form("data_feed_form"):
                 current_time = datetime.now()
                 formatted_time = current_time.strftime("%H:%M:%S")
 
-                st.success(f"Website ingestion took {duration:.2f} seconds. Finished at {formatted_time} UTC.")
+                st.success(f"Reddit ingestion took {duration:.2f} seconds. Finished at {formatted_time} UTC.")
 
-                st.markdown(f"**Website URI:** {uri}")
+                st.markdown(f"**Reddit subreddit:** {name}")
 
                 placeholder = st.empty()
 
@@ -273,7 +274,7 @@ with st.form("data_feed_form"):
                 else:
                     start_summary_time = time.time()
 
-                    with st.spinner('Generating website summary... Please wait.'):
+                    with st.spinner('Generating Reddit summary... Please wait.'):
                         summary = generate_summary()
                         placeholder.markdown(summary)
 
@@ -282,7 +283,7 @@ with st.form("data_feed_form"):
                         current_time = datetime.now()
                         formatted_time = current_time.strftime("%H:%M:%S")
 
-                        st.success(f"Website summary generation took {summary_duration:.2f} seconds. Finished at {formatted_time} UTC.")
+                        st.success(f"Reddit summary generation took {summary_duration:.2f} seconds. Finished at {formatted_time} UTC.")
         else:
             st.error("Please fill in all the connection information.")
 
@@ -290,8 +291,8 @@ with st.sidebar:
     st.info("""
         ### Demo Instructions
         - **Step 1:** Generate Graphlit project token.
-        - **Step 2:** Fill in the website URI.
-        - **Step 3:** Click to generate summary of website using Claude 3 Haiku.     
+        - **Step 2:** Fill in the Reddit subreddit name.
+        - **Step 3:** Click to generate summary of recent Reddit subreddit posts using Claude 3 Haiku.     
         """)
 
     with st.form("credentials_form"):
