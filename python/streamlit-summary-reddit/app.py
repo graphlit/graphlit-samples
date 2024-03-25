@@ -263,7 +263,7 @@ with st.form("data_feed_form"):
 
                 st.success(f"Reddit ingestion took {duration:.2f} seconds. Finished at {formatted_time} UTC.")
 
-                st.markdown(f"**Reddit subreddit:** {name}")
+                st.markdown(f"**Reddit subreddit:** r/{name}")
 
                 placeholder = st.empty()
 
