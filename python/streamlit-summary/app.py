@@ -203,7 +203,7 @@ if st.session_state['token'] is None:
     st.info("To get started, generate a token to connect to your Graphlit project.")
 
 websites = {
-    "OpenAI Blog": "https://www.openai.com/blog",
+    "OpenAI Blog": "https://openai.com/blog", # can't have www.openai.com, otherwise nothing found in sitemap
     "Anthropic News": "https://www.anthropic.com/news",
     "Mistral News": "https://mistral.ai/news/",
     "Groq Blog": "https://wow.groq.com/blog/"
