@@ -320,7 +320,7 @@ pdfs = {
 with st.form("data_content_form"):
     selected_pdf = st.selectbox("Select a PDF:", options=list(pdfs.keys()))
     
-    document_uri = st.text_input("Or enter your own URL to a file (i.e. PDF, DOCX, PPTX, MD)", key='pdf_uri')
+    document_uri = st.text_input("Or enter your own URL to a file (i.e. PDF, DOCX, PPTX, MD):", key='pdf_uri')
 
     uri = document_uri if document_uri else pdfs[selected_pdf]
 
