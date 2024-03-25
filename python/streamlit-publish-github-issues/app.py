@@ -42,7 +42,7 @@ def create_feed(owner, name):
         "feed": {
             "type": "ISSUE",
             "issue": {
-                "type": "GITHUB_ISSUES",
+                "type": "GIT_HUB_ISSUES",
                 "github": {
                     "repositoryOwner": owner,
                     "repositoryName": name,
