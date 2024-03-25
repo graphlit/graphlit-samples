@@ -290,7 +290,7 @@ with st.sidebar:
         ### Demo Instructions
         - **Step 1:** Generate Graphlit project token.
         - **Step 2:** Fill in the Reddit subreddit name.
-        - **Step 3:** Click to generate followup questions from recent Reddit subreddit posts using Claude 3 Haiku.     
+        - **Step 3:** Click to generate followup questions from recent Reddit subreddit posts using [Anthropic](https://www.anthropic.com) Claude 3 Haiku LLM.     
         """)
 
     with st.form("credentials_form"):
