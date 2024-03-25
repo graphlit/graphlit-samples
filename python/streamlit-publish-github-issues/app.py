@@ -248,7 +248,9 @@ with st.form("data_feed_form"):
 
     owner, name = parse_uri(uri)
 
-    prompt = st.text_input("Enter a prompt to generate a report about recent GitHub issues", key='prompt')
+    default_prompt = "Write me a report of recurring themes across all GitHub issues, which can be used to group issues into workstreams.  For each theme, provide an example of issues which fall into this theme."
+
+    prompt = st.text_input("Enter a prompt to generate a report about recent GitHub issues:", key='prompt', val=default_prompt)
 
     submit_data = st.form_submit_button("Submit")
 
