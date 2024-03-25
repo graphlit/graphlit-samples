@@ -35,6 +35,7 @@ def get_content_metadata():
         content(id: $id) {
             id
             state
+            markdown
             document {
                 title
                 keywords
@@ -54,7 +55,7 @@ def get_content_metadata():
  #   st.json(response)
 
     if 'content' in response['data']:
-        return response['data']['content']['document']
+        return response['data']['content']['document'], response['data']['content']['markdown']
     
     return None
 
@@ -332,16 +333,6 @@ with st.form("data_content_form"):
             st.session_state['uri'] = uri
             
             # Clean up previous session state
-            if st.session_state['conversation_id'] is not None:
-                with st.spinner('Deleting existing conversation... Please wait.'):
-                    delete_conversation()
-                st.session_state["conversation_id"] = None
-
-            if st.session_state['specification_id'] is not None:
-                with st.spinner('Deleting existing specification... Please wait.'):
-                    delete_specification()
-                st.session_state["specification_id"] = None
-
             if st.session_state['workflow_id'] is not None:
                 with st.spinner('Deleting existing workflow... Please wait.'):
                     delete_workflow()
@@ -384,33 +375,26 @@ with st.form("data_content_form"):
 
                     st.success(f"PDF ingestion took {duration:.2f} seconds. Finished at {formatted_time} UTC.")
 
-                    metadata = get_content_metadata()
+                    document_metadata, document_markdown = get_content_metadata()
 
     #                st.json(metadata)
 
                     st.markdown(f"**PDF URI:** {uri}")
 
-                    if metadata is not None:
-                        pdf_title = metadata["title"]
-                        pdf_author = metadata["author"]
+                    if document_metadata is not None:
+                        document_title = document_metadata["title"]
+                        document_author = document_metadata["author"]
 
-                        if pdf_title is not None:
-                            st.markdown(f"**Title:** {pdf_title}")
+                        if document_title is not None:
+                            st.markdown(f"**Title:** {document_title}")
 
-                        if pdf_author is not None:
-                            st.markdown(f"**Author:** {pdf_author}")
+                        if document_author is not None:
+                            st.markdown(f"**Author:** {document_author}")
+
+                        with st.expander("See extracted document text:", expanded=False):
+                            st.markdown(document_markdown)
 
                     placeholder = st.empty()
-
-                    error_message = create_specification()
-
-                    if error_message is not None:
-                        st.error(f"Failed to create specification. {error_message}")
-                    else:
-                        error_message = create_conversation();
-
-                        if error_message is not None:
-                            st.error(f"Failed to create conversation. {error_message}")
         else:
             st.error("Please fill in all the connection information.")
 
@@ -421,6 +405,27 @@ if st.session_state['content_done'] == True:
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
+
+    # Clean up previous session state
+    if st.session_state['conversation_id'] is not None:
+        with st.spinner('Deleting existing conversation... Please wait.'):
+            delete_conversation()
+        st.session_state["conversation_id"] = None
+
+    if st.session_state['specification_id'] is not None:
+        with st.spinner('Deleting existing specification... Please wait.'):
+            delete_specification()
+        st.session_state["specification_id"] = None
+
+    error_message = create_specification()
+
+    if error_message is not None:
+        st.error(f"Failed to create specification. {error_message}")
+    else:
+        error_message = create_conversation();
+
+        if error_message is not None:
+            st.error(f"Failed to create conversation. {error_message}")
 
     try:
         if prompt := st.chat_input("Ask me anything about this document."):
