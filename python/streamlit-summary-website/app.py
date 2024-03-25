@@ -289,7 +289,7 @@ with st.sidebar:
         ### Demo Instructions
         - **Step 1:** Generate Graphlit project token.
         - **Step 2:** Fill in the website URI.
-        - **Step 3:** Click to generate summary of website using Claude 3 Haiku.     
+        - **Step 3:** Click to generate summary of website using [Anthropic](https://www.anthropic.com) Claude 3 Haiku LLM.     
         """)
 
     with st.form("credentials_form"):

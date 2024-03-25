@@ -77,6 +77,49 @@ def delete_feed():
     }
     response = st.session_state['client'].request(query=query, variables=variables)
 
+def get_content_metadata_by_feed():
+    # Define the GraphQL mutation
+    query = """
+    query QueryContents($filter: ContentFilter) {
+        contents(filter: $filter) {
+            results {
+                id
+                state
+                audio {
+                    title
+                    duration
+                }            
+            }
+        }
+    }
+    """
+
+    # Define the variables for the mutation
+    variables = {
+        "filter": {
+            "types": [
+                "FILE"
+            ],
+            "fileTypes": [
+                "AUDIO"
+            ],
+            "feeds": [
+                {
+                    "id": st.session_state["feed_id"]
+                }
+            ]
+        }
+    }
+
+    response = st.session_state['client'].request(query=query, variables=variables)
+
+ #   st.json(response)
+
+    if 'results' in response['data']["contents"] and len(response['data']['contents']['results']) > 0:
+        return response['data']['contents']['results'][0]['audio']
+    
+    return None
+
 def delete_specification():
     # Define the GraphQL mutation
     query = """
@@ -272,7 +315,7 @@ with st.form("data_feed_form"):
                 start_time = time.time()
 
                 # Display spinner while processing
-                with st.spinner('Ingesting YouTube video... Please wait.'):
+                with st.spinner('Ingesting YouTube video... Will be slow because of YouTube rate-limiting. Please wait.'):
                     done = False
                     time.sleep(5)
                     while not done:
@@ -291,7 +334,20 @@ with st.form("data_feed_form"):
 
                 st.success(f"YouTube video ingestion took {duration:.2f} seconds. Finished at {formatted_time} UTC.")
 
-                st.markdown(f"**YouTube video identifier:** {identifier}")
+                st.markdown(f"**YouTube video URL:** https://www.youtube.com/watch?v={identifier}")
+
+                metadata = get_content_metadata_by_feed()
+
+#                st.json(metadata)
+
+                if metadata is not None:
+                    video_title = metadata["title"]
+                    video_duration = metadata["duration"]
+
+                    if video_title is not None:
+                        st.markdown(f"**Video:** {video_title}")
+
+                    st.markdown(f"**Duration:** {video_duration}")
 
                 placeholder = st.empty()
 
@@ -320,7 +376,7 @@ with st.sidebar:
         ### Demo Instructions
         - **Step 1:** Generate Graphlit project token.
         - **Step 2:** Fill in the YouTube video identifier.
-        - **Step 3:** Click to generate chapters from YouTube video using Claude 3 Haiku.     
+        - **Step 3:** Click to generate chapters from YouTube video using [Deepgram](https://www.deepgram.com) audio transcription and [Anthropic](https://www.anthropic.com) Claude 3 Haiku LLM.     
         """)
 
     with st.form("credentials_form"):

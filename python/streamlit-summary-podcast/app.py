@@ -371,7 +371,7 @@ with st.sidebar:
         ### Demo Instructions
         - **Step 1:** Generate Graphlit project token.
         - **Step 2:** Select a podcast, or fill in the podcast RSS URL.
-        - **Step 3:** Click to generate chapters from latest podcast episode using Claude 3 Haiku.     
+        - **Step 3:** Click to generate chapters from latest podcast episode using [Deepgram](https://www.deepgram.com) audio transcription and [Anthropic](https://www.anthropic.com) Claude 3 Haiku LLM.     
         """)
 
     with st.form("credentials_form"):
