@@ -74,7 +74,12 @@ def is_content_done():
         "id": st.session_state["content_id"]
     }
     response = st.session_state['client'].request(query=query, variables=variables)
-    return response['data']['isContentDone']['result']
+
+    if 'errors' in response and len(response['errors']) > 0:
+        error_message = response['errors'][0]['message']
+        return None, error_message
+
+    return response['data']['isContentDone']['result'], None
 
 def delete_content():
     # Define the GraphQL mutation
@@ -90,6 +95,7 @@ def delete_content():
     variables = {
         "id": st.session_state['content_id']
     }
+
     response = st.session_state['client'].request(query=query, variables=variables)
 
 def ingest_file(uri):
@@ -363,8 +369,13 @@ with st.form("data_content_form"):
                         done = False
                         time.sleep(5)
                         while not done:
-                            done = is_content_done()
+                            done, error_message = is_content_done()
 
+                            if error_message is not None:
+                                st.error(f"Failed to wait for content to be done. {error_message}")
+                            else:
+                                break
+                            
                             # Wait a bit before checking again
                             if not done:
                                 time.sleep(2)
