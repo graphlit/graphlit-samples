@@ -27,7 +27,7 @@ if 'organization_id' not in st.session_state:
 if 'secret_key' not in st.session_state:
     st.session_state['secret_key'] = ""
 
-def render_histogram_charts(data):
+def render_combined_histogram_chart(data):
     # Convert JSON data to DataFrame
     df = pd.json_normalize(data, sep='_')
     
@@ -38,20 +38,14 @@ def render_histogram_charts(data):
         'count': 'count'
     }, inplace=True)
 
-    # Group by observable_type to create separate charts
-    observable_types = df['observable_type'].unique()
+    # Aggregate counts by observable_name, summing counts across observable_types
+    aggregated_df = df.groupby('observable_name').agg(total_count=('count', 'sum')).reset_index()
     
-    for observable_type in observable_types:        
-        st.subheader(f"{observable_type}s")
-        
-        # Filter data for the current observable type
-        filtered_df = df[df['observable_type'] == observable_type]
-        
-        # Sort the observable names alphabetically before charting
-        sorted_filtered_df = filtered_df.sort_values(by='observable_name')
-        
-        # Create histogram chart with the sorted DataFrame
-        st.bar_chart(sorted_filtered_df.set_index('observable_name')['count'])
+    # Sort the aggregated DataFrame by observable_name alphabetically
+    sorted_aggregated_df = aggregated_df.sort_values(by='observable_name')
+    
+    # Create a single histogram chart for all observables, ensuring it's sorted by name
+    st.bar_chart(sorted_aggregated_df.set_index('observable_name')['total_count'])
 
 def query_contents_facets():
     # Define the GraphQL mutation
