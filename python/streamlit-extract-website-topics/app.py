@@ -27,7 +27,7 @@ if 'organization_id' not in st.session_state:
 if 'secret_key' not in st.session_state:
     st.session_state['secret_key'] = ""
 
-def render_combined_histogram_chart(data):
+def render_histogram_chart(data):
     # Convert JSON data to DataFrame
     df = pd.json_normalize(data, sep='_')
     
@@ -295,7 +295,7 @@ if st.session_state['feed_done'] == True:
         if content_facets is not None:
             st.header('Topics observed in website:')
         
-            render_histogram_charts(content_facets)
+            render_histogram_chart(content_facets)
 
 with st.sidebar:
     st.info("""
