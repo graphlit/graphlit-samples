@@ -128,8 +128,8 @@ def create_workflow():
 
 def create_feed(uri):
     mutation = """
-    mutation CreateFeed($feed: FeedInput!, $workflow: EntityReferenceInput) {
-        createFeed(feed: $feed, workflow: $workflow) {
+    mutation CreateFeed($feed: FeedInput!) {
+        createFeed(feed: $feed) {
             id
             name
             state
