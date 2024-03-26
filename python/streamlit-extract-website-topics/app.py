@@ -247,7 +247,11 @@ with st.form("data_feed_form"):
                     delete_feed()
                 st.session_state["feed_id"] = None
 
-            if st.session_state['workflow_id'] is None:
+            if st.session_state['workflow_id'] is not None:
+                with st.spinner('Deleting existing workflow... Please wait.'):
+                    delete_workflow()
+                st.session_state["workflow_id"] = None
+
                 error_message = create_workflow()
 
                 if error_message is not None:
