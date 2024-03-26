@@ -197,6 +197,14 @@ def display_observations_as_chips(observations):
     # Group observations by type
     result = {}
     
+    # Define a fixed color lookup table for observable types
+    colors = {
+        "LABEL": "#FFD700",  # Gold
+        "PERSON": "#FF6347",  # Tomato
+        "ORGANIZATION": "#4682B4",  # SteelBlue
+        # Define more types and their colors as needed
+    }
+    
     for observation in observations:
         observation_type = observation['type']
         observable_name = observation['observable']['name']
@@ -209,14 +217,17 @@ def display_observations_as_chips(observations):
     # For each observation type, create a row with type label and chips
     for observation_type, observable_names in result.items():
         # Create a row for each type
-        col1, col2 = st.columns([1, 3])
+        col1, col2 = st.columns([1, 4])
         
         with col1:
             st.markdown(f"**{observation_type}**")
         
         with col2:
-            # Using markdown to simulate chips, since Streamlit does not support disabled multiselect
-            chips = ''.join([f"<span style='padding: 5px; background-color: #f0f2f6; border-radius: 25px; margin-right: 5px;'>{name}</span>" for name in observable_names])
+            # Fetch the color for each observation type from the lookup table
+            chip_color = colors.get(observation_type, "#DDDDDD")  # Default color if type not found
+            
+            # Adjust chip style and layout
+            chips = ''.join([f"<span style='padding: 8px 10px; background-color: {chip_color}; border-radius: 5px; margin: 5px; display: inline-block;'>{name}</span>" for name in observable_names])
             st.markdown(f"<div style='display: flex; flex-wrap: wrap;'>{chips}</div>", unsafe_allow_html=True)
 
 st.image("https://graphlitplatform.blob.core.windows.net/samples/graphlit-logo.svg", width=128)
@@ -328,9 +339,7 @@ if st.session_state['content_done'] == True:
                 st.markdown(document_markdown)
         
         if document_observations is not None:
-            st.header('Extracted people and organizations:')
-
-            st.json(document_observations)
+            st.header('People and organizations observed in document:')
 
             display_observations_as_chips(document_observations)
 
