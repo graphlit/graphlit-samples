@@ -193,11 +193,11 @@ def create_workflow():
 
     return None
 
-def display_observations_as_chips(observations_json):
+def display_observations_as_chips(observations):
     # Group observations by type
     result = {}
     
-    for observation in observations_json['observations']:
+    for observation in observations:
         observation_type = observation['type']
         observable_name = observation['observable']['name']
 
@@ -324,11 +324,13 @@ if st.session_state['content_done'] == True:
                 st.markdown(f"**Author:** {document_author}")
 
         if document_markdown is not None:
-            with st.expander("See extracted document text:", expanded=False):
+            with st.expander("See document text:", expanded=False):
                 st.markdown(document_markdown)
         
         if document_observations is not None:
             st.header('Extracted people and organizations:')
+
+            st.json(document_observations)
 
             display_observations_as_chips(document_observations)
 

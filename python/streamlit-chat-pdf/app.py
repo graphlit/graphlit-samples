@@ -425,7 +425,7 @@ if st.session_state['content_done'] == True:
                 st.markdown(f"**Author:** {document_author}")
 
         if document_markdown is not None:
-            with st.expander("See extracted document text:", expanded=False):
+            with st.expander("See document text:", expanded=False):
                 st.markdown(document_markdown)
 
         if "messages" not in st.session_state:
