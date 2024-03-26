@@ -349,20 +349,17 @@ with st.form("data_content_form"):
             st.session_state['uri'] = uri
             
             # Clean up previous session state
-            if st.session_state['workflow_id'] is not None:
-                with st.spinner('Deleting existing workflow... Please wait.'):
-                    delete_workflow()
-                st.session_state["workflow_id"] = None
+            if st.session_state['workflow_id'] is None:
+                error_message = create_workflow()
+
+                if error_message is not None:
+                    st.error(f"Failed to create workflow. {error_message}")
 
             if st.session_state['content_id'] is not None:
                 with st.spinner('Deleting existing content... Please wait.'):
                     delete_content()
                 st.session_state["content_id"] = None
 
-            error_message = create_workflow()
-
-            if error_message is not None:
-                st.error(f"Failed to create workflow. {error_message}")
             else:
                 error_message = ingest_file(uri)
 
@@ -371,36 +368,36 @@ with st.form("data_content_form"):
                 else:
                     start_time = time.time()
 
-                    # Display spinner while processing
-                    with st.spinner('Ingesting document... Please wait.'):
-                        done = False
-                        time.sleep(5)
-                        while not done:
-                            done, error_message = is_content_done()
+                # Display spinner while processing
+                with st.spinner('Ingesting document... Please wait.'):
+                    done = False
+                    time.sleep(5)
+                    while not done:
+                        done, error_message = is_content_done()
 
-                            if error_message is not None:
-                                st.error(f"Failed to wait for content to be done. {error_message}")
-                                done = True                                
+                        if error_message is not None:
+                            st.error(f"Failed to wait for content to be done. {error_message}")
+                            done = True                                
 
-                            # Wait a bit before checking again
-                            if not done:
-                                time.sleep(2)
-                    # Once done, notify the user
-                    st.session_state["content_done"] = True
+                        # Wait a bit before checking again
+                        if not done:
+                            time.sleep(2)
+                # Once done, notify the user
+                st.session_state["content_done"] = True
 
-                    duration = time.time() - start_time
+                duration = time.time() - start_time
 
-                    current_time = datetime.now()
-                    formatted_time = current_time.strftime("%H:%M:%S")
+                current_time = datetime.now()
+                formatted_time = current_time.strftime("%H:%M:%S")
 
-                    st.success(f"PDF ingestion took {duration:.2f} seconds. Finished at {formatted_time} UTC.")
+                st.success(f"PDF ingestion took {duration:.2f} seconds. Finished at {formatted_time} UTC.")
 
-                    document_metadata, document_markdown = get_content_metadata()
+                document_metadata, document_markdown = get_content_metadata()
 
-                    st.session_state['document_metadata'] = document_metadata
-                    st.session_state['document_markdown'] = document_markdown
+                st.session_state['document_metadata'] = document_metadata
+                st.session_state['document_markdown'] = document_markdown
 
-                    placeholder = st.empty()
+                placeholder = st.empty()
         else:
             st.error("Please fill in all the connection information.")
 
@@ -432,23 +429,14 @@ if st.session_state['content_done'] == True:
             with st.chat_message(message["role"]):
                 st.markdown(message["content"])
 
-        # Clean up previous session state
-        if st.session_state['conversation_id'] is not None:
-            with st.spinner('Deleting existing conversation... Please wait.'):
-                delete_conversation()
-            st.session_state["conversation_id"] = None
+        if st.session_state['specification_id'] is None:
+            error_message = create_specification()
 
-        if st.session_state['specification_id'] is not None:
-            with st.spinner('Deleting existing specification... Please wait.'):
-                delete_specification()
-            st.session_state["specification_id"] = None
+            if error_message is not None:
+                st.error(f"Failed to create specification. {error_message}")
 
-        error_message = create_specification()
-
-        if error_message is not None:
-            st.error(f"Failed to create specification. {error_message}")
-        else:
-            error_message = create_conversation();
+        if st.session_state['conversation_id'] is None:
+            error_message = create_conversation()
 
             if error_message is not None:
                 st.error(f"Failed to create conversation. {error_message}")
