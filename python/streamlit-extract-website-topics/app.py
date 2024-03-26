@@ -33,23 +33,23 @@ def render_histogram_charts(data):
     
     # Rename columns for clarity
     df.rename(columns={
-        'observable_type': 'type',
-        'observable_observable_name': 'name',
+        'observable_type': 'observable_type',
+        'observable_observable_name': 'observable_name',
         'count': 'count'
     }, inplace=True)
 
     # Group by observable_type to create separate charts
-    observable_types = df['type'].unique()
+    observable_types = df['observable_type'].unique()
     
     for observable_type in observable_types:        
         # Filter data for the current observable type
-        filtered_df = df[df['type'] == observable_type]
+        filtered_df = df[df['observable_type'] == observable_type]
         
         # Sort the observable names alphabetically before charting
-        sorted_filtered_df = filtered_df.sort_values(by='name')
+        sorted_filtered_df = filtered_df.sort_values(by='observable_name')
         
         # Create histogram chart with the sorted DataFrame
-        st.bar_chart(sorted_filtered_df.set_index('name')['count'])
+        st.bar_chart(sorted_filtered_df.set_index('observable_name')['count'])
 
 def query_contents_facets():
     # Define the GraphQL mutation
