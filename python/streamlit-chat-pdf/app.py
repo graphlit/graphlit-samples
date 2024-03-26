@@ -306,7 +306,7 @@ def prompt_conversation(prompt):
        
 st.image("https://graphlitplatform.blob.core.windows.net/samples/graphlit-logo.svg", width=128)
 st.title("Graphlit Platform")
-st.markdown("Chat with PDF.")
+st.markdown("Chat with any PDF, DOCX, PPTX, or Markdown file.")
 
 if st.session_state['token'] is None:
     st.info("To get started, generate a token to connect to your Graphlit project.")
