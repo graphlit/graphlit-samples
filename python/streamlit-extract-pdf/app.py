@@ -216,6 +216,9 @@ def display_observations_as_chips(observations):
     
     # For each observation type, create a row with type label and chips
     for observation_type, observable_names in result.items():
+        # Sort the list of observable names for this type
+        observable_names.sort()
+
         # Create a row for each type
         col1, col2 = st.columns([1, 4])
         
@@ -229,7 +232,7 @@ def display_observations_as_chips(observations):
             # Adjust chip style and layout
             chips = ''.join([
                 f"<span style='padding: 8px 12px; background-color: {chip_color}; border-radius: 5px; margin: 5px; display: inline-block; box-shadow: 0 2px 4px rgba(0,0,0,0.1); font-family: Arial, sans-serif; color: #FFFFFF;'>{name}</span>"
-                for name in observable_names
+                for name in sorted(observable_names)  # Sort names before generating chips
             ])
 
             st.markdown(f"<div style='display: flex; flex-wrap: wrap;'>{chips}</div>", unsafe_allow_html=True)
