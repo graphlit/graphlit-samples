@@ -1,5 +1,5 @@
 import streamlit as st
-import matplotlib.pyplot as plt
+import plotly.graph_objects as go
 import pandas as pd
 import requests
 import jwt
@@ -38,15 +38,32 @@ def render_histogram_chart(data):
         'observable_observable_name': 'Name',
         'count': 'Count'
     }, inplace=True)
+
+    # Create a figure using Plotly graph objects
+    fig = go.Figure()
     
-    # Using Plotly for more customizable visualization
-    fig = plt.bar(df, x='Name', y='Count', color='Type', 
-                 hover_data={'Name': True, 'Count': True, 'Type': True},
-                 labels={'Count': 'Count', 'Name': 'Observable Name', 'Type': 'Observable Type'})
+    # Iterate over each unique observable type to add a trace for each
+    for observable_type in df['Type'].unique():
+        filtered_df = df[df['Type'] == observable_type]
+        
+        fig.add_trace(go.Bar(
+            x=filtered_df['Name'],
+            y=filtered_df['Count'],
+            name=observable_type,
+            hoverinfo='text',
+            hovertext=[
+                f'Name: {name}<br>Type: {otype}<br>Count: {count}' 
+                for name, otype, count in zip(filtered_df['Name'], filtered_df['Type'], filtered_df['Count'])
+            ]
+        ))
     
-    # Update layout for clearer visualization
-    fig.update_layout(xaxis={'categoryorder': 'total descending'},
-                      title='Combined Histogram Chart for All Observables')
+    # Update the layout if needed
+    fig.update_layout(
+        title='Observable Names and Counts by Type',
+        xaxis_title='Observable Name',
+        yaxis_title='Count',
+        barmode='group'
+    )
     
     # Render the Plotly figure in Streamlit
     st.plotly_chart(fig)
