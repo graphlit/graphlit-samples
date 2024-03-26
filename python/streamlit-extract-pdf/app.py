@@ -193,6 +193,32 @@ def create_workflow():
 
     return None
 
+def display_observations_as_chips(observations_json):
+    # Group observations by type
+    result = {}
+    
+    for observation in observations_json['observations']:
+        observation_type = observation['type']
+        observable_name = observation['observable']['name']
+
+        if observation_type not in result:
+            result[observation_type] = []
+        
+        result[observation_type].append(observable_name)
+    
+    # For each observation type, create a row with type label and chips
+    for observation_type, observable_names in result.items():
+        # Create a row for each type
+        col1, col2 = st.columns([1, 3])
+        
+        with col1:
+            st.markdown(f"**{observation_type}**")
+        
+        with col2:
+            # Using markdown to simulate chips, since Streamlit does not support disabled multiselect
+            chips = ''.join([f"<span style='padding: 5px; background-color: #f0f2f6; border-radius: 25px; margin-right: 5px;'>{name}</span>" for name in observable_names])
+            st.markdown(f"<div style='display: flex; flex-wrap: wrap;'>{chips}</div>", unsafe_allow_html=True)
+
 st.image("https://graphlitplatform.blob.core.windows.net/samples/graphlit-logo.svg", width=128)
 st.title("Graphlit Platform")
 st.markdown("Extract people and companies from any PDF, DOCX, or PPTX file.")
@@ -304,8 +330,7 @@ if st.session_state['content_done'] == True:
         if document_observations is not None:
             st.header('Extracted people and organizations:')
 
-            # TODO: pretty render the observations
-            st.json(document_observations)
+            display_observations_as_chips(document_observations)
 
 with st.sidebar:
     st.info("""
