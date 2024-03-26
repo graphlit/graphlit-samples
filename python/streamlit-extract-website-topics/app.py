@@ -29,8 +29,8 @@ if 'secret_key' not in st.session_state:
 def query_contents_facets():
     # Define the GraphQL mutation
     query = """
-    query QueryContents($filter: ContentFilter) {
-        contents(filter: $filter) {
+    query QueryContents($filter: ContentFilter, $facets: [ContentFacetInput]) {
+        contents(filter: $filter, facets: $facets) {
             facets { 
                 facet 
                 type
