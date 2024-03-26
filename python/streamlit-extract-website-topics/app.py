@@ -1,4 +1,5 @@
 import streamlit as st
+import pandas as pd
 import requests
 import jwt
 from datetime import datetime
@@ -25,6 +26,29 @@ if 'organization_id' not in st.session_state:
     st.session_state['organization_id'] = ""
 if 'secret_key' not in st.session_state:
     st.session_state['secret_key'] = ""
+
+def render_histogram_charts(data):
+    # Convert JSON data to DataFrame
+    df = pd.json_normalize(data, sep='_')
+    
+    # Rename columns for clarity
+    df.rename(columns={
+        'observable_type': 'observable_type',
+        'observable_observable_name': 'observable_name',
+        'count': 'count'
+    }, inplace=True)
+
+    # Group by observable_type to create separate charts
+    observable_types = df['observable_type'].unique()
+    
+    for observable_type in observable_types:
+        st.subheader(f"Histogram for Observable Type: {observable_type}")
+        
+        # Filter data for the current observable type
+        filtered_df = df[df['observable_type'] == observable_type]
+        
+        # Create histogram chart
+        st.bar_chart(filtered_df.set_index('observable_name')['count'])
 
 def query_contents_facets():
     # Define the GraphQL mutation
@@ -274,9 +298,7 @@ if st.session_state['feed_done'] == True:
         if content_facets is not None:
             st.header('Topics observed in website:')
         
-            st.json(content_facets)
-
-#            display_facets_as_chart(content_facets)
+            render_histogram_charts(content_facets)
 
 with st.sidebar:
     st.info("""
