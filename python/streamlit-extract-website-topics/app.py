@@ -263,8 +263,6 @@ with st.form("data_feed_form"):
                 content_facets = query_contents_facets()
 
                 st.session_state['content_facets'] = content_facets
-
-                placeholder = st.empty()
         else:
             st.error("Please fill in all the connection information.")
 
