@@ -323,7 +323,7 @@ with st.form("data_feed_form"):
 with st.sidebar:
     st.info("""
         ### Demo Instructions
-        - **Prerequisite:** [Sign up for Graphlit 🆓](https://docs.graphlit.dev/getting-started/signup)
+        - [Sign up for Graphlit](https://docs.graphlit.dev/getting-started/signup) 🆓  
         - **Step 1:** Generate Graphlit project token.
         - **Step 2:** Fill in the GitHub repo URI.
         - **Step 3:** Click to generate report of recent GitHub Issues using [Anthropic](https://www.anthropic.com) Claude 3 Haiku LLM.     
