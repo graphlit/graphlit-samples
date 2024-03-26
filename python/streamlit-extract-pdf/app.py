@@ -239,7 +239,7 @@ def display_observations_as_chips(observations):
 
 st.image("https://graphlitplatform.blob.core.windows.net/samples/graphlit-logo.svg", width=128)
 st.title("Graphlit Platform")
-st.markdown("Extract people and companies from any PDF, DOCX, or PPTX file.")
+st.markdown("Extract people and companies from any PDF, DOCX, or PPTX file. Entity extraction is done with [Azure AI Language](https://azure.microsoft.com/en-us/products/ai-services/ai-language).")
 
 if st.session_state['token'] is None:
     st.info("To get started, generate a token to connect to your Graphlit project.")
@@ -346,7 +346,7 @@ if st.session_state['content_done'] == True:
                 st.markdown(document_markdown)
         
         if document_observations is not None:
-            st.header('People and organizations observed in document:')
+            st.header('Entities observed in document:')
 
             display_observations_as_chips(document_observations)
 
@@ -355,7 +355,7 @@ with st.sidebar:
         ### Demo Instructions
         - **Step 1:** Generate Graphlit project token.
         - **Step 2:** Select a PDF, or fill in your own document URL.
-        - **Step 3:** TODO
+        - **Step 3:** View entities extracted from document text, i.e. persons and organizations.
         """)
 
     with st.form("credentials_form"):
