@@ -371,7 +371,7 @@ with st.form("data_content_form"):
                 # Display spinner while processing
                 with st.spinner('Ingesting document... Please wait.'):
                     done = False
-                    time.sleep(5)
+                    time.sleep(2)
                     while not done:
                         done, error_message = is_content_done()
 
