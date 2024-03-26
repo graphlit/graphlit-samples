@@ -204,7 +204,6 @@ if st.session_state['token'] is None:
 
 websites = {
     "OpenAI Blog": "https://openai.com/blog", # can't have www.openai.com, otherwise nothing found in sitemap
-    "Ben's Bites": "https://bensbites.beehiiv.com/",
     "MIT News": "https://news.mit.edu/topic/artificial-intelligence2",
     "NVIDIA Blog": "https://blogs.nvidia.com/",
     "Call to the Pen (Baseball)": "https://calltothepen.com/"
