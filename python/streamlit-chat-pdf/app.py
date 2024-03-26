@@ -27,6 +27,10 @@ if 'secret_key' not in st.session_state:
     st.session_state['secret_key'] = ""
 if 'content_done' not in st.session_state:
     st.session_state['content_done'] = None
+if 'document_markdown' not in st.session_state:
+    st.session_state['document_markdown'] = None
+if 'document_metadata' not in st.session_state:
+    st.session_state['document_metadata'] = None
 
 def get_content_metadata():
     # Define the GraphQL mutation
@@ -393,7 +397,8 @@ with st.form("data_content_form"):
 
                     document_metadata, document_markdown = get_content_metadata()
 
-    #                st.json(metadata)
+                    st.session_state['document_metadata'] = document_metadata
+                    st.session_state['document_markdown'] = document_markdown
 
                     placeholder = st.empty()
         else:
@@ -402,6 +407,9 @@ with st.form("data_content_form"):
 if st.session_state['content_done'] == True:
     if st.session_state['token']:
         st.markdown(f"**PDF URI:** {uri}")
+
+        document_metadata = st.session_state['document_metadata']
+        document_markdown = st.session_state['document_markdown']
 
         if document_metadata is not None:
             document_title = document_metadata["title"]
@@ -413,6 +421,7 @@ if st.session_state['content_done'] == True:
             if document_author is not None:
                 st.markdown(f"**Author:** {document_author}")
 
+        if document_markdown is not None:
             with st.expander("See extracted document text:", expanded=False):
                 st.markdown(document_markdown)
 
