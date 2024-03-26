@@ -51,13 +51,6 @@ def render_histogram_chart(data):
     # Render the Plotly figure in Streamlit
     st.plotly_chart(fig)
 
-# Assuming your 'data' is already defined
-# render_histogram_chart_with_tooltips(data)
-
-
-# Assuming your 'data' is already defined
-# render_histogram_chart_with_tooltips(data)
-
 def query_contents_facets():
     # Define the GraphQL mutation
     query = """
@@ -263,10 +256,10 @@ with st.form("data_feed_form"):
                     delete_workflow()
                 st.session_state["workflow_id"] = None
 
-                error_message = create_workflow()
+            error_message = create_workflow()
 
-                if error_message is not None:
-                    st.error(f"Failed to create workflow. {error_message}")
+            if error_message is not None:
+                st.error(f"Failed to create workflow. {error_message}")
 
             error_message = create_feed(uri)
 
