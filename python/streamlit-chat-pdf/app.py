@@ -225,6 +225,7 @@ def create_specification():
                 "completionTokenLimit": 2048
             },
             "strategy": { 
+                "embedCitations": False, # TODO: add citations
                 "enableExpandedRetrieval": True
             },
             "promptStrategy": { 
