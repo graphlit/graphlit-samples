@@ -1,4 +1,5 @@
 import streamlit as st
+import matplotlib.pyplot as plt
 import pandas as pd
 import requests
 import jwt
@@ -39,7 +40,7 @@ def render_histogram_chart(data):
     }, inplace=True)
     
     # Using Plotly for more customizable visualization
-    fig = st.bar_chart(df, x='Name', y='Count', color='Type', 
+    fig = plt.bar(df, x='Name', y='Count', color='Type', 
                  hover_data={'Name': True, 'Count': True, 'Type': True},
                  labels={'Count': 'Count', 'Name': 'Observable Name', 'Type': 'Observable Type'})
     
