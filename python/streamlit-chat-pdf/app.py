@@ -220,9 +220,15 @@ def create_specification():
             "serviceType": "ANTHROPIC",
             "anthropic": {
                 "model": "CLAUDE_3_HAIKU",
-                "temperature": 0.5,
+                "temperature": 0.1,
                 "probability": 0.2,
                 "completionTokenLimit": 2048
+            },
+            "strategy": { 
+                "enableExpandedRetrieval": True
+            },
+            "promptStrategy": { 
+                "type": "OPTIMIZE_SEARCH"
             },
             "name": "Completion"
         }
