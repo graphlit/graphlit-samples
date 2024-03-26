@@ -49,8 +49,7 @@ def render_histogram_charts(data):
         # Use Plotly to create a customizable histogram
         fig = px.bar(filtered_df, x='Name', y='Count',
                      color='Count',  # Color the bars by their count value
-                     labels={'Count': 'Count', 'Name': 'Observable Name'},
-                     title=f'Histogram for {observable_type}s')
+                     labels={'Count': 'Count', 'Name': 'Observable Name'})
         fig.update_layout(xaxis_title='Observable Name', yaxis_title='Count')
         
         # Render the Plotly figure in Streamlit
