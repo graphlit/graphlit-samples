@@ -365,7 +365,7 @@ with st.form("data_content_form"):
                     start_time = time.time()
 
                     # Display spinner while processing
-                    with st.spinner('Ingesting PDF... Please wait.'):
+                    with st.spinner('Ingesting document... Please wait.'):
                         done = False
                         time.sleep(5)
                         while not done:
@@ -375,7 +375,7 @@ with st.form("data_content_form"):
                                 st.error(f"Failed to wait for content to be done. {error_message}")
                             else:
                                 break
-                            
+
                             # Wait a bit before checking again
                             if not done:
                                 time.sleep(2)
