@@ -11,6 +11,8 @@ if 'token' not in st.session_state:
     st.session_state['token'] = None
 if 'uri' not in st.session_state:
     st.session_state['uri'] = None
+if 'workflow_id' not in st.session_state:
+    st.session_state['workflow_id'] = None
 if 'feed_id' not in st.session_state:
     st.session_state['feed_id'] = None
 if 'feed_done' not in st.session_state:
