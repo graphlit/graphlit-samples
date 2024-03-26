@@ -29,8 +29,8 @@ if 'secret_key' not in st.session_state:
     st.session_state['secret_key'] = ""
 
 def render_histogram_chart(data):
-    st.json(data)
-    
+#    st.json(data)
+
     # Convert JSON data to DataFrame
     df = pd.json_normalize(data, sep='_')
     
