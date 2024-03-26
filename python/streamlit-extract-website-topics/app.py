@@ -29,6 +29,8 @@ if 'secret_key' not in st.session_state:
     st.session_state['secret_key'] = ""
 
 def render_histogram_chart(data):
+    st.json(data)
+    
     # Convert JSON data to DataFrame
     df = pd.json_normalize(data, sep='_')
     
@@ -39,15 +41,14 @@ def render_histogram_chart(data):
         'count': 'Count'
     }, inplace=True)
     
+    # Sort the DataFrame by 'Name' alphabetically
+    df = df.sort_values(by='Name')
+    
     # Using Plotly for more customizable visualization
     fig = px.bar(df, x='Name', y='Count', color='Type', 
                  hover_data={'Name': True, 'Count': True, 'Type': True},
                  labels={'Count': 'Count', 'Name': 'Observable Name', 'Type': 'Observable Type'})
-    
-    # Update layout for clearer visualization
-    fig.update_layout(xaxis={'categoryorder': 'total descending'},
-                      title='Combined Histogram Chart for All Observables')
-    
+        
     # Render the Plotly figure in Streamlit
     st.plotly_chart(fig)
 
