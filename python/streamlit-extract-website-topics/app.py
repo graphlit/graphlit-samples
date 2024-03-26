@@ -42,6 +42,8 @@ def render_histogram_charts(data):
     observable_types = df['observable_type'].unique()
     
     for observable_type in observable_types:        
+        st.subheader(f"{observable_type}s")
+        
         # Filter data for the current observable type
         filtered_df = df[df['observable_type'] == observable_type]
         
@@ -128,8 +130,7 @@ def create_workflow():
                 "jobs": [
                     {
                     "connector": {
-                        "type": "AZURE_COGNITIVE_SERVICES_TEXT",
-                        "extractedTypes": [ "LABEL" ]
+                        "type": "AZURE_COGNITIVE_SERVICES_TEXT"
                     }
                     }
                 ]
@@ -218,7 +219,7 @@ def is_feed_done():
 
 st.image("https://graphlitplatform.blob.core.windows.net/samples/graphlit-logo.svg", width=128)
 st.title("Graphlit Platform")
-st.markdown("Analyze website for topics. Will scrape website, and read a maximum of 10 pages via sitemap.xml. Entity extraction is done with [Azure AI Language](https://azure.microsoft.com/en-us/products/ai-services/ai-language).")
+st.markdown("Analyze website for topics. Will scrape website, and read a maximum of 10 pages via web sitemap. Entity extraction is done with [Azure AI Language](https://azure.microsoft.com/en-us/products/ai-services/ai-language).")
 
 if st.session_state['token'] is None:
     st.info("To get started, generate a token to connect to your Graphlit project.")
