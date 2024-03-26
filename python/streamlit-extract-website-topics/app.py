@@ -105,7 +105,7 @@ def create_workflow():
                 "jobs": [
                     {
                     "connector": {
-                        "type": "MODEL_TEXT",
+                        "type": "AZURE_COGNITIVE_SERVICES_TEXT",
                         "extractedTypes": [ "LABEL" ]
                     }
                     }
@@ -195,7 +195,7 @@ def is_feed_done():
 
 st.image("https://graphlitplatform.blob.core.windows.net/samples/graphlit-logo.svg", width=128)
 st.title("Graphlit Platform")
-st.markdown("Analyze website for topics. Will scrape website, and read a maximum of 10 pages via sitemap.xml.")
+st.markdown("Analyze website for topics. Will scrape website, and read a maximum of 10 pages via sitemap.xml. Entity extraction is done with [Azure AI Language](https://azure.microsoft.com/en-us/products/ai-services/ai-language).")
 
 if st.session_state['token'] is None:
     st.info("To get started, generate a token to connect to your Graphlit project.")
@@ -287,7 +287,7 @@ with st.sidebar:
         - [Sign up for Graphlit](https://docs.graphlit.dev/getting-started/signup) 🆓  
         - **Step 1:** Generate Graphlit project token.
         - **Step 2:** Fill in the website URI.
-        - **Step 3:** Click to analyze website topics using Azure OpenAI GPT-4 Turbo 128k LLM.     
+        - **Step 3:** Click to analyze website topics.     
         """)
 
     with st.form("credentials_form"):
