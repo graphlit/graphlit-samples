@@ -324,6 +324,9 @@ pdfs = {
     "Unifying Large Language Models and Knowledge Graphs: A Roadmap": "https://graphlitplatform.blob.core.windows.net/samples/Unifying%20Large%20Language%20Models%20and%20Knowledge%20Graphs%20A%20Roadmap-2306.08302.pdf",
 }
 
+document_metadata = None
+document_markdown = None
+
 with st.form("data_content_form"):
     selected_pdf = st.selectbox("Select a PDF:", options=list(pdfs.keys()))
     
@@ -392,27 +395,27 @@ with st.form("data_content_form"):
 
     #                st.json(metadata)
 
-                    st.markdown(f"**PDF URI:** {uri}")
-
-                    if document_metadata is not None:
-                        document_title = document_metadata["title"]
-                        document_author = document_metadata["author"]
-
-                        if document_title is not None:
-                            st.markdown(f"**Title:** {document_title}")
-
-                        if document_author is not None:
-                            st.markdown(f"**Author:** {document_author}")
-
-                        with st.expander("See extracted document text:", expanded=False):
-                            st.markdown(document_markdown)
-
                     placeholder = st.empty()
         else:
             st.error("Please fill in all the connection information.")
 
 if st.session_state['content_done'] == True:
     if st.session_state['token']:
+        st.markdown(f"**PDF URI:** {uri}")
+
+        if document_metadata is not None:
+            document_title = document_metadata["title"]
+            document_author = document_metadata["author"]
+
+            if document_title is not None:
+                st.markdown(f"**Title:** {document_title}")
+
+            if document_author is not None:
+                st.markdown(f"**Author:** {document_author}")
+
+            with st.expander("See extracted document text:", expanded=False):
+                st.markdown(document_markdown)
+
         if "messages" not in st.session_state:
             st.session_state.messages = []
 
