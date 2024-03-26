@@ -225,11 +225,10 @@ def create_specification():
                 "completionTokenLimit": 2048
             },
             "strategy": { 
-                "embedCitations": False, # TODO: add citations
-                "enableExpandedRetrieval": True
+                "enableExpandedRetrieval": True # enable small-to-big retrieval
             },
             "promptStrategy": { 
-                "type": "OPTIMIZE_SEARCH"
+                "type": "OPTIMIZE_SEARCH" # rewrite prompt to optimize for semantic search
             },
             "name": "Completion"
         }
