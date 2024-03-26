@@ -33,19 +33,25 @@ def render_histogram_chart(data):
     
     # Rename columns for clarity
     df.rename(columns={
-        'observable_type': 'observable_type',
-        'observable_observable_name': 'observable_name',
-        'count': 'count'
+        'observable_type': 'Type',
+        'observable_observable_name': 'Name',
+        'count': 'Count'
     }, inplace=True)
+    
+    # Using Plotly for more customizable visualization
+    fig = st.bar_chart(df, x='Name', y='Count', color='Type', 
+                 hover_data={'Name': True, 'Count': True, 'Type': True},
+                 labels={'Count': 'Count', 'Name': 'Observable Name', 'Type': 'Observable Type'})
+    
+    # Update layout for clearer visualization
+    fig.update_layout(xaxis={'categoryorder': 'total descending'},
+                      title='Combined Histogram Chart for All Observables')
+    
+    # Render the Plotly figure in Streamlit
+    st.plotly_chart(fig)
 
-    # Aggregate counts by observable_name, summing counts across observable_types
-    aggregated_df = df.groupby('observable_name').agg(total_count=('count', 'sum')).reset_index()
-    
-    # Sort the aggregated DataFrame by observable_name alphabetically
-    sorted_aggregated_df = aggregated_df.sort_values(by='observable_name')
-    
-    # Create a single histogram chart for all observables, ensuring it's sorted by name
-    st.bar_chart(sorted_aggregated_df.set_index('observable_name')['total_count'])
+# Assuming your 'data' is already defined
+# render_histogram_chart_with_tooltips(data)
 
 def query_contents_facets():
     # Define the GraphQL mutation
