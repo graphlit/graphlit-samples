@@ -1,8 +1,8 @@
 # Graphlit Platform
 
-## Chat with content in your Graphlit project.
+## Chat with any PDF, DOCX, or PPTX file.  Text extraction and OCR done with [Azure AI Document Intelligence](https://azure.microsoft.com/en-us/products/ai-services/ai-document-intelligence).
 
-You can view the Streamlit application [here](https://graphlit-samples-chat.streamlit.app/).
+You can view the Streamlit application [here](https://graphlit-samples-chat-pdf.streamlit.app/).
 
 ### Demo Instructions
 - **Step 1:** Generate Graphlit project token.
