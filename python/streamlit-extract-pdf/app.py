@@ -314,7 +314,7 @@ with st.form("data_content_form"):
                 current_time = datetime.now()
                 formatted_time = current_time.strftime("%H:%M:%S")
 
-                st.success(f"Document ingestion took {duration:.2f} seconds. Finished at {formatted_time} UTC.")
+                st.success(f"Document ingestion and extraction took {duration:.2f} seconds. Finished at {formatted_time} UTC.")
 
                 document_metadata, document_markdown, document_observations = get_content()
 
