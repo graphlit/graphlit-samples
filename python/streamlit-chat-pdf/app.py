@@ -306,7 +306,7 @@ def prompt_conversation(prompt):
        
 st.image("https://graphlitplatform.blob.core.windows.net/samples/graphlit-logo.svg", width=128)
 st.title("Graphlit Platform")
-st.markdown("Chat with any PDF, DOCX, PPTX, or Markdown file.  Text extraction and OCR done with [Azure AI Document Intelligence](https://azure.microsoft.com/en-us/products/ai-services/ai-document-intelligence).")
+st.markdown("Chat with any PDF, DOCX, or PPTX file.  Text extraction and OCR done with [Azure AI Document Intelligence](https://azure.microsoft.com/en-us/products/ai-services/ai-document-intelligence).")
 
 if st.session_state['token'] is None:
     st.info("To get started, generate a token to connect to your Graphlit project.")
@@ -321,7 +321,7 @@ pdfs = {
 with st.form("data_content_form"):
     selected_pdf = st.selectbox("Select a PDF:", options=list(pdfs.keys()))
     
-    document_uri = st.text_input("Or enter your own URL to a file (i.e. PDF, DOCX, PPTX, MD):", key='pdf_uri')
+    document_uri = st.text_input("Or enter your own URL to a file (i.e. PDF, DOCX, PPTX):", key='pdf_uri')
 
     uri = document_uri if document_uri else pdfs[selected_pdf]
 
