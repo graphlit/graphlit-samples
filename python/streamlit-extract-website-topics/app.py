@@ -65,8 +65,6 @@ def query_contents_facets():
 
     response = st.session_state['client'].request(query=query, variables=variables)
 
-    st.json(response)
-
     if 'contents' in response['data'] and 'facets' in response['data']['contents']:
         return response['data']['contents']['facets']
     
@@ -278,6 +276,8 @@ if st.session_state['feed_done'] == True:
 
         if content_facets is not None:
             st.header('Topics observed in website:')
+        
+            st.json(content_facets)
 
 #            display_facets_as_chart(content_facets)
 
