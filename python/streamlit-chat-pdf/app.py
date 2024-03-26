@@ -373,8 +373,7 @@ with st.form("data_content_form"):
 
                             if error_message is not None:
                                 st.error(f"Failed to wait for content to be done. {error_message}")
-                            else:
-                                break
+                                done = True                                
 
                             # Wait a bit before checking again
                             if not done:
