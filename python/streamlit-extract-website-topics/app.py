@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-import plotly.express as px
 import requests
 import jwt
 from datetime import datetime
@@ -34,26 +33,23 @@ def render_histogram_charts(data):
     
     # Rename columns for clarity
     df.rename(columns={
-        'observable_type': 'Type',
-        'observable_observable_name': 'Name',
-        'count': 'Count'
+        'observable_type': 'type',
+        'observable_observable_name': 'name',
+        'count': 'count'
     }, inplace=True)
 
-    # Group by Type to create separate charts
-    observable_types = df['Type'].unique()
+    # Group by observable_type to create separate charts
+    observable_types = df['type'].unique()
     
     for observable_type in observable_types:        
-        # Filter and sort data for the current Type
-        filtered_df = df[df['Type'] == observable_type].sort_values(by='Name')
+        # Filter data for the current observable type
+        filtered_df = df[df['type'] == observable_type]
         
-        # Use Plotly to create a customizable histogram
-        fig = px.bar(filtered_df, x='Name', y='Count',
-                     color='Count',  # Color the bars by their count value
-                     labels={'Count': 'Count', 'Name': 'Observable Name'})
-        fig.update_layout(xaxis_title='Observable Name', yaxis_title='Count')
+        # Sort the observable names alphabetically before charting
+        sorted_filtered_df = filtered_df.sort_values(by='name')
         
-        # Render the Plotly figure in Streamlit
-        st.plotly_chart(fig)
+        # Create histogram chart with the sorted DataFrame
+        st.bar_chart(sorted_filtered_df.set_index('name')['count'])
 
 def query_contents_facets():
     # Define the GraphQL mutation
