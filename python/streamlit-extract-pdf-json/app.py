@@ -506,7 +506,7 @@ if st.session_state['content_done'] == True:
                             st.error(f"Failed to extract JSON. {error_message}")
 
                         if response is not None:
-                            st.subheader("Extracted JSON:")
+                            st.subheader("Extracted JSON (with page-level extraction):")
                             st.json(response)
                         else:
                             st.text("No JSON was extracted.")
