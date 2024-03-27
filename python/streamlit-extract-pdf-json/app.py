@@ -376,6 +376,8 @@ if st.session_state['content_done'] == True:
         with col2:
             if schema:
                 try:
+                    st.caption("Formatted JSON schema:")
+                    
                     # Format the JSON input
                     formatted_json = json.dumps(json.loads(schema), indent=2)
 
