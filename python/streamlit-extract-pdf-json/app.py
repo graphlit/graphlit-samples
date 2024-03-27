@@ -380,6 +380,8 @@ if st.session_state['content_done'] == True:
 
                     if response is not None:
                         placeholder.json(response)
+                    else:
+                        placeholder.text("No JSON was extracted.")
 
 with st.sidebar:
     st.info("""
