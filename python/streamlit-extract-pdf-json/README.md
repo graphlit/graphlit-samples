@@ -1,6 +1,6 @@
 # Graphlit Platform
 
-## Extract JSON from any PDF, DOCX, or PPTX file.
+## Extract JSON from any PDF, DOCX, or PPTX file. Tool calling done with [OpenAI GPT-4 Turbo 128k](https://platform.openai.com/docs/models/gpt-4-and-gpt-4-turbo) LLM.
 
 You can view the Streamlit application [here](https://graphlit-samples-extract-pdf-json.streamlit.app/).
 

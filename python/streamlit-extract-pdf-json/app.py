@@ -220,7 +220,7 @@ def ingest_file(uri):
 
 st.image("https://graphlitplatform.blob.core.windows.net/samples/graphlit-logo.svg", width=128)
 st.title("Graphlit Platform")
-st.markdown("Extract JSON from any PDF, DOCX, or PPTX file.")
+st.markdown("Extract JSON from any PDF, DOCX, or PPTX file. Tool calling done with [OpenAI GPT-4 Turbo 128k](https://platform.openai.com/docs/models/gpt-4-and-gpt-4-turbo) LLM.")
 
 if st.session_state['token'] is None:
     st.info("To get started, generate a token to connect to your Graphlit project.")
@@ -327,23 +327,44 @@ if st.session_state['content_done'] == True:
 
         default_schema = """
 {
-    "type": "object",
-    "properties": {
-        "term": {
-        "type": "string",
-        "description": "A term or key phrase, which can be searched on the web"
-        }
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "FinancialData",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Name of the financial figure, such as revenue."
     },
-    "required": [
-        "term"
-    ]
+    "value": {
+      "type": "number",
+      "description": "Nominal earnings in local currency."
+    },
+    "scale": {
+      "type": "string",
+      "description": "Scale of figure, such as MM, B, or percent."
+    },
+    "period_start": {
+      "type": "string",
+      "description": "The start of the time period in ISO format.",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "period_duration": {
+      "type": "integer",
+      "description": "Duration of period, in months"
+    },
+    "evidence": {
+      "type": "string",
+      "description": "Verbatim sentence of text where figure was found."
+    }
+  },
+  "required": ["name", "value", "scale", "period_start", "period_duration", "evidence"]
 }
         """
 
         if 'schema' not in st.session_state:
             st.session_state['schema'] = default_schema.strip()
 
-        with st.expander("See JSON Schema:", expanded=True):
+        with st.expander("See JSON schema:", expanded=True):
             schema = st.text_area("Enter JSON schema to be extracted:", value=st.session_state["schema"].strip(), height=500)
 
             st.session_state["schema"] = schema.strip()
@@ -373,6 +394,8 @@ if st.session_state['content_done'] == True:
                 if error_message is not None:
                     st.error(f"Failed to create specification. {error_message}")
                 else:
+                    start_time = time.time()
+
                     with st.spinner('Extracting JSON... Please wait.'):
                         response, error_message = extract_content()
                     
@@ -384,6 +407,13 @@ if st.session_state['content_done'] == True:
                             st.json(response)
                         else:
                             st.text("No JSON was extracted.")
+
+                        duration = time.time() - start_time
+
+                        current_time = datetime.now()
+                        formatted_time = current_time.strftime("%H:%M:%S")
+
+                        st.success(f"JSON extraction took {duration:.2f} seconds. Finished at {formatted_time} UTC.")
 
 with st.sidebar:
     st.info("""
