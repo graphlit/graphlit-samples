@@ -330,16 +330,16 @@ if st.session_state['content_done'] == True:
 
         default_schema = """
         {
-            "type": "object",
-            "properties": {
-                "term": {
-                "type": "string",
-                "description": "A term or key phrase, which can be searched on the web"
-                }
-            },
-            "required": [
-                "term"
-            ]
+        "type": "object",
+        "properties": {
+            "term": {
+            "type": "string",
+            "description": "A term or key phrase, which can be searched on the web"
+            }
+        },
+        "required": [
+            "term"
+        ]
         }
         """
 
