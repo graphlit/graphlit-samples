@@ -56,11 +56,11 @@ def extract_content():
         error_message = response['errors'][0]['message']
         return None, error_message
 
-    st.json(response)
+#    st.json(response)
 
     if 'extractContents' in response['data'] and len(response['data']['extractContents']) > 0:
         return [json.loads(item['value']) for item in response['data']['extractContents']], None
-
+    
     return None, None
 
 def get_content():
