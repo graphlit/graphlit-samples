@@ -52,7 +52,7 @@ def extract_content():
     }
     response = st.session_state['client'].request(query=query, variables=variables)
 
-    st.json(response)
+#    st.json(response)
 
     if 'errors' in response and len(response['errors']) > 0:
         error_message = response['errors'][0]['message']
