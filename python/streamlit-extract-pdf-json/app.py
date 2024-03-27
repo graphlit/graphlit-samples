@@ -324,14 +324,34 @@ if st.session_state['content_done'] == True:
 
         placeholder = st.empty()
 
+        default_schema = """
+        {
+            "type": "object",
+            "properties": {
+                "term": {
+                "type": "string",
+                "description": "A term or key phrase, which can be searched on the web"
+                }
+            },
+            "required": [
+                "term"
+            ]
+        }
+        """
+
+        if 'schema' not in st.session_state:
+            st.session_state['schema'] = default_schema
+
         # Create two columns
         col1, col2 = st.columns(2)
 
         # Input JSON in the first column
         with col1:
-            schema = st.text_area("Enter JSON schema to be extracted:", height=300)
+            schema = st.text_area("Enter JSON schema to be extracted:", value=st.session_state["schema"], height=300)
 
-            submit_extract = st.submit_button("Extract JSON")
+            st.session_state["schema"] = schema
+
+            submit_extract = st.button("Extract JSON")
 
             if submit_extract:
                 if st.session_state['specification_id'] is not None:
