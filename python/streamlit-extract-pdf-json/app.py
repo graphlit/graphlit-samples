@@ -343,10 +343,7 @@ if st.session_state['content_done'] == True:
         if 'schema' not in st.session_state:
             st.session_state['schema'] = default_schema.strip()
 
-        if 'expand' not in st.session_state:
-            st.session_state.expand = True
-
-        with st.expander("JSON Schema:", expanded=st.session_state.expand):
+        with st.expander("See JSON Schema:", expanded=True):
             schema = st.text_area("Enter JSON schema to be extracted:", value=st.session_state["schema"].strip(), height=500)
 
             st.session_state["schema"] = schema.strip()
@@ -365,9 +362,6 @@ if st.session_state['content_done'] == True:
         submit_extract = st.button("Extract JSON")
 
         if submit_extract:
-            st.session_state.expand = False
-            st.experimental_rerun()
-
             if st.session_state['specification_id'] is not None:
                 with st.spinner('Deleting existing specification... Please wait.'):
                     delete_specification()
@@ -386,6 +380,7 @@ if st.session_state['content_done'] == True:
                             st.error(f"Failed to extract JSON. {error_message}")
 
                         if response is not None:
+                            st.subheader("Extracted JSON:")
                             st.json(response)
                         else:
                             st.text("No JSON was extracted.")
