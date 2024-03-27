@@ -347,7 +347,7 @@ if st.session_state['content_done'] == True:
 
         # Input JSON in the first column
         with col1:
-            schema = st.text_area("Enter JSON schema to be extracted:", value=st.session_state["schema"].strip(), height=500)
+            schema = st.text_area("Enter JSON schema to be extracted:", value=st.session_state["schema"].strip(), height=300)
 
             st.session_state["schema"] = schema.strip()
 
