@@ -351,7 +351,7 @@ if st.session_state['content_done'] == True:
                 # Format the JSON input
                 formatted_json = json.dumps(json.loads(schema), indent=2)
 
-                st.code(formatted_json, language='json', height=500)
+                st.code(formatted_json, language='json')
             except json.JSONDecodeError:
                 st.error("Invalid JSON schema.")
 
