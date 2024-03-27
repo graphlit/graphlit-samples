@@ -187,7 +187,7 @@ def create_specification(schema):
             "type": "EXTRACTION",
             "serviceType": "MISTRAL",
             "mistral": {
-                "model": "MIXTRAL_8X7B_INSTRUCT",
+                "model": "MISTRAL_LARGE",
                 "temperature": 0.1,
                 "probability": 0.2,
                 "completionTokenLimit": 2048
