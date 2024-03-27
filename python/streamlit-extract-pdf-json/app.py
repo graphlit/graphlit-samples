@@ -53,7 +53,7 @@ def extract_content():
     response = st.session_state['client'].request(query=query, variables=variables)
 
     st.json(response)
-    
+
     if 'errors' in response and len(response['errors']) > 0:
         error_message = response['errors'][0]['message']
         return None, error_message
@@ -378,8 +378,8 @@ if st.session_state['content_done'] == True:
                     if error_message is not None:
                         st.error(f"Failed to extract JSON. {error_message}")
 
-                    placeholder.subheader("Extracted JSON:")
-                    placeholder.json(response)
+                    if response is not None:
+                        placeholder.json(response)
 
 with st.sidebar:
     st.info("""
