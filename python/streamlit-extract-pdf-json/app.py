@@ -350,10 +350,16 @@ if st.session_state['content_done'] == True:
             schema = st.text_area("Enter JSON schema to be extracted:", value=st.session_state["schema"].strip(), height=500)
 
             st.session_state["schema"] = schema.strip()
+            
+            submit_extract = False
 
-            st.button("Format JSON Schema")
+            colA, colB = st.columns(2)
 
-            submit_extract = st.button("Extract JSON")
+            with colA:
+                st.button("Format JSON Schema")
+
+            with colB:
+                submit_extract = st.button("Extract JSON")
 
             if submit_extract:
                 if st.session_state['specification_id'] is not None:
