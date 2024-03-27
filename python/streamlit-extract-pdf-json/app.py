@@ -340,6 +340,8 @@ if st.session_state['content_done'] == True:
         if 'schema' not in st.session_state:
             st.session_state['schema'] = default_schema.strip()
 
+        submit_extract = st.button("Extract JSON")
+
         schema = st.text_area("Enter JSON schema to be extracted:", value=st.session_state["schema"].strip(), height=500)
 
         st.session_state["schema"] = schema.strip()
@@ -354,8 +356,6 @@ if st.session_state['content_done'] == True:
                 st.code(formatted_json, language='json')
             except json.JSONDecodeError:
                 st.error("Invalid JSON schema.")
-
-        submit_extract = st.button("Extract JSON")
 
         if submit_extract:
             if st.session_state['specification_id'] is not None:
