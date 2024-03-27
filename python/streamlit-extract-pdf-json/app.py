@@ -238,7 +238,6 @@ pdfs = {
 
 document_metadata = None
 document_markdown = None
-uri = None
 
 if st.session_state['content_done'] is None:
     st.session_state['content_done'] = False
@@ -309,7 +308,8 @@ with st.form("data_content_form"):
 
 if st.session_state['content_done'] == True:
     if st.session_state['token']:
-        st.markdown(f"**Document URI:** {uri}")
+        if st.session_state['uri'] is not None:
+            st.markdown(f"**Document URI:** {st.session_state['uri']}")
 
         document_metadata = st.session_state['document_metadata']
         document_markdown = st.session_state['document_markdown']
@@ -329,18 +329,18 @@ if st.session_state['content_done'] == True:
                 st.markdown(document_markdown)
 
         default_schema = """
-        {
-        "type": "object",
-        "properties": {
-            "term": {
-            "type": "string",
-            "description": "A term or key phrase, which can be searched on the web"
-            }
-        },
-        "required": [
-            "term"
-        ]
+{
+    "type": "object",
+    "properties": {
+        "term": {
+        "type": "string",
+        "description": "A term or key phrase, which can be searched on the web"
         }
+    },
+    "required": [
+        "term"
+    ]
+}
         """
 
         if 'schema' not in st.session_state:
