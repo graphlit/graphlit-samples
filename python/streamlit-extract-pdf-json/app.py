@@ -243,68 +243,67 @@ if st.session_state['content_done'] is None:
     st.session_state['content_done'] = False
 
 with st.form("data_content_form"):
-    if st.session_state['content_done'] is False:
-        selected_pdf = st.selectbox("Select a PDF:", options=list(pdfs.keys()))
-        
-        document_uri = st.text_input("Or enter your own URL to a file (i.e. PDF, DOCX, PPTX):", key='pdf_uri')
+    selected_pdf = st.selectbox("Select a PDF:", options=list(pdfs.keys()))
+    
+    document_uri = st.text_input("Or enter your own URL to a file (i.e. PDF, DOCX, PPTX):", key='pdf_uri')
 
-        uri = document_uri if document_uri else pdfs[selected_pdf]
+    uri = document_uri if document_uri else pdfs[selected_pdf]
 
-        submit_content = st.form_submit_button("Submit")
+    submit_content = st.form_submit_button("Submit")
 
-        # Now, handle actions based on submit_data outside the form's scope
-        if submit_content and uri:
-            st.session_state.messages = []
+    # Now, handle actions based on submit_data outside the form's scope
+    if submit_content and uri:
+        st.session_state.messages = []
 
-            if st.session_state['token']:
-                st.session_state['uri'] = uri
-                
-                # Clean up previous session state
-                if st.session_state['content_id'] is not None:
-                    with st.spinner('Deleting existing content... Please wait.'):
-                        delete_content()
-                    st.session_state["content_id"] = None
+        if st.session_state['token']:
+            st.session_state['uri'] = uri
+            
+            # Clean up previous session state
+            if st.session_state['content_id'] is not None:
+                with st.spinner('Deleting existing content... Please wait.'):
+                    delete_content()
+                st.session_state["content_id"] = None
 
-                else:
-                    error_message = ingest_file(uri)
-
-                    if error_message is not None:
-                        st.error(f"Failed to ingest file [{uri}]. {error_message}")
-                    else:
-                        start_time = time.time()
-
-                    # Display spinner while processing
-                    with st.spinner('Ingesting document... Please wait.'):
-                        done = False
-                        time.sleep(2)
-                        while not done:
-                            done, error_message = is_content_done()
-
-                            if error_message is not None:
-                                st.error(f"Failed to wait for content to be done. {error_message}")
-                                done = True                                
-
-                            # Wait a bit before checking again
-                            if not done:
-                                time.sleep(2)
-                    # Once done, notify the user
-                    st.session_state["content_done"] = True
-
-                    duration = time.time() - start_time
-
-                    current_time = datetime.now()
-                    formatted_time = current_time.strftime("%H:%M:%S")
-
-                    st.success(f"Document ingestion took {duration:.2f} seconds. Finished at {formatted_time} UTC.")
-
-                    document_metadata, document_markdown = get_content()
-
-                    st.session_state['document_metadata'] = document_metadata
-                    st.session_state['document_markdown'] = document_markdown
-
-                    placeholder = st.empty()
             else:
-                st.error("Please fill in all the connection information.")
+                error_message = ingest_file(uri)
+
+                if error_message is not None:
+                    st.error(f"Failed to ingest file [{uri}]. {error_message}")
+                else:
+                    start_time = time.time()
+
+                # Display spinner while processing
+                with st.spinner('Ingesting document... Please wait.'):
+                    done = False
+                    time.sleep(2)
+                    while not done:
+                        done, error_message = is_content_done()
+
+                        if error_message is not None:
+                            st.error(f"Failed to wait for content to be done. {error_message}")
+                            done = True                                
+
+                        # Wait a bit before checking again
+                        if not done:
+                            time.sleep(2)
+                # Once done, notify the user
+                st.session_state["content_done"] = True
+
+                duration = time.time() - start_time
+
+                current_time = datetime.now()
+                formatted_time = current_time.strftime("%H:%M:%S")
+
+                st.success(f"Document ingestion took {duration:.2f} seconds. Finished at {formatted_time} UTC.")
+
+                document_metadata, document_markdown = get_content()
+
+                st.session_state['document_metadata'] = document_metadata
+                st.session_state['document_markdown'] = document_markdown
+
+                placeholder = st.empty()
+        else:
+            st.error("Please fill in all the connection information.")
 
 if st.session_state['content_done'] == True:
     if st.session_state['token']:
@@ -368,7 +367,7 @@ if st.session_state['content_done'] == True:
         if submit_extract:
             if st.session_state['specification_id'] is not None:
                 with st.spinner('Deleting existing specification... Please wait.'):
-                    delete_content()
+                    delete_specification()
                 st.session_state["specification_id"] = None
 
             if st.session_state['specification_id'] is None:
@@ -377,15 +376,16 @@ if st.session_state['content_done'] == True:
                 if error_message is not None:
                     st.error(f"Failed to create specification. {error_message}")
                 else:
-                    response, error_message = extract_content()
+                    with st.spinner('Extracting JSON... Please wait.'):
+                        response, error_message = extract_content()
                     
-                    if error_message is not None:
-                        st.error(f"Failed to extract JSON. {error_message}")
+                        if error_message is not None:
+                            st.error(f"Failed to extract JSON. {error_message}")
 
-                    if response is not None:
-                        placeholder.json(response)
-                    else:
-                        placeholder.text("No JSON was extracted.")
+                        if response is not None:
+                            placeholder.json(response)
+                        else:
+                            placeholder.text("No JSON was extracted.")
 
 with st.sidebar:
     st.info("""
