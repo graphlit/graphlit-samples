@@ -164,9 +164,9 @@ def create_specification(schema):
     variables = {
         "specification": {
             "type": "EXTRACTION",
-            "serviceType": "OPEN_AI",
-            "openAI": {
-                "model": "GPT4_TURBO_128K",
+            "serviceType": "MISTRAL",
+            "mistral": {
+                "model": "MIXTRAL_8X7B_INSTRUCT",
                 "temperature": 0.1,
                 "probability": 0.2,
                 "completionTokenLimit": 2048
@@ -343,36 +343,124 @@ if st.session_state['content_done'] == True:
         default_schema = """
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "FinancialData",
+  "title": "10Q Financial Document Data Extraction",
+  "description": "Schema for extracting key information from 10-Q filings and other financial documents, including company details, financial statements, management's discussion and analysis, controls and procedures, and risk factors.",
   "type": "object",
   "properties": {
-    "name": {
+    "documentInfo": {
+      "type": "object",
+      "description": "Basic information about the financial document.",
+      "properties": {
+        "companyName": {
+          "type": "string",
+          "description": "The full legal name of the company as reported in the document."
+        },
+        "cik": {
+          "type": "string",
+          "description": "Central Index Key (CIK) is a unique identifier assigned by the SEC to all entities who file disclosures."
+        },
+        "filingDate": {
+          "type": "string",
+          "format": "date",
+          "description": "The date when the document was officially filed with the SEC."
+        },
+        "fiscalYearEnd": {
+          "type": "string",
+          "description": "The end date of the fiscal year for which the document reports financial information."
+        },
+        "formType": {
+          "type": "string",
+          "description": "The type of SEC form, e.g., 10-Q, 10-K."
+        }
+      },
+      "required": ["companyName", "cik", "filingDate", "formType"]
+    },
+    "financialStatements": {
+      "type": "object",
+      "description": "The financial statements section including balance sheets, income statements, and cash flow statements.",
+      "properties": {
+        "balanceSheets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/financialStatement"
+          },
+          "description": "An array of balance sheet statements, capturing the company's financial position at a specific point in time."
+        },
+        "incomeStatements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/financialStatement"
+          },
+          "description": "An array of income statements, detailing the company's revenues, expenses, and profit over a specific period."
+        },
+        "cashFlowStatements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/financialStatement"
+          },
+          "description": "An array of cash flow statements, showing the company's cash inflows and outflows over a specific period."
+        }
+      }
+    },
+    "mdAndA": {
+      "type": "object",
+      "description": "Management's Discussion and Analysis of financial condition and results of operations.",
+      "properties": {
+        "quantitativeAndQualitativeDisclosuresAboutMarketRisk": {
+          "type": "string",
+          "description": "Disclosures regarding market risk, including how it is managed."
+        },
+        "resultsOfOperations": {
+          "type": "string",
+          "description": "Management's perspective on the company's financial results and significant factors affecting them."
+        },
+        "liquidityAndCapitalResources": {
+          "type": "string",
+          "description": "An analysis of the company's liquidity and the condition of its capital resources."
+        }
+      }
+    },
+    "controlsAndProcedures": {
       "type": "string",
-      "description": "Name of the financial figure, such as revenue."
+      "description": "Information on the company's controls and procedures, including internal control over financial reporting."
     },
-    "value": {
-      "type": "number",
-      "description": "Nominal earnings in local currency."
-    },
-    "scale": {
-      "type": "string",
-      "description": "Scale of figure, such as MM, B, or percent."
-    },
-    "period_start": {
-      "type": "string",
-      "description": "The start of the time period in ISO format.",
-      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
-    },
-    "period_duration": {
-      "type": "integer",
-      "description": "Duration of period, in months"
-    },
-    "evidence": {
-      "type": "string",
-      "description": "Verbatim sentence of text where figure was found."
+    "riskFactors": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "A list of risk factors that could potentially affect the company's business, financial condition, or future results."
     }
   },
-  "required": ["name", "value", "scale", "period_start", "period_duration", "evidence"]
+  "definitions": {
+    "financialStatement": {
+      "type": "object",
+      "description": "A structure representing a single financial statement, such as a balance sheet, income statement, or cash flow statement.",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "The title of the financial statement."
+        },
+        "periodEndDate": {
+          "type": "string",
+          "format": "date",
+          "description": "The end date of the period covered by the financial statement."
+        },
+        "amounts": {
+          "type": "object",
+          "description": "A mapping of financial item names to their respective amounts, allowing for the representation of various financial metrics and figures.",
+          "patternProperties": {
+            "^[a-zA-Z ]+$": {
+              "type": "number",
+              "description": "The monetary value associated with the financial item, represented as a number."
+            }
+          }
+        }
+      },
+      "required": ["title", "periodEndDate", "amounts"]
+    }
+  },
+  "required": ["documentInfo", "financialStatements", "mdAndA"]
 }
         """
 
