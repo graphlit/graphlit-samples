@@ -244,14 +244,16 @@ with st.form("data_content_form"):
     
     document_uri = st.text_input("Or enter your own URL to a file (i.e. PDF, DOCX, PPTX):", key='pdf_uri')
 
+    if st.session_state['content_done'] is None:
+        st.session_state['content_done'] = False
+
     uri = document_uri if document_uri else pdfs[selected_pdf]
 
     submit_content = st.form_submit_button("Submit")
 
     # Now, handle actions based on submit_data outside the form's scope
-    if submit_content and uri:
+    if submit_content and uri and st.session_state['content_done'] is False:
         st.session_state.messages = []
-        st.session_state['content_done'] = False
 
         if st.session_state['token']:
             st.session_state['uri'] = uri
