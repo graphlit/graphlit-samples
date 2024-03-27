@@ -342,6 +342,8 @@ if st.session_state['content_done'] == True:
 
         submit_extract = st.button("Extract JSON")
 
+        placeholder = st.empty()
+
         schema = st.text_area("Enter JSON schema to be extracted:", value=st.session_state["schema"].strip(), height=500)
 
         st.session_state["schema"] = schema.strip()
@@ -374,8 +376,8 @@ if st.session_state['content_done'] == True:
                     if error_message is not None:
                         st.error(f"Failed to extract JSON. {error_message}")
 
-                    st.subheader("Extracted JSON:")
-                    st.json(response)
+                    placeholder.subheader("Extracted JSON:")
+                    placeholder.json(response)
 
 with st.sidebar:
     st.info("""
