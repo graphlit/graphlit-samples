@@ -161,33 +161,12 @@ def create_specification(schema):
     """
 
     # Define the variables for the mutation
-    variables = {
-        "specification": {
-            "type": "EXTRACTION",
-            "serviceType": "OPEN_AI",
-            "openAI": {
-                "model": "GPT4_TURBO_128K",
-                "temperature": 0.1,
-                "probability": 0.2,
-                "completionTokenLimit": 2048
-            },
-            "tools": [
-                {
-                    "name": "extractJSON",
-                    "schema": schema
-                }
-            ],
-            "name": "Extraction"
-        }
-    }
-
-    # Define the variables for the mutation
     # variables = {
     #     "specification": {
     #         "type": "EXTRACTION",
-    #         "serviceType": "MISTRAL",
-    #         "mistral": {
-    #             "model": "MIXTRAL_8X7B_INSTRUCT",
+    #         "serviceType": "OPEN_AI",
+    #         "openAI": {
+    #             "model": "GPT4_TURBO_128K",
     #             "temperature": 0.1,
     #             "probability": 0.2,
     #             "completionTokenLimit": 2048
@@ -201,6 +180,27 @@ def create_specification(schema):
     #         "name": "Extraction"
     #     }
     # }
+
+    # Define the variables for the mutation
+    variables = {
+        "specification": {
+            "type": "EXTRACTION",
+            "serviceType": "MISTRAL",
+            "mistral": {
+                "model": "MIXTRAL_8X7B_INSTRUCT",
+                "temperature": 0.1,
+                "probability": 0.2,
+                "completionTokenLimit": 2048
+            },
+            "tools": [
+                {
+                    "name": "extractJSON",
+                    "schema": schema
+                }
+            ],
+            "name": "Extraction"
+        }
+    }
 
     # Convert the request to JSON format
     response = st.session_state['client'].request(query=mutation, variables=variables)
