@@ -52,8 +52,6 @@ def extract_content():
     }
     response = st.session_state['client'].request(query=query, variables=variables)
 
-    st.json(response)
-
     if 'errors' in response and len(response['errors']) > 0:
         error_message = response['errors'][0]['message']
         return None, error_message
@@ -391,7 +389,7 @@ if st.session_state['content_done'] == True:
                     # Format the JSON input
                     formatted_json = json.dumps(json.loads(schema), indent=2)
 
-                    st.code(formatted_json, language='json')
+                    st.code(formatted_json, language='json', height=500)
                 except json.JSONDecodeError:
                     st.error("Invalid JSON schema.")
 
