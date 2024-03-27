@@ -364,8 +364,8 @@ if st.session_state['content_done'] == True:
         if 'schema' not in st.session_state:
             st.session_state['schema'] = default_schema.strip()
 
-        with st.expander("See JSON schema:", expanded=True):
-            schema = st.text_area("Enter JSON schema to be extracted:", value=st.session_state["schema"].strip(), height=500)
+        with st.expander("Enter your JSON schema:", expanded=True):
+            schema = st.text_area("JSON schema to be extracted:", value=st.session_state["schema"].strip(), height=500)
 
             st.session_state["schema"] = schema.strip()
             
