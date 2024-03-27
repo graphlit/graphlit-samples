@@ -366,6 +366,7 @@ if st.session_state['content_done'] == True:
 
         if submit_extract:
             st.session_state.expand = False
+            st.experimental_rerun()
 
             if st.session_state['specification_id'] is not None:
                 with st.spinner('Deleting existing specification... Please wait.'):
