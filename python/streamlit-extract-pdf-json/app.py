@@ -28,9 +28,6 @@ if 'document_markdown' not in st.session_state:
 if 'document_metadata' not in st.session_state:
     st.session_state['document_metadata'] = None
 
-import json
-import streamlit as st
-
 def extract_content():
     # Define the GraphQL mutation
     query = """
@@ -165,8 +162,8 @@ def create_specification(schema):
     variables = {
         "specification": {
             "type": "EXTRACTION",
-            "serviceType": "OPEN_AI",
-            "openAI": {
+            "serviceType": "AZURE_OPEN_AI",
+            "azureOpenAI": {
                 "model": "GPT4_TURBO_128K",
                 "temperature": 0.1,
                 "probability": 0.2,
@@ -269,7 +266,7 @@ with st.form("data_content_form"):
     if submit_content and uri:
         st.session_state.messages = []
         st.session_state['content_done'] = False
-        
+
         if st.session_state['token']:
             st.session_state['uri'] = uri
             
