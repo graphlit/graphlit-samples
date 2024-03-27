@@ -195,8 +195,8 @@ def delete_content():
 def ingest_file(uri):
     # Define the GraphQL mutation
     mutation = """
-    mutation IngestFile($uri: URL!, $workflow: EntityReferenceInput) {
-        ingestFile(uri: $uri, workflow: $workflow) {
+    mutation IngestFile($uri: URL!) {
+        ingestFile(uri: $uri) {
             id
         }
     }
@@ -204,10 +204,7 @@ def ingest_file(uri):
 
     # Define the variables for the mutation
     variables = {
-        "uri": uri,
-        "workflow": {
-            "id": st.session_state['workflow_id']
-        }
+        "uri": uri
     }
 
     # Convert the request to JSON format
@@ -220,22 +217,6 @@ def ingest_file(uri):
     st.session_state['content_id'] = response['data']['ingestFile']['id']
 
     return None
-
-def delete_workflow():
-    # Define the GraphQL mutation
-    query = """
-    mutation DeleteWorkflow($id: ID!) {
-        deleteWorkflow(id: $id) {
-            id
-        }
-        }
-    """
-
-    # Define the variables for the mutation
-    variables = {
-        "id": st.session_state['workflow_id']
-    }
-    response = st.session_state['client'].request(query=query, variables=variables)
 
 st.image("https://graphlitplatform.blob.core.windows.net/samples/graphlit-logo.svg", width=128)
 st.title("Graphlit Platform")
