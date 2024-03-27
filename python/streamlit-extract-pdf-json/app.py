@@ -244,7 +244,7 @@ if st.session_state['token'] is None:
 
 # A dictionary mapping PDF names to their PDF URIs
 pdfs = {
-    "Uber Prepared Remarks (Q4 2023)": "https://graphlitplatform.blob.core.windows.net/samples/Uber-Q4-23-Prepared-Remarks.pdf",
+#    "Uber Prepared Remarks (Q4 2023)": "https://graphlitplatform.blob.core.windows.net/samples/Uber-Q4-23-Prepared-Remarks.pdf",
     "Microsoft 10Q (March 2024)": "https://graphlitplatform.blob.core.windows.net/samples/MSFT_FY24Q1_10Q.docx",
     "Uber 10Q (March 2022)": "https://graphlitplatform.blob.core.windows.net/samples/uber_10q_march_2022.pdf",
 }
