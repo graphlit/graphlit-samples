@@ -322,8 +322,6 @@ if st.session_state['content_done'] == True:
             with st.expander("See document text:", expanded=False):
                 st.markdown(document_markdown)
 
-        placeholder = st.empty()
-
         default_schema = """
         {
             "type": "object",
@@ -342,56 +340,42 @@ if st.session_state['content_done'] == True:
         if 'schema' not in st.session_state:
             st.session_state['schema'] = default_schema.strip()
 
-        # Create two columns
-        col1, col2 = st.columns(2)
+        schema = st.text_area("Enter JSON schema to be extracted:", value=st.session_state["schema"].strip(), height=500)
 
-        # Input JSON in the first column
-        with col1:
-            schema = st.text_area("Enter JSON schema to be extracted:", value=st.session_state["schema"].strip(), height=500)
+        st.session_state["schema"] = schema.strip()
+        
+        if schema:
+            try:
+                st.caption("Formatted JSON schema:")
 
-            st.session_state["schema"] = schema.strip()
-            
-            submit_extract = False
+                # Format the JSON input
+                formatted_json = json.dumps(json.loads(schema), indent=2)
 
-            colA, colB = st.columns(2)
+                st.code(formatted_json, language='json', height=500)
+            except json.JSONDecodeError:
+                st.error("Invalid JSON schema.")
 
-            with colA:
-                st.button("Format JSON Schema")
+        submit_extract = st.button("Extract JSON")
 
-            with colB:
-                submit_extract = st.button("Extract JSON")
+        if submit_extract:
+            if st.session_state['specification_id'] is not None:
+                with st.spinner('Deleting existing specification... Please wait.'):
+                    delete_content()
+                st.session_state["specification_id"] = None
 
-            if submit_extract:
-                if st.session_state['specification_id'] is not None:
-                    with st.spinner('Deleting existing specification... Please wait.'):
-                        delete_content()
-                    st.session_state["specification_id"] = None
+            if st.session_state['specification_id'] is None:
+                error_message = create_specification(schema)
 
-                if st.session_state['specification_id'] is None:
-                    error_message = create_specification(schema)
-
+                if error_message is not None:
+                    st.error(f"Failed to create specification. {error_message}")
+                else:
+                    response, error_message = extract_content()
+                    
                     if error_message is not None:
-                        st.error(f"Failed to create specification. {error_message}")
-                    else:
-                        response, error_message = extract_content()
-                        
-                        if error_message is not None:
-                            st.error(f"Failed to extract JSON. {error_message}")
+                        st.error(f"Failed to extract JSON. {error_message}")
 
-                        placeholder.json(response)
-
-        # Attempt to format and display the JSON in the second column as it's being edited
-        with col2:
-            if schema:
-                try:
-                    st.caption("Formatted JSON schema:")
-
-                    # Format the JSON input
-                    formatted_json = json.dumps(json.loads(schema), indent=2)
-
-                    st.code(formatted_json, language='json', height=500)
-                except json.JSONDecodeError:
-                    st.error("Invalid JSON schema.")
+                    st.subheader("Extracted JSON:")
+                    st.json(response)
 
 with st.sidebar:
     st.info("""
