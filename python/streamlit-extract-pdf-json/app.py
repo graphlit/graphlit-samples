@@ -31,7 +31,7 @@ if 'document_metadata' not in st.session_state:
 def extract_content():
     # Define the GraphQL mutation
     query = """
-    query ExtractContents($prompt: String!, $specification: EntityReferenceInput, $filter: ContentFilter) {
+    mutation ExtractContents($prompt: String!, $specification: EntityReferenceInput, $filter: ContentFilter) {
         extractContents(prompt: $prompt, specification: $specification, filter: $filter) {
             value
             pageNumber
@@ -52,6 +52,8 @@ def extract_content():
     }
     response = st.session_state['client'].request(query=query, variables=variables)
 
+    st.json(response)
+    
     if 'errors' in response and len(response['errors']) > 0:
         error_message = response['errors'][0]['message']
         return None, error_message
