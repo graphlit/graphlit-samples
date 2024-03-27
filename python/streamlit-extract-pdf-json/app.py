@@ -52,14 +52,12 @@ def extract_content():
     }
     response = st.session_state['client'].request(query=query, variables=variables)
 
-    st.json(response)
-
     if 'errors' in response and len(response['errors']) > 0:
         error_message = response['errors'][0]['message']
         return None, error_message
 
     if 'extractContents' in response['data'] and len(response['data']['extractContents']) > 0:
-        return response['data']['extractContents'][0]['value'], response['data']['extractContents'][0]['error']
+        return [item['value'] for item in response['data']['extractContents']], None
 
     return None, None
 
@@ -345,33 +343,37 @@ if st.session_state['content_done'] == True:
         if 'schema' not in st.session_state:
             st.session_state['schema'] = default_schema.strip()
 
+        if 'expand' not in st.session_state:
+            st.session_state.expand = True
+
+        with st.expander("JSON Schema:", expanded=st.session_state.expand):
+            schema = st.text_area("Enter JSON schema to be extracted:", value=st.session_state["schema"].strip(), height=500)
+
+            st.session_state["schema"] = schema.strip()
+            
+            if schema:
+                try:
+                    st.caption("Formatted JSON schema:")
+
+                    # Format the JSON input
+                    formatted_json = json.dumps(json.loads(schema), indent=2)
+
+                    st.code(formatted_json, language='json')
+                except json.JSONDecodeError:
+                    st.error("Invalid JSON schema.")
+
         submit_extract = st.button("Extract JSON")
 
-        placeholder = st.empty()
-
-        schema = st.text_area("Enter JSON schema to be extracted:", value=st.session_state["schema"].strip(), height=500)
-
-        st.session_state["schema"] = schema.strip()
-        
-        if schema:
-            try:
-                st.caption("Formatted JSON schema:")
-
-                # Format the JSON input
-                formatted_json = json.dumps(json.loads(schema), indent=2)
-
-                st.code(formatted_json, language='json')
-            except json.JSONDecodeError:
-                st.error("Invalid JSON schema.")
-
         if submit_extract:
+            st.session_state.expand = False
+
             if st.session_state['specification_id'] is not None:
                 with st.spinner('Deleting existing specification... Please wait.'):
                     delete_specification()
                 st.session_state["specification_id"] = None
 
             if st.session_state['specification_id'] is None:
-                error_message = create_specification(schema)
+                error_message = create_specification(st.session_state["schema"])
 
                 if error_message is not None:
                     st.error(f"Failed to create specification. {error_message}")
@@ -383,9 +385,9 @@ if st.session_state['content_done'] == True:
                             st.error(f"Failed to extract JSON. {error_message}")
 
                         if response is not None:
-                            placeholder.json(response)
+                            st.json(response)
                         else:
-                            placeholder.text("No JSON was extracted.")
+                            st.text("No JSON was extracted.")
 
 with st.sidebar:
     st.info("""
