@@ -28,6 +28,9 @@ if 'document_markdown' not in st.session_state:
 if 'document_metadata' not in st.session_state:
     st.session_state['document_metadata'] = None
 
+import json
+import streamlit as st
+
 def extract_content():
     # Define the GraphQL mutation
     query = """
@@ -56,10 +59,23 @@ def extract_content():
         error_message = response['errors'][0]['message']
         return None, error_message
 
-#    st.json(response)
-
     if 'extractContents' in response['data'] and len(response['data']['extractContents']) > 0:
-        return [json.loads(item['value']) for item in response['data']['extractContents']], None
+        deserialized_values = []  # Initialize the list here
+
+        # Attach pageNumber to each deserialized dictionary and add to the list
+        for item in response['data']['extractContents']:
+            deserialized = json.loads(item['value'])
+            deserialized['pageNumber'] = item['pageNumber']
+            deserialized_values.append(deserialized)
+
+        # Sort by 'pageNumber'
+        sorted_deserialized_values = sorted(deserialized_values, key=lambda x: x['pageNumber'])
+
+        # If you need to remove 'pageNumber' from the final output:
+        for item in sorted_deserialized_values:
+            item.pop('pageNumber', None)
+    
+        return sorted_deserialized_values, None
     
     return None, None
 
