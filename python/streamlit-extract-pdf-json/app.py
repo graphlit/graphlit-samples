@@ -268,7 +268,8 @@ with st.form("data_content_form"):
     # Now, handle actions based on submit_data outside the form's scope
     if submit_content and uri:
         st.session_state.messages = []
-
+        st.session_state['content_done'] = False
+        
         if st.session_state['token']:
             st.session_state['uri'] = uri
             
