@@ -340,7 +340,7 @@ if st.session_state['content_done'] == True:
         """
 
         if 'schema' not in st.session_state:
-            st.session_state['schema'] = default_schema
+            st.session_state['schema'] = default_schema.strip()
 
         # Create two columns
         col1, col2 = st.columns(2)
