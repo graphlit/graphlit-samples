@@ -161,33 +161,12 @@ def create_specification(schema):
     """
 
     # Define the variables for the mutation
-    # variables = {
-    #     "specification": {
-    #         "type": "EXTRACTION",
-    #         "serviceType": "OPEN_AI",
-    #         "openAI": {
-    #             "model": "GPT4_TURBO_128K",
-    #             "temperature": 0.1,
-    #             "probability": 0.2,
-    #             "completionTokenLimit": 2048
-    #         },
-    #         "tools": [
-    #             {
-    #                 "name": "extractJSON",
-    #                 "schema": schema
-    #             }
-    #         ],
-    #         "name": "Extraction"
-    #     }
-    # }
-
-    # Define the variables for the mutation
     variables = {
         "specification": {
             "type": "EXTRACTION",
-            "serviceType": "MISTRAL",
-            "mistral": {
-                "model": "MISTRAL_LARGE",
+            "serviceType": "OPEN_AI",
+            "openAI": {
+                "model": "GPT4_TURBO_128K",
                 "temperature": 0.1,
                 "probability": 0.2,
                 "completionTokenLimit": 2048
