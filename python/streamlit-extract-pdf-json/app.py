@@ -147,7 +147,7 @@ def create_specification(schema):
     variables = {
         "specification": {
             "type": "EXTRACTION",
-            "serviceType": "OPENAI",
+            "serviceType": "OPEN_AI",
             "openAI": {
                 "model": "GPT4_TURBO_128K",
                 "temperature": 0.1,
@@ -372,13 +372,13 @@ if st.session_state['content_done'] == True:
 
                     if error_message is not None:
                         st.error(f"Failed to create specification. {error_message}")
+                    else:
+                        response, error_message = extract_content()
+                        
+                        if error_message is not None:
+                            st.error(f"Failed to extract JSON. {error_message}")
 
-                response, error_message = extract_content()
-                
-                if error_message is not None:
-                    st.error(f"Failed to extract JSON. {error_message}")
-
-                placeholder.json(response)
+                        placeholder.json(response)
 
         # Attempt to format and display the JSON in the second column as it's being edited
         with col2:
