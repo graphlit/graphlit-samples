@@ -52,6 +52,8 @@ def extract_content():
     }
     response = st.session_state['client'].request(query=query, variables=variables)
 
+    st.json(response)
+
     if 'errors' in response and len(response['errors']) > 0:
         error_message = response['errors'][0]['message']
         return None, error_message
@@ -162,8 +164,8 @@ def create_specification(schema):
     variables = {
         "specification": {
             "type": "EXTRACTION",
-            "serviceType": "AZURE_OPEN_AI",
-            "azureOpenAI": {
+            "serviceType": "OPEN_AI",
+            "openAI": {
                 "model": "GPT4_TURBO_128K",
                 "temperature": 0.1,
                 "probability": 0.2,
