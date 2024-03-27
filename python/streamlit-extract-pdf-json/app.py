@@ -238,6 +238,7 @@ pdfs = {
 
 document_metadata = None
 document_markdown = None
+uri = None
 
 if st.session_state['content_done'] is None:
     st.session_state['content_done'] = False
