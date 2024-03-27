@@ -164,7 +164,7 @@ def create_specification(schema):
     variables = {
         "specification": {
             "type": "EXTRACTION",
-            "serviceType": "OPENAI",
+            "serviceType": "OPEN_AI",
             "openAI": {
                 "model": "GPT4_TURBO_128K",
                 "temperature": 0.1,
