@@ -321,30 +321,29 @@ with st.form("data_content_form"):
                     delete_content()
                 st.session_state["content_id"] = None
 
-            else:
-                start_time = time.time()
+            start_time = time.time()
 
-                # Display spinner while processing
-                with st.spinner('Ingesting document... Please wait.'):
-                    document_metadata, document_markdown, error_message = ingest_file(uri)
+            # Display spinner while processing
+            with st.spinner('Ingesting document... Please wait.'):
+                document_metadata, document_markdown, error_message = ingest_file(uri)
 
-                    if error_message is not None:
-                        st.error(f"Failed to ingest file [{uri}]. {error_message}")
+                if error_message is not None:
+                    st.error(f"Failed to ingest file [{uri}]. {error_message}")
 
-                    st.session_state['document_metadata'] = document_metadata
-                    st.session_state['document_markdown'] = document_markdown
+                st.session_state['document_metadata'] = document_metadata
+                st.session_state['document_markdown'] = document_markdown
 
-                # Once done, notify the user
-                st.session_state["content_done"] = True
+            # Once done, notify the user
+            st.session_state["content_done"] = True
 
-                duration = time.time() - start_time
+            duration = time.time() - start_time
 
-                current_time = datetime.now()
-                formatted_time = current_time.strftime("%H:%M:%S")
+            current_time = datetime.now()
+            formatted_time = current_time.strftime("%H:%M:%S")
 
-                st.success(f"Document ingestion took {duration:.2f} seconds. Finished at {formatted_time} UTC.")
+            st.success(f"Document ingestion took {duration:.2f} seconds. Finished at {formatted_time} UTC.")
 
-                placeholder = st.empty()
+            placeholder = st.empty()
         else:
             st.error("Please fill in all the connection information.")
 
