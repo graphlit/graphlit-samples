@@ -30,69 +30,6 @@ if 'document_metadata' not in st.session_state:
 if 'document_observations' not in st.session_state:
     st.session_state['document_observations'] = None
 
-def get_content():
-    # Define the GraphQL mutation
-    query = """
-    query GetContent($id: ID!) {
-        content(id: $id) {
-            id
-            state
-            markdown
-            document {
-                title
-                keywords
-                author
-            }
-            observations {
-                type
-                occurrences {
-                    type
-                    pageIndex
-                }
-                observable {
-                    name
-                }
-            }            
-        }
-    }
-    """
-
-    # Define the variables for the mutation
-    variables = {
-        "id": st.session_state['content_id']
-    }
-
-    response = st.session_state['client'].request(query=query, variables=variables)
-
- #   st.json(response)
-
-    if 'content' in response['data']:
-        return response['data']['content']['document'], response['data']['content']['markdown'], response['data']['content']['observations']
-    
-    return None
-
-def is_content_done():
-    # Define the GraphQL mutation
-    query = """
-    query IsContentDone($id: ID!) {
-        isContentDone(id: $id) {
-            result
-        }
-    }
-    """
-
-    # Define the variables for the mutation
-    variables = {
-        "id": st.session_state["content_id"]
-    }
-    response = st.session_state['client'].request(query=query, variables=variables)
-
-    if 'errors' in response and len(response['errors']) > 0:
-        error_message = response['errors'][0]['message']
-        return None, error_message
-
-    return response['data']['isContentDone']['result'], None
-
 def delete_content():
     # Define the GraphQL mutation
     query = """
@@ -113,15 +50,33 @@ def delete_content():
 def ingest_file(uri):
     # Define the GraphQL mutation
     mutation = """
-    mutation IngestFile($uri: URL!, $workflow: EntityReferenceInput) {
-        ingestFile(uri: $uri, workflow: $workflow) {
+    mutation IngestFile($uri: URL!, $workflow: EntityReferenceInput, $isSynchronous: Boolean) {
+        ingestFile(uri: $uri, workflow: $workflow, isSynchronous: $isSynchronous) {
             id
+            markdown
+            document {
+                title
+                keywords
+                author
+            }
+            observations {
+                type
+                occurrences {
+                    type
+                    pageIndex
+                }
+                observable {
+                    name
+                }
+            } 
+			            
         }
     }
     """
 
     # Define the variables for the mutation
     variables = {
+        "isSynchronous": True, # wait for content to be ingested
         "uri": uri,
         "workflow": {
             "id": st.session_state['workflow_id']
@@ -133,11 +88,11 @@ def ingest_file(uri):
 
     if 'errors' in response and len(response['errors']) > 0:
         error_message = response['errors'][0]['message']
-        return error_message
+        return None, None, None, error_message
 
     st.session_state['content_id'] = response['data']['ingestFile']['id']
 
-    return None
+    return response['data']['ingestFile']['document'], response['data']['ingestFile']['markdown'], response['data']['content']['observations'], None
 
 def delete_workflow():
     # Define the GraphQL mutation
@@ -254,6 +209,7 @@ pdfs = {
 
 document_metadata = None
 document_markdown = None
+document_observations = None
 
 with st.form("data_content_form"):
     selected_pdf = st.selectbox("Select a PDF:", options=list(pdfs.keys()))
@@ -284,45 +240,30 @@ with st.form("data_content_form"):
                     delete_content()
                 st.session_state["content_id"] = None
 
-            else:
-                error_message = ingest_file(uri)
+            start_time = time.time()
+
+            # Display spinner while processing
+            with st.spinner('Ingesting document... Please wait.'):
+                document_metadata, document_markdown, document_observations, error_message = ingest_file(uri)
 
                 if error_message is not None:
                     st.error(f"Failed to ingest file [{uri}]. {error_message}")
                 else:
-                    start_time = time.time()
+                    st.session_state['document_metadata'] = document_metadata
+                    st.session_state['document_markdown'] = document_markdown
+                    st.session_state['document_observations'] = document_observations
 
-                # Display spinner while processing
-                with st.spinner('Ingesting document... Please wait.'):
-                    done = False
-                    time.sleep(2)
-                    while not done:
-                        done, error_message = is_content_done()
+                    # Once done, notify the user
+                    st.session_state["content_done"] = True
 
-                        if error_message is not None:
-                            st.error(f"Failed to wait for content to be done. {error_message}")
-                            done = True                                
+                    duration = time.time() - start_time
 
-                        # Wait a bit before checking again
-                        if not done:
-                            time.sleep(2)
-                # Once done, notify the user
-                st.session_state["content_done"] = True
+                    current_time = datetime.now()
+                    formatted_time = current_time.strftime("%H:%M:%S")
 
-                duration = time.time() - start_time
+                    st.success(f"Document ingestion and extraction took {duration:.2f} seconds. Finished at {formatted_time} UTC.")
 
-                current_time = datetime.now()
-                formatted_time = current_time.strftime("%H:%M:%S")
-
-                st.success(f"Document ingestion and extraction took {duration:.2f} seconds. Finished at {formatted_time} UTC.")
-
-                document_metadata, document_markdown, document_observations = get_content()
-
-                st.session_state['document_metadata'] = document_metadata
-                st.session_state['document_markdown'] = document_markdown
-                st.session_state['document_observations'] = document_observations
-
-                placeholder = st.empty()
+            placeholder = st.empty()
         else:
             st.error("Please fill in all the connection information.")
 
@@ -335,14 +276,24 @@ if st.session_state['content_done'] == True:
         document_observations = st.session_state['document_observations']
 
         if document_metadata is not None:
-            document_title = document_metadata["title"]
-            document_author = document_metadata["author"]
+            document_title = None
+            document_author = None
+            document_pageCount = None
+
+            if 'title' in document_metadata:
+                document_title = document_metadata["title"]
+
+            if 'author' in document_metadata:
+                document_author = document_metadata["author"]
 
             if document_title is not None:
                 st.markdown(f"**Title:** {document_title}")
 
             if document_author is not None:
                 st.markdown(f"**Author:** {document_author}")
+
+            if document_pageCount is not None:
+                st.markdown(f"**Page count:** {document_pageCount}")
 
         if document_markdown is not None:
             with st.expander("See document text:", expanded=False):
