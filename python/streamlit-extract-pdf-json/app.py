@@ -31,8 +31,8 @@ if 'document_metadata' not in st.session_state:
 def ingest_file(uri):
     # Define the GraphQL mutation
     mutation = """
-    mutation IngestFile($uri: URL!, $workflow: EntityReferenceInput, $isSynchronous: Boolean) {
-        ingestFile(uri: $uri, workflow: $workflow, isSynchronous: $isSynchronous) {
+    mutation IngestFile($uri: URL!, $isSynchronous: Boolean) {
+        ingestFile(uri: $uri, isSynchronous: $isSynchronous) {
             id
             markdown
             document {
@@ -48,10 +48,7 @@ def ingest_file(uri):
     # Define the variables for the mutation
     variables = {
         "isSynchronous": True, # wait for content to be ingested
-        "uri": uri,
-        "workflow": {
-            "id": st.session_state['workflow_id']
-        }
+        "uri": uri
     }
 
     # Convert the request to JSON format
