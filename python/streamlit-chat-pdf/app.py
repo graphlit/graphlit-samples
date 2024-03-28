@@ -60,6 +60,7 @@ def ingest_file(uri):
                 title
                 keywords
                 author
+                pageCount
             }
         }
     }
