@@ -32,23 +32,6 @@ if 'document_markdown' not in st.session_state:
 if 'document_metadata' not in st.session_state:
     st.session_state['document_metadata'] = None
 
-def delete_content():
-    # Define the GraphQL mutation
-    query = """
-    mutation DeleteContent($id: ID!) {
-        deleteContent(id: $id) {
-            id
-        }
-        }
-    """
-
-    # Define the variables for the mutation
-    variables = {
-        "id": st.session_state['content_id']
-    }
-
-    response = st.session_state['client'].request(query=query, variables=variables)
-
 def ingest_file(uri):
     # Define the GraphQL mutation
     mutation = """
@@ -86,11 +69,11 @@ def ingest_file(uri):
 
     return response['data']['ingestFile']['document'], response['data']['ingestFile']['markdown'], None
 
-def delete_workflow():
+def delete_content():
     # Define the GraphQL mutation
     query = """
-    mutation DeleteWorkflow($id: ID!) {
-        deleteWorkflow(id: $id) {
+    mutation DeleteContent($id: ID!) {
+        deleteContent(id: $id) {
             id
         }
         }
@@ -98,8 +81,9 @@ def delete_workflow():
 
     # Define the variables for the mutation
     variables = {
-        "id": st.session_state['workflow_id']
+        "id": st.session_state['content_id']
     }
+
     response = st.session_state['client'].request(query=query, variables=variables)
 
 def create_workflow():
@@ -142,11 +126,11 @@ def create_workflow():
 
     return None
 
-def delete_specification():
+def delete_workflow():
     # Define the GraphQL mutation
     query = """
-    mutation DeleteSpecification($id: ID!) {
-        deleteSpecification(id: $id) {
+    mutation DeleteWorkflow($id: ID!) {
+        deleteWorkflow(id: $id) {
             id
         }
         }
@@ -154,7 +138,7 @@ def delete_specification():
 
     # Define the variables for the mutation
     variables = {
-        "id": st.session_state['specification_id']
+        "id": st.session_state['workflow_id']
     }
     response = st.session_state['client'].request(query=query, variables=variables)
 
@@ -200,11 +184,11 @@ def create_specification():
 
     return None
 
-def delete_conversation():
+def delete_specification():
     # Define the GraphQL mutation
     query = """
-    mutation DeleteConversation($id: ID!) {
-        deleteConversation(id: $id) {
+    mutation DeleteSpecification($id: ID!) {
+        deleteSpecification(id: $id) {
             id
         }
         }
@@ -212,7 +196,7 @@ def delete_conversation():
 
     # Define the variables for the mutation
     variables = {
-        "id": st.session_state['conversation_id']
+        "id": st.session_state['specification_id']
     }
     response = st.session_state['client'].request(query=query, variables=variables)
 
@@ -245,6 +229,22 @@ def create_conversation():
     st.session_state['conversation_id'] = response['data']['createConversation']['id']
 
     return None
+
+def delete_conversation():
+    # Define the GraphQL mutation
+    query = """
+    mutation DeleteConversation($id: ID!) {
+        deleteConversation(id: $id) {
+            id
+        }
+        }
+    """
+
+    # Define the variables for the mutation
+    variables = {
+        "id": st.session_state['conversation_id']
+    }
+    response = st.session_state['client'].request(query=query, variables=variables)
 
 def prompt_conversation(prompt):
     # Define the GraphQL mutation

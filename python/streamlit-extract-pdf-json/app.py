@@ -65,6 +65,86 @@ def ingest_file(uri):
 
     return response['data']['ingestFile']['document'], response['data']['ingestFile']['markdown'], None
 
+def delete_content():
+    # Define the GraphQL mutation
+    query = """
+    mutation DeleteContent($id: ID!) {
+        deleteContent(id: $id) {
+            id
+        }
+        }
+    """
+
+    # Define the variables for the mutation
+    variables = {
+        "id": st.session_state['content_id']
+    }
+
+    response = st.session_state['client'].request(query=query, variables=variables)
+
+def create_specification(schema):
+    # Define the GraphQL mutation
+    mutation = """
+    mutation CreateSpecification($specification: SpecificationInput!) {
+        createSpecification(specification: $specification) {
+            id
+            name
+            state
+            type
+            serviceType
+        }
+    }
+    """
+
+    # Define the variables for the mutation
+    variables = {
+        "specification": {
+            "type": "EXTRACTION",
+            "serviceType": "OPEN_AI",
+            "openAI": {
+                "model": "GPT4_TURBO_128K",
+                "temperature": 0.1,
+                "probability": 0.2,
+                "completionTokenLimit": 2048
+            },
+            "tools": [
+                {
+                    "name": "extractJSON",
+                    "schema": schema
+                }
+            ],
+            "name": "Extraction"
+        }
+    }
+
+    # Convert the request to JSON format
+    response = st.session_state['client'].request(query=mutation, variables=variables)
+
+    if 'errors' in response and len(response['errors']) > 0:
+        error_message = response['errors'][0]['message']
+        return error_message
+
+    st.session_state['specification_id'] = response['data']['createSpecification']['id']
+
+    return None
+
+def delete_specification():
+    # Define the GraphQL mutation
+    query = """
+    mutation DeleteSpecification($id: ID!) {
+        deleteSpecification(id: $id) {
+            id
+            state
+        }
+        }
+    """
+
+    # Define the variables for the mutation
+    variables = {
+        "id": st.session_state['specification_id']
+    }
+    response = st.session_state['client'].request(query=query, variables=variables)
+
 def extract_content():
     # Define the GraphQL mutation
     query = """
@@ -114,86 +194,6 @@ def extract_content():
         return sorted_deserialized_values, None
     
     return None, None
-
-def delete_specification():
-    # Define the GraphQL mutation
-    query = """
-    mutation DeleteSpecification($id: ID!) {
-        deleteSpecification(id: $id) {
-            id
-            state
-        }
-        }
-    """
-
-    # Define the variables for the mutation
-    variables = {
-        "id": st.session_state['specification_id']
-    }
-    response = st.session_state['client'].request(query=query, variables=variables)
-
-def create_specification(schema):
-    # Define the GraphQL mutation
-    mutation = """
-    mutation CreateSpecification($specification: SpecificationInput!) {
-        createSpecification(specification: $specification) {
-            id
-            name
-            state
-            type
-            serviceType
-        }
-    }
-    """
-
-    # Define the variables for the mutation
-    variables = {
-        "specification": {
-            "type": "EXTRACTION",
-            "serviceType": "OPEN_AI",
-            "openAI": {
-                "model": "GPT4_TURBO_128K",
-                "temperature": 0.1,
-                "probability": 0.2,
-                "completionTokenLimit": 2048
-            },
-            "tools": [
-                {
-                    "name": "extractJSON",
-                    "schema": schema
-                }
-            ],
-            "name": "Extraction"
-        }
-    }
-
-    # Convert the request to JSON format
-    response = st.session_state['client'].request(query=mutation, variables=variables)
-
-    if 'errors' in response and len(response['errors']) > 0:
-        error_message = response['errors'][0]['message']
-        return error_message
-
-    st.session_state['specification_id'] = response['data']['createSpecification']['id']
-
-    return None
-
-def delete_content():
-    # Define the GraphQL mutation
-    query = """
-    mutation DeleteContent($id: ID!) {
-        deleteContent(id: $id) {
-            id
-        }
-        }
-    """
-
-    # Define the variables for the mutation
-    variables = {
-        "id": st.session_state['content_id']
-    }
-
-    response = st.session_state['client'].request(query=query, variables=variables)
 
 st.image("https://graphlitplatform.blob.core.windows.net/samples/graphlit-logo.svg", width=128)
 st.title("Graphlit Platform")

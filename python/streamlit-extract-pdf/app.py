@@ -30,23 +30,6 @@ if 'document_metadata' not in st.session_state:
 if 'document_observations' not in st.session_state:
     st.session_state['document_observations'] = None
 
-def delete_content():
-    # Define the GraphQL mutation
-    query = """
-    mutation DeleteContent($id: ID!) {
-        deleteContent(id: $id) {
-            id
-        }
-        }
-    """
-
-    # Define the variables for the mutation
-    variables = {
-        "id": st.session_state['content_id']
-    }
-
-    response = st.session_state['client'].request(query=query, variables=variables)
-
 def ingest_file(uri):
     # Define the GraphQL mutation
     mutation = """
@@ -58,6 +41,7 @@ def ingest_file(uri):
                 title
                 keywords
                 author
+                pageCount
             }
             observations {
                 type
@@ -94,11 +78,11 @@ def ingest_file(uri):
 
     return response['data']['ingestFile']['document'], response['data']['ingestFile']['markdown'], response['data']['content']['observations'], None
 
-def delete_workflow():
+def delete_content():
     # Define the GraphQL mutation
     query = """
-    mutation DeleteWorkflow($id: ID!) {
-        deleteWorkflow(id: $id) {
+    mutation DeleteContent($id: ID!) {
+        deleteContent(id: $id) {
             id
         }
         }
@@ -106,8 +90,9 @@ def delete_workflow():
 
     # Define the variables for the mutation
     variables = {
-        "id": st.session_state['workflow_id']
+        "id": st.session_state['content_id']
     }
+
     response = st.session_state['client'].request(query=query, variables=variables)
 
 def create_workflow():
@@ -147,6 +132,22 @@ def create_workflow():
     st.session_state['workflow_id'] = response['data']['createWorkflow']['id']
 
     return None
+
+def delete_workflow():
+    # Define the GraphQL mutation
+    query = """
+    mutation DeleteWorkflow($id: ID!) {
+        deleteWorkflow(id: $id) {
+            id
+        }
+        }
+    """
+
+    # Define the variables for the mutation
+    variables = {
+        "id": st.session_state['workflow_id']
+    }
+    response = st.session_state['client'].request(query=query, variables=variables)
 
 def display_observations_as_chips(observations):
     # Group observations by type
