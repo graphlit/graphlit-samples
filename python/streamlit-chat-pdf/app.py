@@ -357,12 +357,16 @@ if st.session_state['content_done'] == True:
         if document_metadata is not None:
             document_title = document_metadata["title"]
             document_author = document_metadata["author"]
+            document_pageCount = document_metadata["pageCount"]
 
             if document_title is not None:
                 st.markdown(f"**Title:** {document_title}")
 
             if document_author is not None:
                 st.markdown(f"**Author:** {document_author}")
+
+            if document_pageCount is not None:
+                st.markdown(f"**Page count:** {document_pageCount}")
 
         if document_markdown is not None:
             with st.expander("See document text:", expanded=False):
