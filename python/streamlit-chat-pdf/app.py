@@ -52,8 +52,8 @@ def delete_content():
 def ingest_file(uri):
     # Define the GraphQL mutation
     mutation = """
-    mutation IngestFile($uri: URL!, $workflow: EntityReferenceInput) {
-        ingestFile(uri: $uri, workflow: $workflow) {
+    mutation IngestFile($uri: URL!, $workflow: EntityReferenceInput, $isSynchronous: Boolean) {
+        ingestFile(uri: $uri, workflow: $workflow, isSynchronous: $isSynchronous) {
             id
             markdown
             document {
@@ -67,6 +67,7 @@ def ingest_file(uri):
 
     # Define the variables for the mutation
     variables = {
+        "isSynchronous": True, # wait for content to be ingested
         "uri": uri,
         "workflow": {
             "id": st.session_state['workflow_id']
