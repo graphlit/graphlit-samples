@@ -83,10 +83,7 @@ def ingest_file(uri):
 
     st.session_state['content_id'] = response['data']['ingestFile']['id']
 
-    if 'content' in response['data']:
-        return response['data']['ingestFile']['document'], response['data']['ingestFile']['markdown'], None
-
-    return None, None, None
+    return response['data']['ingestFile']['document'], response['data']['ingestFile']['markdown'], None
 
 def delete_workflow():
     # Define the GraphQL mutation
