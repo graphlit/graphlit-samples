@@ -26,64 +26,11 @@ if 'organization_id' not in st.session_state:
 if 'secret_key' not in st.session_state:
     st.session_state['secret_key'] = ""
 if 'content_done' not in st.session_state:
-    st.session_state['content_done'] = None
+    st.session_state['content_done'] = None    
 if 'document_markdown' not in st.session_state:
     st.session_state['document_markdown'] = None
 if 'document_metadata' not in st.session_state:
     st.session_state['document_metadata'] = None
-
-def get_content_metadata():
-    # Define the GraphQL mutation
-    query = """
-    query GetContent($id: ID!) {
-        content(id: $id) {
-            id
-            state
-            markdown
-            document {
-                title
-                keywords
-                author
-            }            
-        }
-    }
-    """
-
-    # Define the variables for the mutation
-    variables = {
-        "id": st.session_state['content_id']
-    }
-
-    response = st.session_state['client'].request(query=query, variables=variables)
-
- #   st.json(response)
-
-    if 'content' in response['data']:
-        return response['data']['content']['document'], response['data']['content']['markdown']
-    
-    return None
-
-def is_content_done():
-    # Define the GraphQL mutation
-    query = """
-    query IsContentDone($id: ID!) {
-        isContentDone(id: $id) {
-            result
-        }
-    }
-    """
-
-    # Define the variables for the mutation
-    variables = {
-        "id": st.session_state["content_id"]
-    }
-    response = st.session_state['client'].request(query=query, variables=variables)
-
-    if 'errors' in response and len(response['errors']) > 0:
-        error_message = response['errors'][0]['message']
-        return None, error_message
-
-    return response['data']['isContentDone']['result'], None
 
 def delete_content():
     # Define the GraphQL mutation
@@ -108,6 +55,12 @@ def ingest_file(uri):
     mutation IngestFile($uri: URL!, $workflow: EntityReferenceInput) {
         ingestFile(uri: $uri, workflow: $workflow) {
             id
+            markdown
+            document {
+                title
+                keywords
+                author
+            }
         }
     }
     """
@@ -125,11 +78,14 @@ def ingest_file(uri):
 
     if 'errors' in response and len(response['errors']) > 0:
         error_message = response['errors'][0]['message']
-        return error_message
+        return None, None, error_message
 
     st.session_state['content_id'] = response['data']['ingestFile']['id']
 
-    return None
+    if 'content' in response['data']:
+        return response['data']['ingestFile']['document'], response['data']['ingestFile']['markdown'], None
+
+    return None, None, None
 
 def delete_workflow():
     # Define the GraphQL mutation
@@ -368,27 +324,18 @@ with st.form("data_content_form"):
                 st.session_state["content_id"] = None
 
             else:
-                error_message = ingest_file(uri)
-
-                if error_message is not None:
-                    st.error(f"Failed to ingest file [{uri}]. {error_message}")
-                else:
-                    start_time = time.time()
+                start_time = time.time()
 
                 # Display spinner while processing
                 with st.spinner('Ingesting document... Please wait.'):
-                    done = False
-                    time.sleep(2)
-                    while not done:
-                        done, error_message = is_content_done()
+                    document_metadata, document_markdown, error_message = ingest_file(uri)
 
-                        if error_message is not None:
-                            st.error(f"Failed to wait for content to be done. {error_message}")
-                            done = True                                
+                    if error_message is not None:
+                        st.error(f"Failed to ingest file [{uri}]. {error_message}")
 
-                        # Wait a bit before checking again
-                        if not done:
-                            time.sleep(2)
+                    st.session_state['document_metadata'] = document_metadata
+                    st.session_state['document_markdown'] = document_markdown
+
                 # Once done, notify the user
                 st.session_state["content_done"] = True
 
@@ -398,11 +345,6 @@ with st.form("data_content_form"):
                 formatted_time = current_time.strftime("%H:%M:%S")
 
                 st.success(f"Document ingestion took {duration:.2f} seconds. Finished at {formatted_time} UTC.")
-
-                document_metadata, document_markdown = get_content_metadata()
-
-                st.session_state['document_metadata'] = document_metadata
-                st.session_state['document_markdown'] = document_markdown
 
                 placeholder = st.empty()
         else:
