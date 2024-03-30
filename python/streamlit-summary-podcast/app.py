@@ -260,7 +260,7 @@ if st.session_state['token'] is None:
 # A dictionary mapping podcast names to their RSS URIs
 podcasts = {
 #    "Lenny's Podcast": "https://api.substack.com/feed/podcast/10845.rss",
-    "Lex Fridman Podcast": "https://lexfridman.com/podcast/",
+    "Lex Fridman Podcast": "https://lexfridman.com/feed/podcast/",
     "Huberman Lab Podcast": "https://feeds.megaphone.fm/hubermanlab",
     "TWiML Podcast": "https://feeds.megaphone.fm/MLN2155636147",
     "AI in Business Podcast": "https://podcast.emerj.com/rss"
