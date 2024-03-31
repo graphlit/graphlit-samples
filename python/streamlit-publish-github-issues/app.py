@@ -245,7 +245,7 @@ with st.form("data_feed_form"):
 
     selected_website = st.selectbox("Select a GitHub repo:", options=list(websites.keys()))
     
-    website_uri = st.text_input("Or enter your own public GitHub repo URL: (private repos are supported via API using PAT)", key='website_uri')
+    website_uri = st.text_input("Or enter your own public GitHub repo URL:", key='website_uri')
     
     uri = website_uri if website_uri else websites[selected_website]
 
@@ -328,7 +328,7 @@ with st.sidebar:
         ### Demo Instructions
         - [Sign up for Graphlit](https://docs.graphlit.dev/getting-started/signup) 🆓  
         - **Step 1:** Generate Graphlit project token.
-        - **Step 2:** Fill in the GitHub repo URI, and [GitHub personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) with 'Read access to issues and metadata' permissions.
+        - **Step 2:** Fill in the GitHub repo URI, and [GitHub personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) with 'Read access to issues and metadata' permissions.  PAT is required to avoid GitHub API rate-limiting.
         - **Step 3:** Click to generate report of recent GitHub Issues using [Anthropic](https://www.anthropic.com) Claude 3 Haiku LLM.     
         """)
 
