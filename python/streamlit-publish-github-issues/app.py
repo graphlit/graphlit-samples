@@ -241,7 +241,7 @@ websites = {
 }
     
 with st.form("data_feed_form"):
-    personal_access_token = st.text_input("Enter your [GitHub personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens):")
+    personal_access_token = st.text_input("Enter your [GitHub personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) with 'Read access to issues and metadata' permissions:")
 
     selected_website = st.selectbox("Select a GitHub repo:", options=list(websites.keys()))
     
