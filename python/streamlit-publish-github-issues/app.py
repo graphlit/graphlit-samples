@@ -241,6 +241,8 @@ websites = {
 }
     
 with st.form("data_feed_form"):
+    personal_access_token = st.text_input("Enter your GitHub personal access token (PAT):")
+
     selected_website = st.selectbox("Select a GitHub repo:", options=list(websites.keys()))
     
     website_uri = st.text_input("Or enter your own public GitHub repo URL: (private repos are supported via API using PAT)", key='website_uri')
@@ -248,8 +250,6 @@ with st.form("data_feed_form"):
     uri = website_uri if website_uri else websites[selected_website]
 
     owner, name = parse_uri(uri)
-
-    personal_access_token = st.text_input("Enter your GitHub personal access token (PAT):")
 
     default_prompt = "Write me a report of recurring themes across all GitHub issues, which can be used to group issues into workstreams.  For each theme, provide an example of issues which fall into this theme."
 
