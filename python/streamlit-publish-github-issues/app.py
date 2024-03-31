@@ -328,7 +328,7 @@ with st.sidebar:
         ### Demo Instructions
         - [Sign up for Graphlit](https://docs.graphlit.dev/getting-started/signup) 🆓  
         - **Step 1:** Generate Graphlit project token.
-        - **Step 2:** Fill in the GitHub repo URI, and [GitHub personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens).
+        - **Step 2:** Fill in the GitHub repo URI, and [GitHub personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) with 'Read access to issues and metadata' permissions.
         - **Step 3:** Click to generate report of recent GitHub Issues using [Anthropic](https://www.anthropic.com) Claude 3 Haiku LLM.     
         """)
 
