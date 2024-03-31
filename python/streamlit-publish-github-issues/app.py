@@ -27,7 +27,7 @@ if 'organization_id' not in st.session_state:
 if 'secret_key' not in st.session_state:
     st.session_state['secret_key'] = ""
 
-def create_feed(owner, name):
+def create_feed(owner, name, token):
     mutation = """
     mutation CreateFeed($feed: FeedInput!) {
         createFeed(feed: $feed) {
@@ -46,6 +46,7 @@ def create_feed(owner, name):
                 "github": {
                     "repositoryOwner": owner,
                     "repositoryName": name,
+                    "personalAccessToken": token,
                 },
                 "readLimit": 10
             },
@@ -243,10 +244,12 @@ with st.form("data_feed_form"):
     selected_website = st.selectbox("Select a GitHub repo:", options=list(websites.keys()))
     
     website_uri = st.text_input("Or enter your own public GitHub repo URL: (private repos are supported via API using PAT)", key='website_uri')
-
+    
     uri = website_uri if website_uri else websites[selected_website]
 
     owner, name = parse_uri(uri)
+
+    personal_access_token = st.text_input("Enter your GitHub personal access token (PAT):")
 
     default_prompt = "Write me a report of recurring themes across all GitHub issues, which can be used to group issues into workstreams.  For each theme, provide an example of issues which fall into this theme."
 
@@ -269,7 +272,7 @@ with st.form("data_feed_form"):
                     delete_specification()
                 st.session_state["specification_id"] = None
 
-            error_message = create_feed(owner, name)
+            error_message = create_feed(owner, name, personal_access_token)
 
             if error_message is not None:
                 st.error(error_message)
@@ -325,7 +328,7 @@ with st.sidebar:
         ### Demo Instructions
         - [Sign up for Graphlit](https://docs.graphlit.dev/getting-started/signup) 🆓  
         - **Step 1:** Generate Graphlit project token.
-        - **Step 2:** Fill in the GitHub repo URI.
+        - **Step 2:** Fill in the GitHub repo URI, and [GitHub personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens).
         - **Step 3:** Click to generate report of recent GitHub Issues using [Anthropic](https://www.anthropic.com) Claude 3 Haiku LLM.     
         """)
 
