@@ -157,7 +157,7 @@ def create_specification():
         "specification": {
             "type": "COMPLETION",
             "serviceType": "OPEN_AI",
-            "anthropic": {
+            "openai": {
                 "model": "GPT4_TURBO_128K",
                 "temperature": 0.1,
                 "probability": 0.2,
