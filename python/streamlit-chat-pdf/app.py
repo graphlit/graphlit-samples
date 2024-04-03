@@ -156,9 +156,9 @@ def create_specification():
     variables = {
         "specification": {
             "type": "COMPLETION",
-            "serviceType": "ANTHROPIC",
+            "serviceType": "OPEN_AI",
             "anthropic": {
-                "model": "CLAUDE_3_HAIKU",
+                "model": "GPT4_TURBO_128K",
                 "temperature": 0.1,
                 "probability": 0.2,
                 "completionTokenLimit": 2048
@@ -172,6 +172,27 @@ def create_specification():
             "name": "Completion"
         }
     }
+
+    # Define the variables for the mutation
+    # variables = {
+    #     "specification": {
+    #         "type": "COMPLETION",
+    #         "serviceType": "ANTHROPIC",
+    #         "anthropic": {
+    #             "model": "CLAUDE_3_HAIKU",
+    #             "temperature": 0.1,
+    #             "probability": 0.2,
+    #             "completionTokenLimit": 2048
+    #         },
+    #         "strategy": { 
+    #             "enableExpandedRetrieval": True # enable small-to-big retrieval
+    #         },
+    #         "promptStrategy": { 
+    #             "type": "OPTIMIZE_SEARCH" # rewrite prompt to optimize for semantic search
+    #         },
+    #         "name": "Completion"
+    #     }
+    # }
 
     # Convert the request to JSON format
     response = st.session_state['client'].request(query=mutation, variables=variables)
@@ -284,7 +305,7 @@ def prompt_conversation(prompt):
        
 st.image("https://graphlitplatform.blob.core.windows.net/samples/graphlit-logo.svg", width=128)
 st.title("Graphlit Platform")
-st.markdown("Chat with any PDF, DOCX, or PPTX file.  Text extraction and OCR done with [Azure AI Document Intelligence](https://azure.microsoft.com/en-us/products/ai-services/ai-document-intelligence).  Chat completion uses the [Anthropic](https://www.anthropic.com) Claude 3 Haiku LLM.")
+st.markdown("Chat with any PDF, DOCX, or PPTX file.  Text extraction and OCR done with [Azure AI Document Intelligence](https://azure.microsoft.com/en-us/products/ai-services/ai-document-intelligence).  Chat completion uses the [OpenAI GPT-4 Turbo 128k](https://platform.openai.com/docs/models/gpt-4-and-gpt-4-turbo) LLM.")
 
 if st.session_state['token'] is None:
     st.info("To get started, generate a token to connect to your Graphlit project.")
@@ -432,7 +453,7 @@ with st.sidebar:
         - [Sign up for Graphlit](https://docs.graphlit.dev/getting-started/signup) 🆓  
         - **Step 1:** Generate Graphlit project token.
         - **Step 2:** Select a PDF, or fill in your own document URL.
-        - **Step 3:** Enter a prompt to ask about the document using [Anthropic](https://www.anthropic.com) Claude 3 Haiku LLM.
+        - **Step 3:** Enter a prompt to ask about the document using [OpenAI GPT-4 Turbo 128k](https://platform.openai.com/docs/models/gpt-4-and-gpt-4-turbo) LLM.
         """)
 
     with st.form("credentials_form"):
