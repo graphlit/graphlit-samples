@@ -436,7 +436,7 @@ with st.sidebar:
         """)
 
     with st.form("credentials_form"):
-        st.markdown("### Start here:")
+        st.markdown("## 💡 Start here:")
         st.info("Locate connection information for your project in the [Graphlit Developer Portal](https://portal.graphlit.dev/)")
 
         st.text_input("Organization ID", value=st.session_state['organization_id'], key="organization_id")
