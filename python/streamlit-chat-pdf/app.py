@@ -173,27 +173,6 @@ def create_specification():
         }
     }
 
-    # Define the variables for the mutation
-    # variables = {
-    #     "specification": {
-    #         "type": "COMPLETION",
-    #         "serviceType": "ANTHROPIC",
-    #         "anthropic": {
-    #             "model": "CLAUDE_3_HAIKU",
-    #             "temperature": 0.1,
-    #             "probability": 0.2,
-    #             "completionTokenLimit": 2048
-    #         },
-    #         "strategy": { 
-    #             "enableExpandedRetrieval": True # enable small-to-big retrieval
-    #         },
-    #         "promptStrategy": { 
-    #             "type": "OPTIMIZE_SEARCH" # rewrite prompt to optimize for semantic search
-    #         },
-    #         "name": "Completion"
-    #     }
-    # }
-
     # Convert the request to JSON format
     response = st.session_state['client'].request(query=mutation, variables=variables)
 
@@ -457,6 +436,7 @@ with st.sidebar:
         """)
 
     with st.form("credentials_form"):
+        st.markdown("### Start here:")
         st.info("Locate connection information for your project in the [Graphlit Developer Portal](https://portal.graphlit.dev/)")
 
         st.text_input("Organization ID", value=st.session_state['organization_id'], key="organization_id")
