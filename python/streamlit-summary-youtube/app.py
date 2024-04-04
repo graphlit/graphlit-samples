@@ -121,23 +121,6 @@ def get_content_metadata_by_feed():
     
     return None
 
-def delete_specification():
-    # Define the GraphQL mutation
-    query = """
-    mutation DeleteSpecification($id: ID!) {
-        deleteSpecification(id: $id) {
-            id
-            state
-        }
-        }
-    """
-
-    # Define the variables for the mutation
-    variables = {
-        "id": st.session_state['specification_id']
-    }
-    response = st.session_state['client'].request(query=query, variables=variables)
-
 def is_feed_done():
     # Define the GraphQL mutation
     query = """
@@ -194,6 +177,23 @@ def create_specification():
     st.session_state['specification_id'] = response['data']['createSpecification']['id']
 
     return None
+
+def delete_specification():
+    # Define the GraphQL mutation
+    query = """
+    mutation DeleteSpecification($id: ID!) {
+        deleteSpecification(id: $id) {
+            id
+            state
+        }
+        }
+    """
+
+    # Define the variables for the mutation
+    variables = {
+        "id": st.session_state['specification_id']
+    }
+    response = st.session_state['client'].request(query=query, variables=variables)
 
 def parse_uri(url):
     """

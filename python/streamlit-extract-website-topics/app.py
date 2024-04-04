@@ -96,22 +96,6 @@ def query_contents_facets():
     
     return None
 
-def delete_workflow():
-    # Define the GraphQL mutation
-    query = """
-    mutation DeleteWorkflow($id: ID!) {
-        deleteWorkflow(id: $id) {
-            id
-        }
-        }
-    """
-
-    # Define the variables for the mutation
-    variables = {
-        "id": st.session_state['workflow_id']
-    }
-    response = st.session_state['client'].request(query=query, variables=variables)
-
 def create_workflow():
     # Define the GraphQL mutation
     mutation = """
@@ -148,6 +132,22 @@ def create_workflow():
     st.session_state['workflow_id'] = response['data']['createWorkflow']['id']
 
     return None
+
+def delete_workflow():
+    # Define the GraphQL mutation
+    query = """
+    mutation DeleteWorkflow($id: ID!) {
+        deleteWorkflow(id: $id) {
+            id
+        }
+        }
+    """
+
+    # Define the variables for the mutation
+    variables = {
+        "id": st.session_state['workflow_id']
+    }
+    response = st.session_state['client'].request(query=query, variables=variables)
 
 def create_feed(uri):
     mutation = """
