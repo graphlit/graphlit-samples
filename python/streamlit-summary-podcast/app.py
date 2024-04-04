@@ -73,6 +73,35 @@ def delete_feed():
     }
     response = st.session_state['client'].request(query=query, variables=variables)
 
+def create_specification():
+    # Define the GraphQL mutation
+    mutation = """
+    mutation CreateSpecification($specification: SpecificationInput!) {
+        createSpecification(specification: $specification) {
+            id
+            name
+            state
+            type
+            serviceType
+        }
+    }
+    """
+
+    # Define the variables for the mutation
+    variables = {
+        "specification": {
+            "type": "COMPLETION",
+            "serviceType": "ANTHROPIC",
+            "anthropic": {
+                "model": "CLAUDE_3_HAIKU",
+                "temperature": 0.5,
+                "probability": 0.2,
+                "completionTokenLimit": 2048
+            },
+            "name": "Summarization"
+        }
+    }
+
 def delete_specification():
     # Define the GraphQL mutation
     query = """
@@ -159,35 +188,6 @@ def is_feed_done():
     response = st.session_state['client'].request(query=query, variables=variables)
     return response['data']['isFeedDone']['result']
 
-def create_specification():
-    # Define the GraphQL mutation
-    mutation = """
-    mutation CreateSpecification($specification: SpecificationInput!) {
-        createSpecification(specification: $specification) {
-            id
-            name
-            state
-            type
-            serviceType
-        }
-    }
-    """
-
-    # Define the variables for the mutation
-    variables = {
-        "specification": {
-            "type": "COMPLETION",
-            "serviceType": "ANTHROPIC",
-            "anthropic": {
-                "model": "CLAUDE_3_HAIKU",
-                "temperature": 0.5,
-                "probability": 0.2,
-                "completionTokenLimit": 2048
-            },
-            "name": "Summarization"
-        }
-    }
-
     # Convert the request to JSON format
     response = st.session_state['client'].request(query=mutation, variables=variables)
 
@@ -252,7 +252,7 @@ def generate_summary():
 
 st.image("https://graphlitplatform.blob.core.windows.net/samples/graphlit-logo.svg", width=128)
 st.title("Graphlit Platform")
-st.markdown("Generate chapters for latest podcast episode from RSS feed.")
+st.markdown("Generate chapters for latest podcast episode from RSS feed. Chapters generated with the [Anthropic](https://www.anthropic.com) Claude 3 Haiku LLM.")
 
 if st.session_state['token'] is None:
     st.info("💡 To get started, generate a token in the side panel to connect to your Graphlit project.")
