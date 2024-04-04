@@ -200,7 +200,7 @@ st.title("Graphlit Platform")
 st.markdown("Generate followup questions from Reddit subreddit. Will read a maximum of 10 recent posts")
 
 if st.session_state['token'] is None:
-    st.info("To get started, generate a token in the side panel to connect to your Graphlit project.")
+    st.info("💡 To get started, generate a token in the side panel to connect to your Graphlit project.")
 
 subreddits = {
     "r/openai": "openai",

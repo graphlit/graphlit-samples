@@ -198,7 +198,7 @@ st.title("Graphlit Platform")
 st.markdown("Extract people and companies from any PDF, DOCX, or PPTX file. Entity extraction is done with [Azure AI Language](https://azure.microsoft.com/en-us/products/ai-services/ai-language).")
 
 if st.session_state['token'] is None:
-    st.info("To get started, generate a token in the side panel to connect to your Graphlit project.")
+    st.info("💡 To get started, generate a token in the side panel to connect to your Graphlit project.")
 
 # A dictionary mapping PDF names to their PDF URIs
 pdfs = {
