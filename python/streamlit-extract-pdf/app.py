@@ -198,7 +198,7 @@ st.title("Graphlit Platform")
 st.markdown("Extract people and companies from any PDF, DOCX, or PPTX file. Entity extraction is done with [Azure AI Language](https://azure.microsoft.com/en-us/products/ai-services/ai-language).")
 
 if st.session_state['token'] is None:
-    st.info("To get started, generate a token to connect to your Graphlit project.")
+    st.info("To get started, generate a token in the side panel to connect to your Graphlit project.")
 
 # A dictionary mapping PDF names to their PDF URIs
 pdfs = {
@@ -315,6 +315,7 @@ with st.sidebar:
         """)
 
     with st.form("credentials_form"):
+        st.markdown("## 💡 Start here:")
         st.info("Locate connection information for your project in the [Graphlit Developer Portal](https://portal.graphlit.dev/)")
 
         st.text_input("Organization ID", value=st.session_state['organization_id'], key="organization_id")

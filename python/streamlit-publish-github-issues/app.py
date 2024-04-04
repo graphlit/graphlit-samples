@@ -231,7 +231,7 @@ st.title("Graphlit Platform")
 st.markdown("Generate a report of GitHub Issues. Will read a maximum of 10 recent issues.")
 
 if st.session_state['token'] is None:
-    st.info("To get started, generate a token to connect to your Graphlit project.")
+    st.info("To get started, generate a token in the side panel to connect to your Graphlit project.")
 
 websites = {
     "OpenAI TikToken": "https://github.com/openai/tiktoken/", # can't have www.openai.com, otherwise nothing found in sitemap

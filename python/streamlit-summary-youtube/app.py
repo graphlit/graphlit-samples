@@ -273,7 +273,7 @@ st.title("Graphlit Platform")
 st.markdown("Generate chapters of YouTube video.")
 
 if st.session_state['token'] is None:
-    st.info("To get started, generate a token to connect to your Graphlit project.")
+    st.info("To get started, generate a token in the side panel to connect to your Graphlit project.")
 
 videos = {
     "Lex Fridman: w/ Sam Altman": "jvqFAi7vkBc",
@@ -387,6 +387,7 @@ with st.sidebar:
         """)
 
     with st.form("credentials_form"):
+        st.markdown("## 💡 Start here:")
         st.info("Locate connection information for your project in the [Graphlit Developer Portal](https://portal.graphlit.dev/)")
 
         st.text_input("Organization ID", value=st.session_state['organization_id'], key="organization_id")
