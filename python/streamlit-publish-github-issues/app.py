@@ -235,7 +235,7 @@ if st.session_state['token'] is None:
 
 websites = {
     "OpenAI TikToken": "https://github.com/openai/tiktoken/", # can't have www.openai.com, otherwise nothing found in sitemap
-    "OpenAI Whisper": "https://github.com/openai/whisper/",
+    "OpenAI Python Client": "https://github.com/openai/openai-python/",
     "Mistral Transformer": "https://github.com/mistralai/mistral-src",
     "Grok-1": "https://github.com/xai-org/grok-1/"
 }
