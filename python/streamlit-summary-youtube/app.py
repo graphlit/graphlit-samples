@@ -324,16 +324,19 @@ with st.form("data_feed_form"):
     # Assuming parse_uri returns None if no identifier is found
     identifier = video_identifier if video_identifier else videos[selected_video]
 
-    submit_data = st.form_submit_button("Submit")
+    col1, col2 = st.columns(2)
 
-    submit_reset = st.form_submit_button("Delete all project data")
+    with col1:
+        submit_data = st.form_submit_button("Submit")
+
+    with col2:
+        submit_reset = st.form_submit_button("Delete all project data")
 
     if submit_reset:
         delete_all_feeds()
         delete_all_contents()
         
-    # Now, handle actions based on submit_data outside the form's scope
-    if submit_data and identifier:
+    elif submit_data and identifier:
         if st.session_state['token']:
             st.session_state['identifier'] = identifier
             
