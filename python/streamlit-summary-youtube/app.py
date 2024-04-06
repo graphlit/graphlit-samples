@@ -314,7 +314,7 @@ videos = {
     "Andrew Huberman w/ Dr. Cal Newport": "p4ZfkezDTXQ",
     "60 Minutes: Geoffrey Hinton": "qrvK_KuIeJk"
 }
-    
+
 with st.form("data_feed_form"):
     selected_video = st.selectbox("Select a YouTube video:", options=list(videos.keys()))
 
@@ -324,19 +324,9 @@ with st.form("data_feed_form"):
     # Assuming parse_uri returns None if no identifier is found
     identifier = video_identifier if video_identifier else videos[selected_video]
 
-    col1, col2 = st.columns(2)
+    submit_data = st.form_submit_button("Submit")
 
-    with col1:
-        submit_data = st.form_submit_button("Submit")
-
-    with col2:
-        submit_reset = st.form_submit_button("Delete all project data")
-
-    if submit_reset:
-        delete_all_feeds()
-        delete_all_contents()
-        
-    elif submit_data and identifier:
+    if submit_data and identifier:
         if st.session_state['token']:
             st.session_state['identifier'] = identifier
             
@@ -417,6 +407,15 @@ with st.form("data_feed_form"):
                         st.success(f"YouTube video chapter generation took {summary_duration:.2f} seconds. Finished at {formatted_time} UTC.")
         else:
             st.error("Please fill in all the connection information.")
+
+with st.form("clear_data_form"):
+    st.markdown("If you run into any problems, or exceeded your project quota, you can delete all your feeds and content to start over.  Note, this deletes *all* your content in your project.")
+
+    submit_reset = st.form_submit_button("Reset project")
+
+    if submit_reset:
+        delete_all_feeds()
+        delete_all_contents()
 
 with st.sidebar:
     st.info("""
