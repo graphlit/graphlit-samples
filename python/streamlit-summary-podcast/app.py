@@ -377,7 +377,7 @@ with st.form("data_feed_form"):
             st.error("Please fill in all the connection information.")
 
 with st.form("clear_data_form"):
-    st.markdown("If you run into any problems, or exceeded your project quota, you can delete all your feeds (and ingested content) to start over.  Be aware, this deletes *all* the feeds in your project.")
+    st.markdown("If you run into any problems, or exceeded your Free Tier project quota, you can delete all your feeds (and ingested content) to start over.  Be aware, this deletes *all* the feeds in your project.")
 
     submit_reset = st.form_submit_button("Reset project")
 

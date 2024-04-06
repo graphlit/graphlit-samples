@@ -95,6 +95,22 @@ def delete_content():
 
     response = st.session_state['client'].request(query=query, variables=variables)
 
+def delete_all_contents():
+    # Define the GraphQL mutation
+    query = """
+    mutation DeleteAllContents() {
+        deleteAllContents() {
+            id
+            state
+        }
+        }
+    """
+
+    # Define the variables for the mutation
+    variables = {
+    }
+    response = st.session_state['client'].request(query=query, variables=variables)
+
 def create_workflow():
     # Define the GraphQL mutation
     mutation = """
@@ -304,6 +320,16 @@ if st.session_state['content_done'] == True:
             st.header('Entities observed in document:')
 
             display_observations_as_chips(document_observations)
+
+with st.form("clear_data_form"):
+    st.markdown("If you run into any problems, or exceeded your Free Tier project quota, you can delete all your contents to start over.  Be aware, this deletes *all* the contents in your project.")
+
+    submit_reset = st.form_submit_button("Reset project")
+
+    if submit_reset:
+        if st.session_state['token']:
+            with st.spinner('Deleting contents... Please wait.'):
+                delete_all_contents()
 
 with st.sidebar:
     st.info("""
