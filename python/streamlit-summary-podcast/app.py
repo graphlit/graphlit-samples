@@ -333,8 +333,6 @@ with st.form("data_feed_form"):
 
                 metadata = get_content_metadata_by_feed()
 
-#                st.json(metadata)
-
                 st.markdown(f"**Podcast URI:** {uri}")
 
                 if metadata is not None:
