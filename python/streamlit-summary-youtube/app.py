@@ -414,8 +414,9 @@ with st.form("clear_data_form"):
     submit_reset = st.form_submit_button("Reset project")
 
     if submit_reset:
-        delete_all_feeds()
-        delete_all_contents()
+        if st.session_state['token']:
+            delete_all_feeds()
+            delete_all_contents()
 
 with st.sidebar:
     st.info("""
