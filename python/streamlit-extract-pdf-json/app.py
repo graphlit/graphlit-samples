@@ -275,6 +275,16 @@ with st.form("data_content_form"):
         else:
             st.error("Please fill in all the connection information.")
 
+with st.form("clear_data_form"):
+    st.markdown("If you run into any problems, or exceeded your Free Tier project quota, you can delete all your contents to start over.  Be aware, this deletes *all* the contents in your project.")
+
+    submit_reset = st.form_submit_button("Reset project")
+
+    if submit_reset:
+        if st.session_state['token']:
+            with st.spinner('Deleting contents... Please wait.'):
+                delete_all_contents()
+
 if st.session_state['content_done'] == True:
     if st.session_state['token']:
         if st.session_state['uri'] is not None:
@@ -487,16 +497,6 @@ if st.session_state['content_done'] == True:
                         formatted_time = current_time.strftime("%H:%M:%S")
 
                         st.success(f"JSON extraction took {duration:.2f} seconds. Finished at {formatted_time} UTC.")
-
-with st.form("clear_data_form"):
-    st.markdown("If you run into any problems, or exceeded your Free Tier project quota, you can delete all your contents to start over.  Be aware, this deletes *all* the contents in your project.")
-
-    submit_reset = st.form_submit_button("Reset project")
-
-    if submit_reset:
-        if st.session_state['token']:
-            with st.spinner('Deleting contents... Please wait.'):
-                delete_all_contents()
 
 with st.sidebar:
     st.info("""
