@@ -77,6 +77,38 @@ def delete_feed():
     }
     response = st.session_state['client'].request(query=query, variables=variables)
 
+def delete_all_feeds():
+    # Define the GraphQL mutation
+    query = """
+    mutation DeleteAllFeeds() {
+        deleteAllFeeds() {
+            id
+            state
+        }
+        }
+    """
+
+    # Define the variables for the mutation
+    variables = {
+    }
+    response = st.session_state['client'].request(query=query, variables=variables)
+
+def delete_all_contents():
+    # Define the GraphQL mutation
+    query = """
+    mutation DeleteAllContents() {
+        deleteAllContents() {
+            id
+            state
+        }
+        }
+    """
+
+    # Define the variables for the mutation
+    variables = {
+    }
+    response = st.session_state['client'].request(query=query, variables=variables)
+
 def get_content_metadata_by_feed():
     # Define the GraphQL mutation
     query = """
@@ -294,6 +326,12 @@ with st.form("data_feed_form"):
 
     submit_data = st.form_submit_button("Submit")
 
+    submit_reset = st.button("Delete all project data")
+
+    if submit_reset:
+        delete_all_feeds()
+        delete_all_contents()
+        
     # Now, handle actions based on submit_data outside the form's scope
     if submit_data and identifier:
         if st.session_state['token']:
