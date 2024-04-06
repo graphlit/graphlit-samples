@@ -191,8 +191,6 @@ def get_content_metadata_by_feed():
 
     response = st.session_state['client'].request(query=query, variables=variables)
 
- #   st.json(response)
-
     if 'results' in response['data']["contents"] and len(response['data']['contents']['results']) > 0:
         return response['data']['contents']['results'][0]['audio']
     

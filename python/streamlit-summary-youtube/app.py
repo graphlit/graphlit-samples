@@ -270,8 +270,6 @@ def generate_summary():
 
     response = st.session_state['client'].request(query=mutation, variables=variables)
 
-#    st.json(response)
-
     if 'errors' in response and len(response['errors']) > 0:
         error_message = response['errors'][0]['message']
         st.error(error_message)
@@ -352,8 +350,6 @@ with st.form("data_feed_form"):
                 st.markdown(f"**YouTube video URL:** https://www.youtube.com/watch?v={identifier}")
 
                 metadata = get_content_metadata_by_feed()
-
-#                st.json(metadata)
 
                 if metadata is not None:
                     video_title = metadata["title"]

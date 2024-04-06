@@ -29,8 +29,6 @@ if 'secret_key' not in st.session_state:
     st.session_state['secret_key'] = ""
 
 def render_histogram_chart(data):
-#    st.json(data)
-
     # Convert JSON data to DataFrame
     df = pd.json_normalize(data, sep='_')
     
@@ -216,6 +214,22 @@ def is_feed_done():
     response = st.session_state['client'].request(query=query, variables=variables)
     return response['data']['isFeedDone']['result']
 
+def delete_all_feeds():
+    # Define the GraphQL mutation
+    query = """
+    mutation DeleteAllFeeds() {
+        deleteAllFeeds() {
+            id
+            state
+        }
+        }
+    """
+
+    # Define the variables for the mutation
+    variables = {
+    }
+    response = st.session_state['client'].request(query=query, variables=variables)
+
 st.image("https://graphlitplatform.blob.core.windows.net/samples/graphlit-logo.svg", width=128)
 st.title("Graphlit Platform")
 st.markdown("Analyze website for topics. Will scrape website, and read a maximum of 10 pages via web sitemap. Entity extraction is done with [Azure AI Language](https://azure.microsoft.com/en-us/products/ai-services/ai-language).")
@@ -293,6 +307,16 @@ with st.form("data_feed_form"):
                 st.session_state['content_facets'] = content_facets
         else:
             st.error("Please fill in all the connection information.")
+
+with st.form("clear_data_form"):
+    st.markdown("If you run into any problems, or exceeded your project quota, you can delete all your feeds (and ingested content) to start over.  Be aware, this deletes *all* the feeds in your project.")
+
+    submit_reset = st.form_submit_button("Reset project")
+
+    if submit_reset:
+        if st.session_state['token']:
+            with st.spinner('Deleting feeds... Please wait.'):
+                delete_all_feeds()
 
 if st.session_state['feed_done'] == True:
     if st.session_state['token']:
