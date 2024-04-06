@@ -73,6 +73,22 @@ def delete_feed():
     }
     response = st.session_state['client'].request(query=query, variables=variables)
 
+def delete_all_feeds():
+    # Define the GraphQL mutation
+    query = """
+    mutation DeleteAllFeeds() {
+        deleteAllFeeds() {
+            id
+            state
+        }
+        }
+    """
+
+    # Define the variables for the mutation
+    variables = {
+    }
+    response = st.session_state['client'].request(query=query, variables=variables)
+
 def create_specification():
     # Define the GraphQL mutation
     mutation = """
@@ -238,8 +254,6 @@ def generate_summary():
 
     response = st.session_state['client'].request(query=mutation, variables=variables)
 
-#    st.json(response)
-
     if 'errors' in response and len(response['errors']) > 0:
         error_message = response['errors'][0]['message']
         st.error(error_message)
@@ -365,6 +379,16 @@ with st.form("data_feed_form"):
                         st.success(f"Podcast chapter generation took {chapters_duration:.2f} seconds. Finished at {formatted_time} UTC.")
         else:
             st.error("Please fill in all the connection information.")
+
+with st.form("clear_data_form"):
+    st.markdown("If you run into any problems, or exceeded your project quota, you can delete all your feeds (and ingested content) to start over.  Be aware, this deletes *all* the feeds in your project.")
+
+    submit_reset = st.form_submit_button("Reset project")
+
+    if submit_reset:
+        if st.session_state['token']:
+            with st.spinner('Deleting feeds... Please wait.'):
+                delete_all_feeds()
 
 with st.sidebar:
     st.info("""

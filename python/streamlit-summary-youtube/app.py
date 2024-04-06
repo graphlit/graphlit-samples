@@ -93,22 +93,6 @@ def delete_all_feeds():
     }
     response = st.session_state['client'].request(query=query, variables=variables)
 
-def delete_all_contents():
-    # Define the GraphQL mutation
-    query = """
-    mutation DeleteAllContents() {
-        deleteAllContents() {
-            id
-            state
-        }
-        }
-    """
-
-    # Define the variables for the mutation
-    variables = {
-    }
-    response = st.session_state['client'].request(query=query, variables=variables)
-
 def get_content_metadata_by_feed():
     # Define the GraphQL mutation
     query = """
@@ -145,8 +129,6 @@ def get_content_metadata_by_feed():
     }
 
     response = st.session_state['client'].request(query=query, variables=variables)
-
- #   st.json(response)
 
     if 'results' in response['data']["contents"] and len(response['data']['contents']['results']) > 0:
         return response['data']['contents']['results'][0]['audio']
@@ -302,7 +284,7 @@ def generate_summary():
 
 st.image("https://graphlitplatform.blob.core.windows.net/samples/graphlit-logo.svg", width=128)
 st.title("Graphlit Platform")
-st.markdown("Generate chapters of YouTube video.")
+st.markdown("Generate chapters of YouTube video. Chapters generated with the [Anthropic](https://www.anthropic.com) Claude 3 Haiku LLM.")
 
 if st.session_state['token'] is None:
     st.info("💡 To get started, generate a token in the side panel to connect to your Graphlit project.")
@@ -409,7 +391,7 @@ with st.form("data_feed_form"):
             st.error("Please fill in all the connection information.")
 
 with st.form("clear_data_form"):
-    st.markdown("If you run into any problems, or exceeded your project quota, you can delete all your feeds and content to start over.  Be aware, this deletes *all* the content in your project.")
+    st.markdown("If you run into any problems, or exceeded your project quota, you can delete all your feeds (and ingested content) to start over.  Be aware, this deletes *all* the feeds in your project.")
 
     submit_reset = st.form_submit_button("Reset project")
 
@@ -417,9 +399,6 @@ with st.form("clear_data_form"):
         if st.session_state['token']:
             with st.spinner('Deleting feeds... Please wait.'):
                 delete_all_feeds()
-
-            with st.spinner('Deleting contents... Please wait.'):
-                delete_all_contents()
 
 with st.sidebar:
     st.info("""
