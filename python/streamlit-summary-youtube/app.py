@@ -415,8 +415,11 @@ with st.form("clear_data_form"):
 
     if submit_reset:
         if st.session_state['token']:
-            delete_all_feeds()
-            delete_all_contents()
+            with st.spinner('Deleting feeds... Please wait.'):
+                delete_all_feeds()
+
+            with st.spinner('Deleting contents... Please wait.'):
+                delete_all_contents()
 
 with st.sidebar:
     st.info("""
