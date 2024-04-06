@@ -326,7 +326,7 @@ with st.form("data_feed_form"):
 
     submit_data = st.form_submit_button("Submit")
 
-    submit_reset = st.button("Delete all project data")
+    submit_reset = st.form_submit_button("Delete all project data")
 
     if submit_reset:
         delete_all_feeds()
