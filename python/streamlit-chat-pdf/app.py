@@ -419,7 +419,7 @@ if st.session_state['content_done'] == True:
                     response, error_message = prompt_conversation(prompt)
                     
                     if error_message is not None:
-                        st.error(f"Failed to prompt specification. {error_message}")
+                        st.error(f"Failed to prompt conversation. {error_message}")
                     else:
                         st.markdown(response)
                         st.session_state.messages.append({"role": "assistant", "content": response})

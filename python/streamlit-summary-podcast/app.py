@@ -102,6 +102,17 @@ def create_specification():
         }
     }
 
+    # Convert the request to JSON format
+    response = st.session_state['client'].request(query=mutation, variables=variables)
+
+    if 'errors' in response and len(response['errors']) > 0:
+        error_message = response['errors'][0]['message']
+        return error_message
+
+    st.session_state['specification_id'] = response['data']['createSpecification']['id']
+
+    return None
+
 def delete_specification():
     # Define the GraphQL mutation
     query = """
@@ -187,17 +198,6 @@ def is_feed_done():
     }
     response = st.session_state['client'].request(query=query, variables=variables)
     return response['data']['isFeedDone']['result']
-
-    # Convert the request to JSON format
-    response = st.session_state['client'].request(query=mutation, variables=variables)
-
-    if 'errors' in response and len(response['errors']) > 0:
-        error_message = response['errors'][0]['message']
-        return error_message
-
-    st.session_state['specification_id'] = response['data']['createSpecification']['id']
-
-    return None
 
 def generate_summary():
     # Define the GraphQL mutation
