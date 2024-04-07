@@ -13,10 +13,10 @@ if 'token' not in st.session_state:
     st.session_state['token'] = None
 if 'workflow_id' not in st.session_state:
     st.session_state['workflow_id'] = None
-if 'content_id' not in st.session_state:
-    st.session_state['content_id'] = None
-if 'content_done' not in st.session_state:
-    st.session_state['content_done'] = None    
+if 'feed_id' not in st.session_state:
+    st.session_state['feed_id'] = None
+if 'feed_done' not in st.session_state:
+    st.session_state['feed_done'] = None
 if 'specification_id' not in st.session_state:
     st.session_state['specification_id'] = None
 if 'conversation_id' not in st.session_state:
@@ -27,70 +27,82 @@ if 'organization_id' not in st.session_state:
     st.session_state['organization_id'] = ""
 if 'secret_key' not in st.session_state:
     st.session_state['secret_key'] = ""
-if 'document_markdown' not in st.session_state:
-    st.session_state['document_markdown'] = None
-if 'document_metadata' not in st.session_state:
-    st.session_state['document_metadata'] = None
 
-def ingest_file(uri):
-    # Define the GraphQL mutation
+def create_feed(account_name, container_name, storage_key, prefix):
     mutation = """
-    mutation IngestFile($uri: URL!, $workflow: EntityReferenceInput, $isSynchronous: Boolean) {
-        ingestFile(uri: $uri, workflow: $workflow, isSynchronous: $isSynchronous) {
+    mutation CreateFeed($feed: FeedInput!) {
+        createFeed(feed: $feed) {
             id
-            markdown
-            document {
-                title
-                keywords
-                author
-                pageCount
-            }
+            name
+            state
+            type
         }
     }
     """
-
-    # Define the variables for the mutation
     variables = {
-        "isSynchronous": True, # wait for content to be ingested
-        "uri": uri,
-        "workflow": {
-            "id": st.session_state['workflow_id']
+        "feed": {
+            "type": "SITE",
+            "site": {
+                "type": "AZURE_BLOB",
+                "isRecursive": False,
+                "azureBlob": {
+                    "accountName": account_name,
+                    "containerName": container_name,
+                    "storageAccessKey": storage_key,
+                    "prefix": prefix
+                }
+            },
+            "name": f"{account_name}: {container_name}"
         }
     }
-
-    # Convert the request to JSON format
     response = st.session_state['client'].request(query=mutation, variables=variables)
 
     if 'errors' in response and len(response['errors']) > 0:
         error_message = response['errors'][0]['message']
-        return None, None, error_message
+        return error_message
+        
+    st.session_state["feed_id"] = response['data']['createFeed']['id']
+    return None
 
-    st.session_state['content_id'] = response['data']['ingestFile']['id']
-
-    return response['data']['ingestFile']['document'], response['data']['ingestFile']['markdown'], None
-
-def delete_content():
+def delete_feed():
     # Define the GraphQL mutation
     query = """
-    mutation DeleteContent($id: ID!) {
-        deleteContent(id: $id) {
+    mutation DeleteFeed($id: ID!) {
+        deleteFeed(id: $id) {
             id
+            state
         }
         }
     """
 
     # Define the variables for the mutation
     variables = {
-        "id": st.session_state['content_id']
+        "id": st.session_state['feed_id']
     }
-
     response = st.session_state['client'].request(query=query, variables=variables)
 
-def delete_all_contents():
+def is_feed_done():
     # Define the GraphQL mutation
     query = """
-    mutation DeleteAllContents() {
-        deleteAllContents() {
+    query IsFeedDone($id: ID!) {
+        isFeedDone(id: $id) {
+            result
+        }
+    }
+    """
+
+    # Define the variables for the mutation
+    variables = {
+        "id": st.session_state["feed_id"]
+    }
+    response = st.session_state['client'].request(query=query, variables=variables)
+    return response['data']['isFeedDone']['result']
+
+def delete_all_feeds():
+    # Define the GraphQL mutation
+    query = """
+    mutation DeleteAllFeeds() {
+        deleteAllFeeds() {
             id
             state
         }
@@ -173,6 +185,7 @@ def create_specification():
         "specification": {
             "type": "COMPLETION",
             "serviceType": "OPEN_AI",
+            "searchType": "VECTOR",
             "openAI": {
                 "model": "GPT4_TURBO_128K",
                 "temperature": 0.1,
@@ -180,10 +193,18 @@ def create_specification():
                 "completionTokenLimit": 2048
             },
             "strategy": { 
-                "enableExpandedRetrieval": True # enable small-to-big retrieval
+                "embedCitations": True,
             },
             "promptStrategy": { 
-                "type": "OPTIMIZE_SEARCH" # rewrite prompt to optimize for semantic search
+                "type": "REWRITE" # rewrite for semantic search
+            },
+            "retrievalStrategy": {
+                "type": "CONTENT",
+                "contentLimit": 10,
+                "enableExpandedRetrieval": True
+            },
+            "rerankingStrategy": {
+                "serviceType": "COHERE"
             },
             "name": "Completion"
         }
@@ -232,9 +253,9 @@ def create_conversation():
                 "id": st.session_state['specification_id']
             },
             "filter": {
-                "contents":[
+                "feeds":[
                     {
-                        "id": st.session_state['content_id']                        
+                        "id": st.session_state['feed_id']                        
                     }
                 ]
             },
@@ -300,39 +321,25 @@ def prompt_conversation(prompt):
        
 st.image("https://graphlitplatform.blob.core.windows.net/samples/graphlit-logo.svg", width=128)
 st.title("Graphlit Platform")
-st.markdown("Chat with any PDF, DOCX, or PPTX file.  Text extraction and OCR done with [Azure AI Document Intelligence](https://azure.microsoft.com/en-us/products/ai-services/ai-document-intelligence).  Chat completion uses the [OpenAI GPT-4 Turbo 128k](https://platform.openai.com/docs/models/gpt-4-and-gpt-4-turbo) LLM.")
+st.markdown("Chat with files in an Azure storage container.  Text extraction and OCR done with [Azure AI Document Intelligence](https://azure.microsoft.com/en-us/products/ai-services/ai-document-intelligence).  Chat completion uses the [OpenAI GPT-4 Turbo 128k](https://platform.openai.com/docs/models/gpt-4-and-gpt-4-turbo) LLM.")
 
 if st.session_state['token'] is None:
     st.info("💡 To get started, generate a token in the side panel to connect to your Graphlit project.")
 
-# A dictionary mapping PDF names to their PDF URIs
-pdfs = {
-    "Attention is all you need": "https://graphlitplatform.blob.core.windows.net/samples/Attention%20Is%20All%20You%20Need.1706.03762.pdf",
-    "Unifying Large Language Models and Knowledge Graphs: A Roadmap": "https://graphlitplatform.blob.core.windows.net/samples/Unifying%20Large%20Language%20Models%20and%20Knowledge%20Graphs%20A%20Roadmap-2306.08302.pdf",
-    "Microsoft 10Q (March 2024)": "https://graphlitplatform.blob.core.windows.net/samples/MSFT_FY24Q1_10Q.docx",
-    "Uber 10Q (March 2022)": "https://graphlitplatform.blob.core.windows.net/samples/uber_10q_march_2022.pdf",
-}
-
-document_metadata = None
-document_markdown = None
-
-with st.form("data_content_form"):
-    selected_pdf = st.selectbox("Select a PDF:", options=list(pdfs.keys()))
-    
-    document_uri = st.text_input("Or enter your own URL to a file (i.e. PDF, DOCX, PPTX):", key='pdf_uri')
-
-    uri = document_uri if document_uri else pdfs[selected_pdf]
+with st.form("data_content_form"):    
+    account_name = st.text_input("Enter your Azure storage account name", key='account_name')
+    container_name = st.text_input("Enter your Azure blob container name", key='container_name')
+    storage_key = st.text_input("Enter your Azure storage access key", key='storage_key')
+    prefix = st.text_input("Optionally, enter the relative path within the Azure blob container", key='prefix')
 
     submit_content = st.form_submit_button("Submit")
 
     # Now, handle actions based on submit_data outside the form's scope
-    if submit_content and uri:
+    if submit_content and account_name and container_name and storage_key:
         st.session_state.messages = []
-        st.session_state['content_done'] = False
+        st.session_state['feed_done'] = False
 
-        if st.session_state['token']:
-            st.session_state['uri'] = uri
-            
+        if st.session_state['token']:            
             # Clean up previous session state
             if st.session_state['workflow_id'] is None:
                 error_message = create_workflow()
@@ -340,81 +347,56 @@ with st.form("data_content_form"):
                 if error_message is not None:
                     st.error(f"Failed to create workflow. {error_message}")
 
-            if st.session_state['content_id'] is not None:
-                with st.spinner('Deleting existing content... Please wait.'):
-                    delete_content()
-                st.session_state["content_id"] = None
+            if st.session_state['feed_id'] is not None:
+                with st.spinner('Deleting existing feed... Please wait.'):
+                    delete_feed()
+                st.session_state["feed_id"] = None
 
             start_time = time.time()
 
-            # Display spinner while processing
-            with st.spinner('Ingesting document... Please wait.'):
-                document_metadata, document_markdown, error_message = ingest_file(uri)
+            error_message = create_feed(account_name, container_name, storage_key, prefix)
 
-                if error_message is not None:
-                    st.error(f"Failed to ingest file [{uri}]. {error_message}")
-                else:
-                    st.session_state['document_metadata'] = document_metadata
-                    st.session_state['document_markdown'] = document_markdown
+            if error_message is not None:
+                st.error(error_message)
+            else:
+                start_time = time.time()
 
-                    # Once done, notify the user
-                    st.session_state["content_done"] = True
+                # Display spinner while processing
+                with st.spinner('Ingesting feed... Please wait.'):
+                    done = False
+                    time.sleep(5)
+                    while not done:
+                        done = is_feed_done()
 
-                    duration = time.time() - start_time
+                        # Wait a bit before checking again
+                        if not done:
+                            time.sleep(2)
+                # Once done, notify the user
+                st.session_state["feed_done"] = True
 
-                    current_time = datetime.now()
-                    formatted_time = current_time.strftime("%H:%M:%S")
+                duration = time.time() - start_time
 
-                    st.success(f"Document ingestion took {duration:.2f} seconds. Finished at {formatted_time} UTC.")
+                current_time = datetime.now()
+                formatted_time = current_time.strftime("%H:%M:%S")
 
-            placeholder = st.empty()
+                st.success(f"Feed ingestion took {duration:.2f} seconds. Finished at {formatted_time} UTC.")
+
+                placeholder = st.empty()
         else:
             st.error("Please fill in all the connection information.")
 
 with st.form("clear_data_form"):
-    st.markdown("If you run into any problems, or exceeded your Free Tier project quota, you can delete all your contents to start over.  Be aware, this deletes *all* the contents in your project.")
+    st.markdown("If you run into any problems, or exceeded your Free Tier project quota, you can delete all your feeds (and ingested content) to start over.  Be aware, this deletes *all* the feeds in your project.")
 
     submit_reset = st.form_submit_button("Reset project")
 
     if submit_reset:
         if st.session_state['token']:
-            with st.spinner('Deleting contents... Please wait.'):
-                delete_all_contents()
+            with st.spinner('Deleting feeds... Please wait.'):
+                delete_all_feeds()
 
-if st.session_state['content_done'] == True:
+if st.session_state['feed_done'] == True:
     if st.session_state['token']:
-        st.markdown(f"**Document URI:** {uri}")
-
-        document_metadata = st.session_state['document_metadata']
-        document_markdown = st.session_state['document_markdown']
-
-        if document_metadata is not None:
-            document_title = None
-            document_author = None
-            document_pageCount = None
-
-            if 'title' in document_metadata:
-                document_title = document_metadata["title"]
-
-            if 'author' in document_metadata:
-                document_author = document_metadata["author"]
-
-            if 'pageCount' in document_metadata:
-                document_pageCount = document_metadata["pageCount"]
-
-            if document_title is not None:
-                st.markdown(f"**Title:** {document_title}")
-
-            if document_author is not None:
-                st.markdown(f"**Author:** {document_author}")
-
-            if document_pageCount is not None:
-                st.markdown(f"**Page count:** {document_pageCount}")
-
-        if document_markdown is not None:
-            with st.expander("See document text:", expanded=False):
-                st.markdown(document_markdown)
-
         if "messages" not in st.session_state:
             st.session_state.messages = []
 
@@ -435,7 +417,7 @@ if st.session_state['content_done'] == True:
                 st.error(f"Failed to create conversation. {error_message}")
 
         try:
-            if prompt := st.chat_input("Ask me anything about this document."):
+            if prompt := st.chat_input("Ask me anything about your content."):
                 st.session_state.messages.append({"role": "user", "content": prompt})
                 
                 with st.chat_message("user"):
@@ -450,7 +432,7 @@ if st.session_state['content_done'] == True:
                         st.markdown(response)
                         st.session_state.messages.append({"role": "assistant", "content": response})
         except:
-            st.warning("You need to generate a token before chatting with your document.")
+            st.warning("You need to generate a token before chatting with your content.")
 
 with st.sidebar:
     st.info("""
