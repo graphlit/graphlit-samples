@@ -578,7 +578,7 @@ with st.form("data_content_form"):
                 base64_content = base64.b64encode(file_content).decode('utf-8')
 
                 # Display spinner while processing
-                with st.spinner('Ingesting document... Please wait.'):
+                with st.spinner('Ingesting file... Please wait.'):
                     error_message = ingest_file(uploaded_file.name, uploaded_file.type, base64_content)
 
                     if error_message is not None:
