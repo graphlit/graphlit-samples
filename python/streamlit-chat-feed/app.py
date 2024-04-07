@@ -439,8 +439,8 @@ with st.sidebar:
         ### Demo Instructions
         - [Sign up for Graphlit](https://docs.graphlit.dev/getting-started/signup) 🆓  
         - **Step 1:** Generate Graphlit project token.
-        - **Step 2:** Select a PDF, or fill in your own document URL.
-        - **Step 3:** Enter a prompt to ask about the document using [OpenAI GPT-4 Turbo 128k](https://platform.openai.com/docs/models/gpt-4-and-gpt-4-turbo) LLM.
+        - **Step 2:** Enter your Azure blob storage connection information.
+        - **Step 3:** Enter a prompt to ask about the files using [OpenAI GPT-4 Turbo 128k](https://platform.openai.com/docs/models/gpt-4-and-gpt-4-turbo) LLM.
         """)
 
     with st.form("credentials_form"):
