@@ -309,8 +309,6 @@ with st.form("data_content_form"):
                     formatted_time = current_time.strftime("%H:%M:%S")
 
                     st.success(f"Document ingestion took {duration:.2f} seconds. Finished at {formatted_time} UTC.")
-
-            placeholder = st.empty()
         else:
             st.error("Please fill in all the connection information.")
 
@@ -321,6 +319,8 @@ summarizations = {
     "Social media posts": "POSTS",
 }
 
+placeholder = st.empty()
+
 with st.form("summarize_data_form"):
     selected_summarization = st.selectbox("Select a summary type:", options=list(summarizations.keys()))
     
@@ -330,34 +330,37 @@ with st.form("summarize_data_form"):
 
     submit_summarization = st.form_submit_button("Summarize")
 
-    if st.session_state['content_done'] == True:
-        if st.session_state['token']:
-            if st.session_state['specification_id'] is not None:
-                with st.spinner('Deleting existing specification... Please wait.'):
-                    delete_specification()
-                st.session_state["specification_id"] = None
+    if submit_summarization:
+        if st.session_state['content_done'] == True:
+            if st.session_state['token']:
+                if st.session_state['specification_id'] is not None:
+                    with st.spinner('Deleting existing specification... Please wait.'):
+                        delete_specification()
+                    st.session_state["specification_id"] = None
 
-            error_message = create_specification()
+                error_message = create_specification()
 
-            if error_message is not None:
-                st.error(error_message)
+                if error_message is not None:
+                    st.error(error_message)
+                else:
+                    start_summary_time = time.time()
+
+                    with st.spinner('Generating summary... Please wait.'):
+                        if summarization_prompt is not None:
+                            summarization_type = "CUSTOM"
+
+                        summary = generate_summary(summarization_type, summarization_prompt)
+
+                        placeholder.markdown(summary)
+
+                        summary_duration = time.time() - start_summary_time
+
+                        current_time = datetime.now()
+                        formatted_time = current_time.strftime("%H:%M:%S")
+
+                        st.success(f"Summary generation took {summary_duration:.2f} seconds. Finished at {formatted_time} UTC.")
             else:
-                start_summary_time = time.time()
-
-                with st.spinner('Generating summary... Please wait.'):
-                    if summarization_prompt is not None:
-                        summarization_type = "CUSTOM"
-
-                    summary = generate_summary(summarization_type, summarization_prompt)
-
-                    placeholder.markdown(summary)
-
-                    summary_duration = time.time() - start_summary_time
-
-                    current_time = datetime.now()
-                    formatted_time = current_time.strftime("%H:%M:%S")
-
-                    st.success(f"Summary generation took {summary_duration:.2f} seconds. Finished at {formatted_time} UTC.")
+                st.error("Please fill in all the connection information.")
 
 with st.form("clear_data_form"):
     st.markdown("If you run into any problems, or exceeded your Free Tier project quota, you can delete all your contents to start over.  Be aware, this deletes *all* the contents in your project.")
