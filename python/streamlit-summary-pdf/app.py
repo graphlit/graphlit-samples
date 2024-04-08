@@ -317,9 +317,8 @@ summarizations = {
     "Bullet points": "BULLETS",
     "Followup questions": "QUESTIONS",
     "Social media posts": "POSTS",
+    "Custom summarization prompt": "CUSTOM"
 }
-
-placeholder = st.empty()
 
 with st.form("summarize_data_form"):
     selected_summarization = st.selectbox("Select a summary type:", options=list(summarizations.keys()))
@@ -329,6 +328,8 @@ with st.form("summarize_data_form"):
     summarization_type = summarizations[selected_summarization]
 
     submit_summarization = st.form_submit_button("Summarize")
+
+    placeholder = st.empty()
 
     if submit_summarization:
         if st.session_state['content_done'] == True:
