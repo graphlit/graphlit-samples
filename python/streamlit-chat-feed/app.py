@@ -196,16 +196,12 @@ def create_specification():
                 "embedCitations": True,
             },
             "promptStrategy": { 
-                "type": "REWRITE" # rewrite for semantic search
+                "type": "OPTIMIZE_SEARCH" # rewrite for semantic search
             },
-            # "retrievalStrategy": {
-            #     "type": "SECTION",
-            #     "contentLimit": 10,
-            #     "enableExpandedRetrieval": True
-            # },
-            # "rerankingStrategy": {
-            #     "serviceType": "COHERE"
-            # },
+            "retrievalStrategy": {
+                "type": "SECTION",
+                "contentLimit": 10,
+            },
             "name": "Completion"
         }
     }

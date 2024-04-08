@@ -33,8 +33,8 @@ if 'document_observations' not in st.session_state:
 def ingest_file(uri):
     # Define the GraphQL mutation
     mutation = """
-    mutation IngestFile($uri: URL!, $workflow: EntityReferenceInput, $isSynchronous: Boolean) {
-        ingestFile(uri: $uri, workflow: $workflow, isSynchronous: $isSynchronous) {
+    mutation IngestUri($uri: URL!, $workflow: EntityReferenceInput, $isSynchronous: Boolean) {
+        ingestUri(uri: $uri, workflow: $workflow, isSynchronous: $isSynchronous) {
             id
             markdown
             document {
@@ -74,9 +74,9 @@ def ingest_file(uri):
         error_message = response['errors'][0]['message']
         return None, None, None, error_message
 
-    st.session_state['content_id'] = response['data']['ingestFile']['id']
+    st.session_state['content_id'] = response['data']['ingestUri']['id']
 
-    return response['data']['ingestFile']['document'], response['data']['ingestFile']['markdown'], response['data']['ingestFile']['observations'], None
+    return response['data']['ingestUri']['document'], response['data']['ingestUri']['markdown'], response['data']['ingestUri']['observations'], None
 
 def delete_content():
     # Define the GraphQL mutation

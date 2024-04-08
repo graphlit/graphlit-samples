@@ -35,8 +35,8 @@ if 'document_metadata' not in st.session_state:
 def ingest_file(uri):
     # Define the GraphQL mutation
     mutation = """
-    mutation IngestFile($uri: URL!, $workflow: EntityReferenceInput, $isSynchronous: Boolean) {
-        ingestFile(uri: $uri, workflow: $workflow, isSynchronous: $isSynchronous) {
+    mutation IngestUri($uri: URL!, $workflow: EntityReferenceInput, $isSynchronous: Boolean) {
+        ingestUri(uri: $uri, workflow: $workflow, isSynchronous: $isSynchronous) {
             id
             markdown
             document {
@@ -65,9 +65,9 @@ def ingest_file(uri):
         error_message = response['errors'][0]['message']
         return None, None, error_message
 
-    st.session_state['content_id'] = response['data']['ingestFile']['id']
+    st.session_state['content_id'] = response['data']['ingestUri']['id']
 
-    return response['data']['ingestFile']['document'], response['data']['ingestFile']['markdown'], None
+    return response['data']['ingestUri']['document'], response['data']['ingestUri']['markdown'], None
 
 def delete_content():
     # Define the GraphQL mutation
@@ -179,11 +179,12 @@ def create_specification():
                 "probability": 0.2,
                 "completionTokenLimit": 2048
             },
-            "strategy": { 
-                "enableExpandedRetrieval": True # enable small-to-big retrieval
-            },
             "promptStrategy": { 
                 "type": "OPTIMIZE_SEARCH" # rewrite prompt to optimize for semantic search
+            },
+            "retrievalStrategy": {
+                "type": "SECTION",
+                "contentLimit": 10,
             },
             "name": "Completion"
         }

@@ -180,14 +180,10 @@ def create_specification():
             "promptStrategy": { 
                 "type": "OPTIMIZE_SEARCH" # rewrite for semantic search
             },
-            # TODO: requires new PROD release
-            # "retrievalStrategy": {
-            #     "type": "SECTION",
-            #     "contentLimit": 10,
-            # },
-            # "rerankingStrategy": {
-            #     "serviceType": "COHERE"
-            # },
+            "retrievalStrategy": {
+                "type": "SECTION",
+                "contentLimit": 10,
+            },
             "name": "Completion"
         }
     }
