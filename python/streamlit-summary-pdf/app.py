@@ -204,7 +204,7 @@ def delete_specification():
     }
     response = st.session_state['client'].request(query=query, variables=variables)
 
-def generate_summary():
+def generate_summary(summarization_type, summarization_prompt):
     # Define the GraphQL mutation
     mutation = """
     mutation SummarizeContents($summarizations: [SummarizationStrategyInput!]!, $filter: ContentFilter) {
@@ -230,7 +230,8 @@ def generate_summary():
     },
     "summarizations": [
         {
-            "type": "SUMMARY",
+            "type": summarization_type,
+            "prompt": summarization_prompt,
             "specification": {
                 "id": st.session_state["specification_id"]
             }
@@ -323,7 +324,7 @@ summarizations = {
 with st.form("summarize_data_form"):
     selected_summarization = st.selectbox("Select a summary type:", options=list(summarizations.keys()))
     
-    summarization_prompt = st.text_input("Or enter your own summarization prompt:", key='summarization_prompt')
+    summarization_prompt = st.text_area("Or enter your own summarization prompt:", key='summarization_prompt', height=300)
 
     summarization_type = summarizations[selected_summarization]
 
