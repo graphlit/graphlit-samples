@@ -318,7 +318,6 @@ summarizations = {
     "Bullet points": "BULLETS",
     "Followup questions": "QUESTIONS",
     "Social media posts": "POSTS",
-    "Custom": "CUSTOM"
 }
 
 with st.form("summarize_data_form"):
@@ -347,7 +346,7 @@ with st.form("summarize_data_form"):
                 with st.spinner('Generating summary... Please wait.'):
                     if summarization_prompt is not None:
                         summarization_type = "CUSTOM"
-                        
+
                     summary = generate_summary(summarization_type, summarization_prompt)
 
                     placeholder.markdown(summary)
