@@ -198,14 +198,14 @@ def create_specification():
             "promptStrategy": { 
                 "type": "REWRITE" # rewrite for semantic search
             },
-            "retrievalStrategy": {
-                "type": "CONTENT",
-                "contentLimit": 10,
-                "enableExpandedRetrieval": True
-            },
-            "rerankingStrategy": {
-                "serviceType": "COHERE"
-            },
+            # "retrievalStrategy": {
+            #     "type": "SECTION",
+            #     "contentLimit": 10,
+            #     "enableExpandedRetrieval": True
+            # },
+            # "rerankingStrategy": {
+            #     "serviceType": "COHERE"
+            # },
             "name": "Completion"
         }
     }

@@ -161,7 +161,7 @@ def create_specification():
             },
             # TODO: requires new PROD release
             # "retrievalStrategy": {
-            #     "type": "CONTENT",
+            #     "type": "SECTION",
             #     "contentLimit": 10,
             # },
             # "rerankingStrategy": {
