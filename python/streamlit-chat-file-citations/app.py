@@ -165,10 +165,10 @@ def create_specification():
     variables = {
         "specification": {
             "type": "COMPLETION",
-            "serviceType": "OPEN_AI",
+            "serviceType": "ANTHROPIC",
             "searchType": "VECTOR",
-            "openAI": {
-                "model": "GPT4_TURBO_128K",
+            "anthropic": {
+                "model": "CLAUDE_3_HAIKU",
                 "temperature": 0.1,
                 "probability": 0.2,
                 "completionTokenLimit": 2048
@@ -182,9 +182,9 @@ def create_specification():
             "retrievalStrategy": {
                 "type": "SECTION",
             },
-            # "rerankingStrategy": {
-            #     "serviceType": "COHERE"
-            # },
+            "rerankingStrategy": {
+                "serviceType": "COHERE"
+            },
             "name": "Completion"
         }
     }
@@ -735,7 +735,7 @@ with st.sidebar:
         - [Sign up for Graphlit](https://docs.graphlit.dev/getting-started/signup) 🆓  
         - **Step 1:** Generate Graphlit project token.
         - **Step 2:** Browse for a file to upload and ingest.
-        - **Step 3:** Enter a prompt to ask about the file using [OpenAI GPT-4 Turbo 128k](https://platform.openai.com/docs/models/gpt-4-and-gpt-4-turbo) LLM.
+        - **Step 3:** Enter a prompt to ask about the file using [Anthropic](https://www.anthropic.com) Claude 3 Haiku LLM.
         """)
 
     with st.form("credentials_form"):
@@ -744,7 +744,7 @@ with st.sidebar:
 
         st.text_input("Organization ID", value=st.session_state['organization_id'], key="organization_id")
         st.text_input("Preview Environment ID", value=st.session_state['environment_id'], key="environment_id")
-        st.text_input("Secret", value=st.session_state['secret_key'], key="secret_key", type="password")
+        st.text_input("Secret", value=st.session_state['secret_key'], key="secret_key")
 
         submit_credentials = st.form_submit_button("Generate Token")
         

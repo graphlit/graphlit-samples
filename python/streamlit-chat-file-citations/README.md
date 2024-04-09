@@ -1,6 +1,6 @@
 # Graphlit Platform
 
-## Chat with any uploaded file, with citations.  Text extraction and OCR done with [Azure AI Document Intelligence](https://azure.microsoft.com/en-us/products/ai-services/ai-document-intelligence). Chat completion uses the [OpenAI GPT-4 Turbo 128k](https://platform.openai.com/docs/models/gpt-4-and-gpt-4-turbo) LLM.
+## Chat with any uploaded file, with citations.  Text extraction and OCR done with [Azure AI Document Intelligence](https://azure.microsoft.com/en-us/products/ai-services/ai-document-intelligence). Chat completion uses the [Anthropic](https://www.anthropic.com) Claude 3 Haiku LLM.
 
 You can view the Streamlit application [here](https://graphlit-samples-chat-pdf.streamlit.app/).
 
