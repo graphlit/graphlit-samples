@@ -231,13 +231,13 @@ def create_conversation():
             "specification": {
                 "id": st.session_state['specification_id']
             },
-            "filter": {
-                "contents":[
-                    {
-                        "id": st.session_state['content_id']                        
-                    }
-                ]
-            },
+            # "filter": {
+            #     "contents":[
+            #         {
+            #             "id": st.session_state['content_id']                        
+            #         }
+            #     ]
+            # },
             "name": "Conversation"
         }
     }
