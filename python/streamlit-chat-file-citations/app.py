@@ -744,7 +744,7 @@ with st.sidebar:
 
         st.text_input("Organization ID", value=st.session_state['organization_id'], key="organization_id")
         st.text_input("Preview Environment ID", value=st.session_state['environment_id'], key="environment_id")
-        st.text_input("Secret", value=st.session_state['secret_key'], key="secret_key")
+        st.text_input("Secret", value=st.session_state['secret_key'], key="secret_key", type="password")
 
         submit_credentials = st.form_submit_button("Generate Token")
         
