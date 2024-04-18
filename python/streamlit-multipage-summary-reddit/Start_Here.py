@@ -35,7 +35,7 @@ with col1:
                 st.session_state['graphlit'] = graphlit
                 st.session_state['token'] = graphlit.token
 
-                st.switch_page("pages/1_Create_Feed.py")
+                st.switch_page("pages/1_Ingest_Reddit.py")
             else:
                 st.error("Please fill in all the connection information.")
 

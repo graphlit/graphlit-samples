@@ -5,6 +5,7 @@ from streamlit_extras.stylable_container import stylable_container
 
 websites = {
     "OpenAI Blog": "https://openai.com/blog", # can't have www.openai.com, otherwise nothing found in sitemap
+    "MIT News": "https://news.mit.edu/topic/artificial-intelligence2",
     "NVIDIA Blog": "https://blogs.nvidia.com/",
     "Call to the Pen (Baseball)": "https://calltothepen.com/"
 }
@@ -31,7 +32,7 @@ else:
             if submit_content and uri and st.session_state['token']:
                 helpers.run_async_task(feed.handle_feed, uri)
 
-                st.switch_page("pages/2_Topics.py")
+                st.switch_page("pages/2_Summarize_Web_Pages.py")
 
     with col2:
         st.markdown("**Python SDK code example:**")

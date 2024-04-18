@@ -32,7 +32,7 @@ else:
             if submit_content and uri:
                 helpers.run_async_task(upload.handle_upload, uri)
 
-                st.switch_page("pages/2_Summarize.py")
+                st.switch_page("pages/2_Summarize_Document.py")
 
     with col2:
         st.markdown("**Python SDK code example:**")

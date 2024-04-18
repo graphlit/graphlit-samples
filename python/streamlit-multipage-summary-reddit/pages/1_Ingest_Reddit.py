@@ -3,12 +3,12 @@ from other import helpers
 from components import feed, header, sidebar, session_state
 from streamlit_extras.stylable_container import stylable_container
 
-# A dictionary mapping podcast names to their RSS URIs
-podcasts = {
-    "Lex Fridman Podcast": "https://lexfridman.com/feed/podcast/",
-    "Huberman Lab Podcast": "https://feeds.megaphone.fm/hubermanlab",
-    "TWiML Podcast": "https://feeds.megaphone.fm/MLN2155636147",
-    "AI in Business Podcast": "https://podcast.emerj.com/rss"
+subreddits = {
+    "r/openai": "openai",
+    "r/anthropic": "anthropic",
+    "r/mistralai": "MistralAI",
+    "r/llmdevs": "llmdevs",
+    "r/chatgptcoding": "chatgptcoding",
 }
 
 session_state.reset_session_state()
@@ -22,18 +22,18 @@ else:
 
     with col1:
         with st.form("data_feed_form"):    
-            selected_podcast = st.selectbox("Select a Podcast:", options=list(podcasts.keys()))
+            selected_subreddit = st.selectbox("Select a Reddit subreddit:", options=list(subreddits.keys()))
             
-            podcast_uri = st.text_input("Or enter your own Podcast RSS URL", key='podcast_uri')
+            subreddit_name = st.text_input("Or enter your own Reddit subreddit name", key='subreddit_name')
 
-            uri = podcast_uri if podcast_uri else podcasts[selected_podcast]
+            name = subreddit_name if subreddit_name else subreddits[selected_subreddit]
 
             submit_content = st.form_submit_button("Submit")
 
-            if submit_content and uri and st.session_state['token']:
-                helpers.run_async_task(feed.handle_feed, uri)
+            if submit_content and name and st.session_state['token']:
+                helpers.run_async_task(feed.handle_feed, name)
 
-                st.switch_page("pages/2_Summarize.py")
+                st.switch_page("pages/2_Generate_Followup_Questions.py")
 
     with col2:
         st.markdown("**Python SDK code example:**")
@@ -51,11 +51,11 @@ else:
                     from graphlit_api import *
 
                     input = FeedInput(
-                        name=uri,
-                        type=FeedTypes.RSS,
-                        rss=RSSFeedPropertiesInput(
-                            uri="{uri}",
-                            readLimit=1
+                        name="{name}",
+                        type=FeedTypes.REDDIT,
+                        reddit=RedditFeedPropertiesInput(
+                            subredditName="{name}",
+                            readLimit=10
                         )
                     )
 

@@ -35,7 +35,7 @@ else:
             if submit_content and identifier and st.session_state['token']:
                 helpers.run_async_task(feed.handle_feed, identifier)
 
-                st.switch_page("pages/2_Summarize.py")
+                st.switch_page("pages/2_Generate_Chapters.py")
 
     with col2:
         st.markdown("**Python SDK code example:**")

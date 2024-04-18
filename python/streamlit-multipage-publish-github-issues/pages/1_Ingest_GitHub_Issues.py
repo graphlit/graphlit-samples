@@ -36,7 +36,7 @@ else:
             if submit_data and owner and name and personal_access_token and st.session_state['token']:        
                 helpers.run_async_task(feed.handle_feed, owner, name, personal_access_token)
 
-                st.switch_page("pages/2_Publish.py")
+                st.switch_page("pages/2_Publish_Report.py")
 
     with col2:
         st.markdown("**Python SDK code example:**")
