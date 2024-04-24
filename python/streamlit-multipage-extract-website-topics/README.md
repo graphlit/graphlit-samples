@@ -2,7 +2,7 @@
 
 ## Analyze website for topics. Will scrape website, and read a maximum of 10 pages via sitemap.xml. Entity extraction is done with [Azure AI Language](https://azure.microsoft.com/en-us/products/ai-services/ai-language).
 
-You can view the Streamlit application [here](https://graphlit-samples-summary-web-feed.streamlit.app/).
+You can view the Streamlit application [here](https://graphlit-samples-extract-website-topics.streamlit.app/).
 
 ### Demo Instructions
 - **Prerequisite:** [Sign up for Graphlit 🆓](https://docs.graphlit.dev/getting-started/signup)

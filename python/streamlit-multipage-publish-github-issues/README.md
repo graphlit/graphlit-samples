@@ -2,7 +2,7 @@
 
 ## Ingest GitHub Issues and generate a report of themes and workstreams.
 
-You can view the Streamlit application [here](https://graphlit-samples-publish-issues-feed.streamlit.app/).
+You can view the Streamlit application [here](https://graphlit-samples-summary-pdf.streamlit.app/).
 
 ### Demo Instructions
 - **Prerequisite:** [Sign up for Graphlit 🆓](https://docs.graphlit.dev/getting-started/signup)

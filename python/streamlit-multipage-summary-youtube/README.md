@@ -2,7 +2,7 @@
 
 ## Ingest and generate chapters for a YouTube video.
 
-You can view the Streamlit application [here](https://graphlit-samples-summary-youtube-feed.streamlit.app/).
+You can view the Streamlit application [here](https://graphlit-samples-summary-youtube.streamlit.app/).
 
 ### Demo Instructions
 - **Prerequisite:** [Sign up for Graphlit 🆓](https://docs.graphlit.dev/getting-started/signup)

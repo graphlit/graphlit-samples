@@ -2,7 +2,7 @@
 
 ## Chat with files in an Azure storage container. Text extraction and OCR done with [Azure AI Document Intelligence](https://azure.microsoft.com/en-us/products/ai-services/ai-document-intelligence). Chat completion uses the [OpenAI GPT-4 Turbo 128k](https://platform.openai.com/docs/models/gpt-4-and-gpt-4-turbo) LLM.
 
-You can view the Streamlit application [here](https://graphlit-samples-chat-pdf.streamlit.app/).
+You can view the Streamlit application [here](https://graphlit-samples-chat-azure-blob-feed.streamlit.app/).
 
 ### Demo Instructions
 - **Prerequisite:** [Sign up for Graphlit 🆓](https://docs.graphlit.dev/getting-started/signup)

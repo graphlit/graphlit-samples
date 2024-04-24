@@ -2,7 +2,7 @@
 
 ## Ingest and summarize a Reddit subreddit.
 
-You can view the Streamlit application [here](https://graphlit-samples-summary-reddit-feed.streamlit.app/).
+You can view the Streamlit application [here](https://graphlit-samples-summary-reddit.streamlit.app/).
 
 ### Demo Instructions
 - **Prerequisite:** [Sign up for Graphlit 🆓](https://docs.graphlit.dev/getting-started/signup)

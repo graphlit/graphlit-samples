@@ -2,7 +2,7 @@
 
 ## Ingest and generate chapters for a podcast episode.
 
-You can view the Streamlit application [here](https://graphlit-samples-summary-podcast.streamlit.app/).
+You can view the Streamlit application [here](https://graphlit-samples-summary-podcast-feed.streamlit.app/).
 
 ### Demo Instructions
 - **Prerequisite:** [Sign up for Graphlit 🆓](https://docs.graphlit.dev/getting-started/signup)
