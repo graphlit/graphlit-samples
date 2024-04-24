@@ -59,7 +59,7 @@ else:
                     # Using `workflow-id` for text extraction.
                                         
                     response = await graphlit.client.ingest_uri(
-                        uri, 
+                        uri="{uri}", 
                         is_synchronous=True, 
                         workflow=EntityReferenceInput(
                             id="{workflow-id}"

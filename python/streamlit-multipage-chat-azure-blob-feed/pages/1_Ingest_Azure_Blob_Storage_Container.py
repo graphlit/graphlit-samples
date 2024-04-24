@@ -57,7 +57,7 @@ else:
                                 accountName="{account_name}",
                                 containerName="{container_name}",
                                 storageAccessKey="{storage_key}",
-                                prefix=prefix
+                                prefix="{prefix}"
                             )
                         ),
                         workflow=EntityReferenceInput(

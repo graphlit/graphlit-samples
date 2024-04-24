@@ -67,7 +67,7 @@ async def create_specification():
             type=RetrievalStrategyTypes.SECTION
         ),
         rerankingStrategy=RerankingStrategyInput(
-            serviceType=ModelServiceTypes.COHERE
+            serviceType=RerankingModelServiceTypes.COHERE
         )
     )
 
