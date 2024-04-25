@@ -125,7 +125,6 @@ dmypy.json
 *.xlsx
 *.json
 # Local configuration file
-.streamlit/config.toml
 .streamlit/secrets.toml
 
 # Jupyter

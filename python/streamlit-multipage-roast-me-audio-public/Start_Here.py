@@ -5,7 +5,7 @@ from streamlit_extras.stylable_container import stylable_container
 from graphlit import Graphlit
 
 st.set_page_config(
-    page_title="Graphlit Demo Application",
+    page_title="Roast me, by Graphlit",
     page_icon="💡",
     layout="wide"
 )
