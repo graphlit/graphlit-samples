@@ -253,7 +253,7 @@ def select_file_types(table_to_show):
         file_types_table, extra_info  = get_file_types_video()
         file_types = ["mp4","mov","moov","qt"]            
     elif table_to_show == "Images":
-        file_types_table, extra_info  = get_file_types_audio()
+        file_types_table, extra_info  = get_file_types_images()
         file_types = ["jpg","jpeg","jpe","png","heif","heic","webp","bmp","tif","tiff"]
     elif table_to_show == "Animations":
         file_types_table, extra_info  = get_file_types_animations()      
