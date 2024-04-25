@@ -61,6 +61,7 @@ if st.session_state['token'] is not None:
                 white-space: pre-wrap !important;
                 overflow-x: auto;
                 width: 100%;
+                font-size: 12px;
             }
             """,
         ):

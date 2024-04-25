@@ -48,6 +48,7 @@ else:
                 white-space: pre-wrap !important;
                 overflow-x: auto;
                 width: 100%;
+                font-size: 12px;
             }
             """,
         ):
