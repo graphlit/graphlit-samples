@@ -12,3 +12,13 @@ You can view the Streamlit application [here](https://graphlit-samples-roast-me-
 [Support on Discord](https://discord.gg/ygFmfjy3Qx)            
 [API Reference](https://docs.graphlit.dev/graphlit-data-api/api-reference)     
 [Python SDK](https://pypi.org/project/graphlit-client/)
+
+### Run locally
+
+This application assumes that `GRAPHLIT_ORGANIZATION_ID`, `GRAPHLIT_ENVIRONMENT_ID` and `GRAPHLIT_JWT_SECRET` are assigned as environment variables, and is preconfigured for the specified project.
+
+```python
+pip install -r requirements.txt
+
+streamlit run Start_Here.py
+```

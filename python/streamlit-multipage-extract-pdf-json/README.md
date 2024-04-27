@@ -14,3 +14,11 @@ You can view the Streamlit application [here](https://graphlit-samples-extract-p
 [Support on Discord](https://discord.gg/ygFmfjy3Qx)            
 [API Reference](https://docs.graphlit.dev/graphlit-data-api/api-reference)     
 [More information](https://www.graphlit.com)
+
+### Run locally
+
+```python
+pip install -r requirements.txt
+
+streamlit run Start_Here.py
+```
