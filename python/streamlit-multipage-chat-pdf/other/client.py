@@ -120,6 +120,13 @@ async def create_conversation():
         name="Conversation",
         specification=EntityReferenceInput(
             id=st.session_state['specification_id']
+        ),
+        filter=ContentCriteriaInput(
+            contents=[
+                EntityReferenceInput(  
+                id=st.session_state['content_id']
+                )
+            ]
         )
     )
 
