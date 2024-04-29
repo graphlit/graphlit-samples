@@ -62,12 +62,20 @@ else:
                     from graphlit import Graphlit
                     from graphlit_api import *
 
-                    # NOTE: Using LLM via `specification-id`
+                    # NOTE: Using LLM via `specification-id`, 
+                    # and filtering by 'content-id'
                     
                     input = ConversationInput(
                         name="Conversation",
                         specification=EntityReferenceInput(
                             id="{specification-id}"
+                        ),
+                        filter=ContentCriteriaInput(
+                            contents=[
+                                EntityReferenceInput(  
+                                id="{content-id}"
+                                )
+                            ]
                         )
                     )
 
