@@ -15,6 +15,8 @@ def reset_session_state():
         st.session_state['token'] = None
 
     # app-specific session state
+    if 'workflow_id' not in st.session_state:
+        st.session_state['workflow_id'] = None
     if 'feed_id' not in st.session_state:
         st.session_state['feed_id'] = None
     if 'feed_done' not in st.session_state:

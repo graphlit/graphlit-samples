@@ -6,6 +6,13 @@ from other import client
 async def handle_feed(name):
     st.session_state['feed_done'] = False
 
+    if st.session_state['workflow_id'] is None:
+        error_message = await client.create_workflow()
+
+        if error_message is not None:
+            st.error(f"Failed to create workflow. {error_message}")
+            return
+
     if st.session_state['feed_id'] is not None:
         with st.spinner('Deleting existing feed... Please wait.'):
             await client.delete_feed()

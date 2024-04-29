@@ -30,11 +30,15 @@ async def delete_feed():
     _ = await graphlit.client.delete_feed(st.session_state['feed_id'])
 
     st.session_state['feed_id'] = None
+    st.session_state['feed_done'] = None
 
 async def delete_all_feeds():
     graphlit: Optional[Graphlit] = st.session_state['graphlit']
 
     _ = await graphlit.client.delete_all_feeds()
+
+    st.session_state['feed_id'] = None
+    st.session_state['feed_done'] = None
 
 async def is_feed_done():
     graphlit: Optional[Graphlit] = st.session_state['graphlit']

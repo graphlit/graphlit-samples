@@ -25,27 +25,21 @@ async def get_content():
     except GraphQLClientError as e:
         return None, str(e)
 
-async def delete_content():
+async def delete_content(id):
     graphlit: Optional[Graphlit] = st.session_state['graphlit']
 
-    try:
-        _ = await graphlit.client.delete_content(st.session_state['content_id'])
+    _ = await graphlit.client.delete_content(id)
 
-        st.session_state['content_id'] = None
-    except GraphQLClientError as e:
-        return str(e)
-
-    return None
+    st.session_state['content_id'] = None
+    st.session_state['content_done'] = None
 
 async def delete_all_contents():
     graphlit: Optional[Graphlit] = st.session_state['graphlit']
 
-    try:
-        _ = await graphlit.client.delete_all_contents()
-    except GraphQLClientError as e:
-        return str(e)
+    _ = await graphlit.client.delete_all_contents()
 
-    return None
+    st.session_state['content_id'] = None
+    st.session_state['content_done'] = None
 
 async def create_workflow():
     input = WorkflowInput(

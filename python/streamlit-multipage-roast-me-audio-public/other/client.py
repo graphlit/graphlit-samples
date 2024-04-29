@@ -47,10 +47,16 @@ async def delete_content(id):
 
     _ = await graphlit.client.delete_content(id)
 
+    st.session_state['content_id'] = None
+    st.session_state['content_done'] = None
+
 async def delete_all_contents():
     graphlit: Optional[Graphlit] = st.session_state['graphlit']
 
     _ = await graphlit.client.delete_all_contents()
+
+    st.session_state['content_id'] = None
+    st.session_state['content_done'] = None
 
 async def create_workflow():
     instructions = "Roast me. Really roast me.  Do your worst as if you were responding on Reddit r/roastme. Speak in the second person, if there a person pictured in the image. For any inappropriate, pornographic or NFSW images, say you cannot roast the image."

@@ -9,7 +9,7 @@ sidebar.create_sidebar()
 header.create_header()
 
 if st.session_state['token'] is None:
-    st.info("💡 To get started, generate a token in the side panel to connect to your Graphlit project.")
+    st.info("💡 To get started, generate a token to connect to your Graphlit project.")
 else:
     if st.session_state['content_done'] == True:
         if "cohere_messages" not in st.session_state:

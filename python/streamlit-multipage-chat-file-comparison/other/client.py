@@ -21,11 +21,15 @@ async def delete_content():
     _ = await graphlit.client.delete_content(st.session_state['content_id'])
 
     st.session_state['content_id'] = None
+    st.session_state['content_done'] = None
 
 async def delete_all_contents():
     graphlit: Optional[Graphlit] = st.session_state['graphlit']
 
     _ = await graphlit.client.delete_all_contents()
+
+    st.session_state['content_id'] = None
+    st.session_state['content_done'] = None
 
 async def create_workflow():
     input = WorkflowInput(

@@ -134,7 +134,7 @@ default_schema = """
 """
 
 if st.session_state['token'] is None:
-    st.info("💡 To get started, generate a token in the side panel to connect to your Graphlit project.")
+    st.info("💡 To get started, generate a token to connect to your Graphlit project.")
 else:
     col1, col2 = st.columns(2)
 

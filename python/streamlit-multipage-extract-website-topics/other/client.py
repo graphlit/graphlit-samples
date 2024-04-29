@@ -33,11 +33,15 @@ async def delete_feed():
     _ = await graphlit.client.delete_feed(st.session_state['feed_id'])
 
     st.session_state['feed_id'] = None
+    st.session_state['feed_done'] = None
 
 async def delete_all_feeds():
     graphlit: Optional[Graphlit] = st.session_state['graphlit']
 
     _ = await graphlit.client.delete_all_feeds()
+
+    st.session_state['feed_id'] = None
+    st.session_state['feed_done'] = None
 
 async def is_feed_done():
     graphlit: Optional[Graphlit] = st.session_state['graphlit']
@@ -64,7 +68,7 @@ async def create_workflow():
 
     try:
         response = await graphlit.client.create_workflow(input)
-
+        
         st.session_state['workflow_id'] = response.create_workflow.id
     except GraphQLClientError as e:
         return str(e)
