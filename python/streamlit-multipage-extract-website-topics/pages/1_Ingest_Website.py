@@ -4,8 +4,8 @@ from components import feed, header, sidebar, session_state
 from streamlit_extras.stylable_container import stylable_container
 
 websites = {
-    "OpenAI News": "https://openai.com/news", # can't have www.openai.com, otherwise nothing found in sitemap
     "NVIDIA Blog": "https://blogs.nvidia.com/",
+    "MIT News": "https://news.mit.edu/topic/artificial-intelligence2",
     "Call to the Pen (Baseball)": "https://calltothepen.com/"
 }
 
