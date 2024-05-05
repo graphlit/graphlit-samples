@@ -86,7 +86,7 @@ async def query_contents_facets():
     graphlit: Optional[Graphlit] = st.session_state['graphlit']
 
     try:
-        response = await graphlit.client.query_content_facets(
+        response = await graphlit.client.query_contents_facets(
             filter=ContentFilter(
                 offset=0,
                 limit=0,

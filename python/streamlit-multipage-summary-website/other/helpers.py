@@ -36,7 +36,7 @@ def run_async_task(async_func, *args):
         if loop is not None:
             loop.close()
 
-def render_observable_facet_chart(facets: List[QueryContentFacetsContentsFacets]):
+def render_observable_facet_chart(facets: List[QueryContentsFacetsContentsFacets]):
     json_strings = [facet.model_dump_json(indent=2) for facet in facets]  # Using indent for pretty printing
     json_dicts = [json.loads(js) for js in json_strings]
 
