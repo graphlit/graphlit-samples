@@ -46,7 +46,7 @@ def display_observations_as_chips(observations: List[GetContentContentObservatio
     }
     
     for observation in observations:
-        observation_type = observation.type
+        observation_type = observation.type.name
         observable_name = observation.observable.name
 
         if observation_type not in result:
