@@ -36,7 +36,7 @@ def run_async_task(async_func, *args):
 def render_citations(citations: Optional[List[Optional[PromptConversationPromptConversationMessageCitations]]]):
     for citation in citations:
         emoji = select_emoji(citation.content.type, citation.content.file_type)
-        index_emoji = index_to_emoji(citation.index + 1)
+        index_emoji = index_to_emoji(citation.index)
 
         if citation.page_number is not None:
             expander_label = f"{index_emoji} {emoji} {citation.content.file_name}: Page {citation.page_number}"
