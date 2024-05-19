@@ -39,8 +39,6 @@ with col1:
             else:
                 st.error("Please fill in all the connection information.")
 
-            st.markdown("**Python SDK code example:**")
-
 with col2:        
     st.markdown("**Python SDK code example:**")
 
