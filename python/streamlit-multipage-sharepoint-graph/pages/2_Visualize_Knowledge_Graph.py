@@ -11,7 +11,8 @@ if st.session_state['token'] is None:
     st.info("💡 To get started, generate a token to connect to your Graphlit project.")
 else:
     if st.session_state['token']:
-        st.write("Visualize ingested content and extracted entities. Refresh knowledge graph, if none shown, as SharePoint feed is ingested in the background.")
+        st.write("Visualize ingested content and extracted entities.")
+        st.warning("Refresh knowledge graph, if none shown, as SharePoint feed is ingested in the background.")
 
         contents_graph = None
         error_message = None
