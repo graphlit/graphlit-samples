@@ -1,6 +1,6 @@
 # Graphlit Platform
 
-Chat with any SharePoint files, with knowledge graph built from extracted entities.  Text extraction and OCR done with [Azure AI Document Intelligence](https://azure.microsoft.com/en-us/products/ai-services/ai-document-intelligence).  Chat completion uses the [OpenAI](https://www.openai.com) GPT-4o LLM.
+Chat with any SharePoint files, using GraphRAG with knowledge graph built from extracted entities.  Text extraction and OCR done with [Azure AI Document Intelligence](https://azure.microsoft.com/en-us/products/ai-services/ai-document-intelligence).  Chat completion uses the [OpenAI](https://www.openai.com) GPT-4o LLM.
 
 You can view the Streamlit application [here](https://graphlit-samples-sharepoint-graph.streamlit.app/).
 
