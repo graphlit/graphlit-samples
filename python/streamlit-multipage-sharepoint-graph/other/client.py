@@ -170,6 +170,9 @@ async def create_specification():
             probability=0.2,
             completionTokenLimit=2048,
         ),
+        graphStrategy=GraphStrategyInput(
+            type=GraphStrategyTypes.EXTRACT_ENTITIES_GRAPH
+        ),
         retrievalStrategy=RetrievalStrategyInput(
             type=RetrievalStrategyTypes.SECTION
         ),
