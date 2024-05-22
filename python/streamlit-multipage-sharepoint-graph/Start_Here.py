@@ -15,7 +15,7 @@ session_state.reset_session_state()
 sidebar.create_sidebar()
 header.create_header()
 
-SCOPES = ["User.Read", "Files.Read.All"]
+SCOPES = ["User.Read", "Files.Read.All", "Sites.Read.All"]
 
 redirect_uri = st.secrets["default"]["redirect_uri"]
 

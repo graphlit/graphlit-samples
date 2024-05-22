@@ -36,7 +36,8 @@ def run_async_task(async_func, *args):
 def get_sign_in_url(app, scopes, redirect_url):
     return app.get_authorization_request_url(
         scopes,
-        redirect_uri=redirect_url
+        redirect_uri=redirect_url,
+        prompt='consent'
     )
 
 def render_citations(citations: Optional[List[Optional[PromptConversationPromptConversationMessageCitations]]]):
