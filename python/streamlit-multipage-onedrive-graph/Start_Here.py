@@ -52,6 +52,8 @@ with col1:
         st.subheader("Please login...")
         st.markdown(f"<a href='{helpers.get_sign_in_url(app, SCOPES, redirect_uri)}' target=_blank>Login with your Microsoft account</a>", unsafe_allow_html=True)
 
+        st.warning(f"This OneDrive demo only works with personal Microsoft accounts. For Microsoft Entra ID (aka Azure AD) accounts, please use our [SharePoint](https://graphlit-samples-sharepoint-graph.streamlit.app/) demo application.")
+
         st.info("Authenticate to access your Microsoft OneDrive account. It will open a new tab where you can continue using the application.")
     else:
         if st.session_state['jwt_secret'] is None and st.session_state['environment_id'] is None and st.session_state['organization_id'] is None:
