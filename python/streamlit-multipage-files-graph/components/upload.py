@@ -6,18 +6,11 @@ import os
 from other import client
 
 async def handle_upload(uploaded_file):
-    st.session_state['content_done'] = False
-
     if st.session_state['workflow_id'] is None:
         error_message = await client.create_workflow()
 
         if error_message is not None:
             st.error(f"Failed to create workflow. {error_message}")
-
-    if st.session_state['content_id'] is not None:
-        with st.spinner('Deleting existing content... Please wait.'):
-            await client.delete_content()
-        st.session_state["content_id"] = None
 
     start_time = time.time()
         
@@ -43,5 +36,3 @@ async def handle_upload(uploaded_file):
             formatted_time = current_time.strftime("%H:%M:%S")
 
             st.success(f"File ingestion took {duration:.2f} seconds. Finished at {formatted_time} UTC.")
-
-    st.session_state["content_done"] = True
