@@ -11,7 +11,7 @@ async def ingest_file(name, mime_type, data):
             name,
             data, 
             mime_type, 
-            is_synchronous=True, 
+            is_synchronous=False, # NOTE: not waiting for entity extraction workflow
             workflow=EntityReferenceInput(
                 id=st.session_state['workflow_id']
             )
