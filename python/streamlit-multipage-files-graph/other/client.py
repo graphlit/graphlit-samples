@@ -129,7 +129,8 @@ async def create_specification():
             completionTokenLimit=2048,
         ),
         graphStrategy=GraphStrategyInput(
-            type=GraphStrategyTypes.EXTRACT_ENTITIES_GRAPH
+            type=GraphStrategyTypes.EXTRACT_ENTITIES_GRAPH,
+            generateGraph=True
         ),
         retrievalStrategy=RetrievalStrategyInput(
             type=RetrievalStrategyTypes.SECTION
