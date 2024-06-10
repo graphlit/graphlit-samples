@@ -90,7 +90,7 @@ def parse_metadata(metadata):
     return ContentTypes[o["type"]] if "type" in o else None, FileTypes[o["fileType"]] if "fileType" in o else None
 
 def pretty_print_json(dictionary):
-    return '\n'.join(f"{key}: {value}" for key, value in dictionary.items())
+    return '\n'.join(f"{key}: {value}" for key, value in dictionary.items() if not key.startswith('@'))
 
 def parse_title(metadata):
     if metadata is None:
@@ -98,23 +98,17 @@ def parse_title(metadata):
     
     o = json.loads(metadata)
 
-    email = o["email"] if "email" in o else None
-    document = o["document"] if "document" in o else None
-    audio = o["audio"] if "audio" in o else None
-    video = o["video"] if "video" in o else None
+    if o is not None:
+        uri = o["uri"] if "uri" in o else None
 
-    if document is not None:
-        title = pretty_print_json(document)
-    elif video is not None:
-        title = pretty_print_json(video)
-    elif audio is not None:
-        title = pretty_print_json(audio)
-    elif email is not None:
-        title = pretty_print_json(email)
-    else:
         title = pretty_print_json(o)
 
-    return title
+        if uri is not None:
+            return f'URI: {uri}' + '\n' + title
+        else:
+            return title
+    else:
+        return None
 
 def parse_label(metadata):
     if metadata is None:
@@ -126,7 +120,6 @@ def parse_label(metadata):
 
     label = None
 
-    email = o["email"] if "email" in o else None
     document = o["document"] if "document" in o else None
     audio = o["audio"] if "audio" in o else None
     video = o["video"] if "video" in o else None
@@ -158,10 +151,12 @@ def create_pyvis_conversation_graph(graph: Optional[PromptConversationPromptConv
         if node.type == EntityTypes.CONTENT:
             content_type, file_type = parse_metadata(node.metadata)
             label = parse_label(node.metadata)
-            title = parse_title(node.metadata)
+            title = f'{node.type.name} [{node.id}]\n' + parse_title(node.metadata)
+        else:
+            title = f'{node.type.name} [{node.id}]\n' + parse_title(node.metadata)
 
         shape = lookup_node_shape(node.type.name, content_type, file_type)
-
+        
         g.add_node(node.id, label=label if label is not None else node.name, shape=shape["shape"], icon=shape["icon"], color=lookup_node_color(node.type.name), title=title if title is not None else f'{node.type.name} [{node.id}]')
 
     for edge in graph.edges:
@@ -191,7 +186,9 @@ def create_pyvis_contents_graph(graph: Optional[QueryContentsGraphContentsGraph]
         if node.type == EntityTypes.CONTENT:
             content_type, file_type = parse_metadata(node.metadata)
             label = parse_label(node.metadata)
-            title = parse_title(node.metadata)
+            title = f'{node.type.name} [{node.id}]\n' + parse_title(node.metadata)
+        else:
+            title = f'{node.type.name} [{node.id}]\n' + parse_title(node.metadata)
 
         shape = lookup_node_shape(node.type.name, content_type, file_type)
 

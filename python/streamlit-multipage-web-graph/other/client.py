@@ -3,63 +3,60 @@ from typing import Optional
 from graphlit import Graphlit
 from graphlit_api import *
 
-async def ingest_file(name, mime_type, data):
+async def create_feed(uri):
     graphlit: Optional[Graphlit] = st.session_state['graphlit']
 
-    try:
-        response = await graphlit.client.ingest_encoded_file(
-            name,
-            data, 
-            mime_type, 
-            is_synchronous=True, 
-            workflow=EntityReferenceInput(
-                id=st.session_state['workflow_id']
-            )
+    input = FeedInput(
+        name=uri,
+        type=FeedTypes.WEB,
+        web=WebFeedPropertiesInput(
+            uri=uri,
+            readLimit=10
+        ),
+        workflow=EntityReferenceInput(
+            id=st.session_state['workflow_id']
         )
+    )
+
+    try:
+        response = await graphlit.client.create_feed(input)
         
-        st.session_state['content_id'] = response.ingest_encoded_file.id
+        st.session_state['feed_id'] = response.create_feed.id
     except GraphQLClientError as e:
         return str(e)
 
     return None
 
-async def delete_content():
+async def delete_feed():
     graphlit: Optional[Graphlit] = st.session_state['graphlit']
 
-    _ = await graphlit.client.delete_content(st.session_state['content_id'])
+    _ = await graphlit.client.delete_feed(st.session_state['feed_id'])
 
-    st.session_state['content_id'] = None
-    st.session_state['content_done'] = None
+    st.session_state['feed_id'] = None
+    st.session_state['feed_done'] = None
 
-async def delete_all_contents():
+async def delete_all_feeds():
     graphlit: Optional[Graphlit] = st.session_state['graphlit']
 
-    _ = await graphlit.client.delete_all_contents()
+    _ = await graphlit.client.delete_all_feeds()
 
-    st.session_state['content_id'] = None
-    st.session_state['content_done'] = None
+    st.session_state['feed_id'] = None
+
+async def is_feed_done():
+    graphlit: Optional[Graphlit] = st.session_state['graphlit']
+
+    response = await graphlit.client.is_feed_done(st.session_state['feed_id'])
+    
+    return response.is_feed_done.result
 
 async def create_workflow():
     input = WorkflowInput(
         name="Workflow",
-        preparation=PreparationWorkflowStageInput(
-            jobs=[
-                PreparationWorkflowJobInput(
-                    connector=FilePreparationConnectorInput(
-                        type=FilePreparationServiceTypes.AZURE_DOCUMENT_INTELLIGENCE,
-                        azureDocument=AzureDocumentPreparationPropertiesInput(
-                            model=AzureDocumentIntelligenceModels.LAYOUT
-                        )
-                    )
-                )
-            ]
-        ),
         extraction=ExtractionWorkflowStageInput(
             jobs=[
                 ExtractionWorkflowJobInput(
                     connector=EntityExtractionConnectorInput(
-                        type=EntityExtractionServiceTypes.MODEL_TEXT,
-                        extractedCount=1000
+                        type=EntityExtractionServiceTypes.MODEL_TEXT
                     )
                 )
             ]
