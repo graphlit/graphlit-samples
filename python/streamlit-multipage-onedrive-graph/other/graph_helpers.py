@@ -142,70 +142,74 @@ def format_relation(relation: str):
 def create_pyvis_conversation_graph(graph: Optional[PromptConversationPromptConversationGraph]):
     g = create_pyvis_network()
 
-    for node in graph.nodes:
-        content_type = None
-        file_type = None
-        label = None
-        title = None
+    if graph.nodes is not None:
+        for node in graph.nodes:
+            content_type = None
+            file_type = None
+            label = None
+            title = None
 
-        if node.type == EntityTypes.CONTENT:
-            content_type, file_type = parse_metadata(node.metadata)
-            label = parse_label(node.metadata)
-            title = f'{node.type.name} [{node.id}]\n' + parse_title(node.metadata)
-        else:
-            title = f'{node.type.name} [{node.id}]\n' + parse_title(node.metadata)
+            if node.type == EntityTypes.CONTENT:
+                content_type, file_type = parse_metadata(node.metadata)
+                label = parse_label(node.metadata)
+                title = f'{node.type.name} [{node.id}]\n' + parse_title(node.metadata)
+            else:
+                title = f'{node.type.name} [{node.id}]\n' + parse_title(node.metadata)
 
-        shape = lookup_node_shape(node.type.name, content_type, file_type)
-        
-        g.add_node(node.id, label=label if label is not None else node.name, shape=shape["shape"], icon=shape["icon"], color=lookup_node_color(node.type.name), title=title if title is not None else f'{node.type.name} [{node.id}]')
+            shape = lookup_node_shape(node.type.name, content_type, file_type)
+            
+            g.add_node(node.id, label=label if label is not None else node.name, shape=shape["shape"], icon=shape["icon"], color=lookup_node_color(node.type.name), title=title if title is not None else f'{node.type.name} [{node.id}]')
 
-    for edge in graph.edges:
-        # ensure start and end vertex exist in graph
-        if not edge.from_ in g.node_ids:
-            g.add_node(edge.from_)
-        if not edge.to in g.node_ids:
-            g.add_node(edge.to)
+    if graph.edges is not None:
+        for edge in graph.edges:
+            # ensure start and end vertex exist in graph
+            if not edge.from_ in g.node_ids:
+                g.add_node(edge.from_)
+            if not edge.to in g.node_ids:
+                g.add_node(edge.to)
 
-        relation = format_relation(edge.relation)
+            relation = format_relation(edge.relation)
 
-        width = 3 if edge.relation != "observed-by" else 1
+            width = 3 if edge.relation != "observed-by" else 1
 
-        g.add_edge(edge.from_, edge.to, label=relation, title=relation, width=width, arrowStrikethrough=False, arrows="middle")
+            g.add_edge(edge.from_, edge.to, label=relation, title=relation, width=width, arrowStrikethrough=False, arrows="middle")
 
     return g
 
 def create_pyvis_contents_graph(graph: Optional[QueryContentsGraphContentsGraph]):
     g = create_pyvis_network()
 
-    for node in graph.nodes:
-        content_type = None
-        file_type = None
-        label = None
-        title = None
+    if graph.nodes is not None:
+        for node in graph.nodes:
+            content_type = None
+            file_type = None
+            label = None
+            title = None
 
-        if node.type == EntityTypes.CONTENT:
-            content_type, file_type = parse_metadata(node.metadata)
-            label = parse_label(node.metadata)
-            title = f'{node.type.name} [{node.id}]\n' + parse_title(node.metadata)
-        else:
-            title = f'{node.type.name} [{node.id}]\n' + parse_title(node.metadata)
+            if node.type == EntityTypes.CONTENT:
+                content_type, file_type = parse_metadata(node.metadata)
+                label = parse_label(node.metadata)
+                title = f'{node.type.name} [{node.id}]\n' + parse_title(node.metadata)
+            else:
+                title = f'{node.type.name} [{node.id}]\n' + parse_title(node.metadata)
 
-        shape = lookup_node_shape(node.type.name, content_type, file_type)
+            shape = lookup_node_shape(node.type.name, content_type, file_type)
 
-        g.add_node(node.id, label=label if label is not None else node.name, shape=shape["shape"], icon=shape["icon"], color=lookup_node_color(node.type.name), title=title if title is not None else f'{node.type.name} [{node.id}]')
+            g.add_node(node.id, label=label if label is not None else node.name, shape=shape["shape"], icon=shape["icon"], color=lookup_node_color(node.type.name), title=title if title is not None else f'{node.type.name} [{node.id}]')
 
-    for edge in graph.edges:
-        # ensure start and end vertex exist in graph
-        if not edge.from_ in g.node_ids:
-            g.add_node(edge.from_)
-        if not edge.to in g.node_ids:
-            g.add_node(edge.to)
+    if graph.edges is not None:
+        for edge in graph.edges:
+            # ensure start and end vertex exist in graph
+            if not edge.from_ in g.node_ids:
+                g.add_node(edge.from_)
+            if not edge.to in g.node_ids:
+                g.add_node(edge.to)
 
-        relation = format_relation(edge.relation)
+            relation = format_relation(edge.relation)
 
-        width = 3 if edge.relation != "observed-by" else 1
+            width = 3 if edge.relation != "observed-by" else 1
 
-        g.add_edge(edge.from_, edge.to, label=relation, title=relation, width=width, arrowStrikethrough=False, arrows="middle")
+            g.add_edge(edge.from_, edge.to, label=relation, title=relation, width=width, arrowStrikethrough=False, arrows="middle")
 
     return g
 
