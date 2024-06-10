@@ -28,6 +28,10 @@ else:
                 g = graph_helpers.create_pyvis_contents_graph(contents_graph)
 
                 graph_helpers.display_pyvis_graph(g)
+
+                # NOTE: uncomment to show the raw JSON for the graph
+                #json = contents_graph.model_dump_json(indent=2)
+                #st.json(json)                
             else:
                 st.error('No knowledge graph was created.')
 
