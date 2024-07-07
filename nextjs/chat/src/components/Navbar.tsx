@@ -48,7 +48,9 @@ export function Navbar() {
         <NextLink
           target="_blank"
           aria-label="Github"
-          href={'https://github.com/graphlit/graphlit-samples/tree/main/nextjs/chat'}
+          href={
+            'https://github.com/graphlit/graphlit-samples/tree/main/nextjs/chat'
+          }
         >
           <GithubIcon className="text-default-500" />
         </NextLink>
