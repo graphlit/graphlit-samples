@@ -1,0 +1,53 @@
+{
+  "name": "chat",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "npm": ">=9.6.7",
+    "node": ">=18.17.0"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "check-types": "tsc --noEmit",
+    "format": "prettier --write ."
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6",
+    "@fortawesome/free-solid-svg-icons": "^6",
+    "@fortawesome/react-fontawesome": "^0",
+    "@nextui-org/react": "^2",
+    "color": "^4",
+    "dayjs": "^1",
+    "graphlit-client": "^1",
+    "next": "14",
+    "react": "^18",
+    "react-code-blocks": "^0.1.6",
+    "react-dom": "^18",
+    "react-markdown": "^9.0.1",
+    "react-textarea-autosize": "^8",
+    "tailwind-scrollbar": "^3",
+    "usehooks-ts": "^3",
+    "zod": "^3"
+  },
+  "devDependencies": {
+    "@ianvs/prettier-plugin-sort-imports": "^4",
+    "@types/color": "^3",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "dotenv": "^16",
+    "eslint": "^8",
+    "eslint-config-next": "14",
+    "eslint-config-prettier": "^9",
+    "eslint-plugin-prettier": "^5",
+    "postcss": "^8",
+    "prettier": "^3",
+    "tailwind-merge": "^2",
+    "tailwindcss": "^3",
+    "typescript": "^5"
+  }
+}
