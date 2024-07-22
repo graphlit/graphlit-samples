@@ -1,15 +1,15 @@
 <br /><br />
 
 <p align="center">
-  <img src="./public/images/graphlit-logo.svg" alt="Graphlit Chat Logo" width="70">
+  <img src="./public/images/graphlit-logo.svg" alt="Graphlit Logo" width="70">
 </p>
 
-<h3 align="center"><b>Graphlit Chat</b></h3>
+<h3 align="center"><b>Graphlit Web Extraction</b></h3>
 
 <p>
       <img
         src="./public/images/screenshot.png"
-        alt="Graphlit Chat Screen"
+        alt="Graphlit Screen"
         width="100%"
       />
 </p>
@@ -31,7 +31,7 @@ Clone the repository:
 
 ```bash
 git clone git@github.com:graphlit/graphlit-samples.git
-cd nextjs/chat
+cd web-extraction
 ```
 
 Install packages:
@@ -60,7 +60,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Deploy on Vercel
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fgraphlit%2Fgraphlit-samples%2Ftree%2Fmain%2Fnextjs%2Fchat&env=GRAPHLIT_ORGANIZATION_ID,GRAPHLIT_ENVIRONMENT_ID,GRAPHLIT_JWT_SECRET&project-name=graphlit-chat)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fgraphlit%2Fnextjs-samples%2Ftree%2Fmain%2Fweb-extraction&env=GRAPHLIT_ORGANIZATION_ID,GRAPHLIT_ENVIRONMENT_ID,GRAPHLIT_JWT_SECRET&project-name=graphlit-web-extraction)
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
