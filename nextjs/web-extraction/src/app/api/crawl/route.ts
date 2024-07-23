@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
 
       // Loop to check if feed is done every 5 seconds
       const startTime = Date.now();
-      const maxTimeout = 30000 + data.limit * 10000;
+      const maxTimeout = 60000 + data.limit * 10000;
       let isDone = false;
 
       while (!isDone && Date.now() - startTime < maxTimeout) {
