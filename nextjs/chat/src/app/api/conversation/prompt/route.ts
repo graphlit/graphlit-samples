@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
 import { Graphlit } from 'graphlit-client';
 
-import { ApiPromptRequest, ApiPromptResponse } from '@/types.d';
+import { ApiPromptRequest, ApiPromptResponse } from '@/types';
 
 // Handle POST request
 export async function POST(req: NextRequest) {

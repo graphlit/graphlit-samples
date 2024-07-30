@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { Chip } from '@nextui-org/react';
 import { ConversationRoleTypes } from 'graphlit-client/dist/generated/graphql-types';
 
-import { Message as MessageType } from '@/types.d';
+import { Message as MessageType } from '@/types';
 
 export function Message({ message, role }: MessageType) {
   // Render user message
