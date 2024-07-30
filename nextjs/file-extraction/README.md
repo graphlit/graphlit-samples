@@ -4,7 +4,7 @@
   <img src="./public/images/graphlit-logo.svg" alt="Graphlit Logo" width="70">
 </p>
 
-<h3 align="center"><b>Graphlit Web Extraction</b></h3>
+<h3 align="center"><b>Graphlit File Extraction</b></h3>
 
 <p>
       <img

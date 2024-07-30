@@ -112,7 +112,7 @@ export default function Home() {
           className="hidden"
           id="file-input"
           multiple
-          accept=".pdf, .htm, .html, .mhtml, .docx, .xlsx, .pptx, .rtf, .md, .txt, .text, .csv, .tsv, .log"
+          accept=".pdf, .htm, .html, .mhtml, .docx, .xlsx, .pptx, .md, .txt, .text, .csv, .tsv, .log"
           onChange={handleChange}
           ref={fileInputRef}
           disabled={isSubmitting}
