@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button } from '@nextui-org/react';
 
 import FileCard from '@/components/FileCard';
-import { FileData } from '@/types.d';
+import { FileData } from '@/types';
 
 interface PromptControlsProps {
   files: FileData[];

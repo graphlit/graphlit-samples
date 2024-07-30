@@ -6,7 +6,9 @@ import {
   ApiPromptFilesResponse,
   FileResponseResult,
   FileResponseStatus,
-} from '@/types.d';
+} from '@/types';
+
+export const maxDuration = 60;
 
 // Handle POST requests
 export async function POST(req: NextRequest) {
