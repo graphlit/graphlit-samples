@@ -4,7 +4,7 @@ import {
   SpecificationResults,
 } from 'graphlit-client/dist/generated/graphql-types';
 
-import { defaultModel, specifications as specConfigs } from './constants';
+import { defaultSpec, specifications as specConfigs } from './constants';
 
 // Fetch all conversations from the API
 export const getConversations = async () => {
@@ -84,6 +84,6 @@ export const mergeSpecsConfig = (specifications: Specification[]) => {
 // Find and return the default specification based on the default model name
 export const mergeDefaultSpecConfig = (specifications: Specification[]) => {
   return specifications.find(
-    (spec) => spec.name === defaultModel.name
+    (spec) => spec.name === defaultSpec.name
   ) as Specification;
 };

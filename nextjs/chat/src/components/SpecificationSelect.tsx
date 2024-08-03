@@ -16,14 +16,13 @@ import {
 } from 'graphlit-client/dist/generated/graphql-types';
 
 import {
-  anthropicModels,
-  azureOpenAiModels,
-  cohereModels,
-  defaultModel,
-  groqModels,
-  mistralModels,
-  openAiModels,
-  replicateModels,
+  anthropicSpecs,
+  azureOpenAiSpecs,
+  cohereSpecs,
+  groqSpecs,
+  mistralSpecs,
+  openAiSpecs,
+  replicateSpecs,
 } from '@/constants';
 import { findModel } from '@/utils';
 
@@ -71,7 +70,7 @@ export function SpecificationSelect({
       >
         {/* Render DropdownSection for each ModelServiceType */}
         <DropdownSection title={ModelServiceTypes.Anthropic}>
-          {anthropicModels.map((specConfig) => {
+          {anthropicSpecs.map((specConfig) => {
             const spec = specifications.find(
               (s) => s.name === specConfig.name
             ) as Specification;
@@ -86,7 +85,7 @@ export function SpecificationSelect({
           })}
         </DropdownSection>
         <DropdownSection title={ModelServiceTypes.AzureOpenAi}>
-          {azureOpenAiModels.map((specConfig) => {
+          {azureOpenAiSpecs.map((specConfig) => {
             const spec = specifications.find(
               (s) => s.name === specConfig.name
             ) as Specification;
@@ -101,7 +100,7 @@ export function SpecificationSelect({
           })}
         </DropdownSection>
         <DropdownSection title={ModelServiceTypes.Cohere}>
-          {cohereModels.map((specConfig) => {
+          {cohereSpecs.map((specConfig) => {
             const spec = specifications.find(
               (s) => s.name === specConfig.name
             ) as Specification;
@@ -116,7 +115,7 @@ export function SpecificationSelect({
           })}
         </DropdownSection>
         <DropdownSection title={ModelServiceTypes.Groq}>
-          {groqModels.map((specConfig) => {
+          {groqSpecs.map((specConfig) => {
             const spec = specifications.find(
               (s) => s.name === specConfig.name
             ) as Specification;
@@ -131,7 +130,7 @@ export function SpecificationSelect({
           })}
         </DropdownSection>
         <DropdownSection title={ModelServiceTypes.Mistral}>
-          {mistralModels.map((specConfig) => {
+          {mistralSpecs.map((specConfig) => {
             const spec = specifications.find(
               (s) => s.name === specConfig.name
             ) as Specification;
@@ -146,7 +145,7 @@ export function SpecificationSelect({
           })}
         </DropdownSection>
         <DropdownSection title={ModelServiceTypes.OpenAi}>
-          {openAiModels.map((specConfig) => {
+          {openAiSpecs.map((specConfig) => {
             const spec = specifications.find(
               (s) => s.name === specConfig.name
             ) as Specification;
@@ -161,7 +160,7 @@ export function SpecificationSelect({
           })}
         </DropdownSection>
         <DropdownSection title={ModelServiceTypes.Replicate}>
-          {replicateModels.map((specConfig) => {
+          {replicateSpecs.map((specConfig) => {
             const spec = specifications.find(
               (s) => s.name === specConfig.name
             ) as Specification;

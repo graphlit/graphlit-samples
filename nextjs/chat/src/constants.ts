@@ -12,7 +12,7 @@ import {
 } from 'graphlit-client/dist/generated/graphql-types';
 
 // Define the default model configuration
-export const defaultModel: SpecificationInput = {
+export const defaultSpec: SpecificationInput = {
   type: SpecificationTypes.Completion, // Type of the specification
   serviceType: ModelServiceTypes.OpenAi, // Service type
   openAI: { model: OpenAiModels.Gpt4 }, // Model specific configuration for OpenAI
@@ -20,7 +20,7 @@ export const defaultModel: SpecificationInput = {
 };
 
 // Define anthropic models as an array of SpecificationInputs
-export const anthropicModels: SpecificationInput[] = [
+export const anthropicSpecs: SpecificationInput[] = [
   AnthropicModels.Claude_2,
   AnthropicModels.Claude_2_0,
   AnthropicModels.Claude_2_1,
@@ -39,7 +39,7 @@ export const anthropicModels: SpecificationInput[] = [
 );
 
 // Define Azure OpenAI models as an array of SpecificationInputs
-export const azureOpenAiModels: SpecificationInput[] = [
+export const azureOpenAiSpecs: SpecificationInput[] = [
   AzureOpenAiModels.Gpt4,
   AzureOpenAiModels.Gpt4Turbo_128K,
   AzureOpenAiModels.Gpt35Turbo_16K,
@@ -53,7 +53,7 @@ export const azureOpenAiModels: SpecificationInput[] = [
 );
 
 // Define Cohere models as an array of SpecificationInputs
-export const cohereModels: SpecificationInput[] = [
+export const cohereSpecs: SpecificationInput[] = [
   CohereModels.CommandR,
   CohereModels.CommandRPlus,
 ].map(
@@ -66,7 +66,7 @@ export const cohereModels: SpecificationInput[] = [
 );
 
 // Define Groq models as an array of SpecificationInputs
-export const groqModels: SpecificationInput[] = [
+export const groqSpecs: SpecificationInput[] = [
   GroqModels.Llama_3_8B,
   GroqModels.Llama_3_70B,
   GroqModels.Mixtral_8X7BInstruct,
@@ -80,7 +80,7 @@ export const groqModels: SpecificationInput[] = [
 );
 
 // Define Mistral models as an array of SpecificationInputs
-export const mistralModels: SpecificationInput[] = [
+export const mistralSpecs: SpecificationInput[] = [
   MistralModels.MistralLarge,
   MistralModels.MistralMedium,
   MistralModels.MistralSmall,
@@ -95,7 +95,7 @@ export const mistralModels: SpecificationInput[] = [
 );
 
 // Define OpenAI models as an array of SpecificationInputs
-export const openAiModels: SpecificationInput[] = [
+export const openAiSpecs: SpecificationInput[] = [
   OpenAiModels.Gpt4,
   OpenAiModels.Gpt4O_128K,
   OpenAiModels.Gpt4O_128K_20240513,
@@ -121,7 +121,7 @@ export const openAiModels: SpecificationInput[] = [
 );
 
 // Define Replicate models as an array of SpecificationInputs
-export const replicateModels: SpecificationInput[] = [
+export const replicateSpecs: SpecificationInput[] = [
   ReplicateModels.Llama_2_7B,
   ReplicateModels.Llama_2_7BChat,
   ReplicateModels.Llama_2_13B,
@@ -142,17 +142,17 @@ export const replicateModels: SpecificationInput[] = [
 // Combine all specification inputs into a single array
 export const specifications: SpecificationInput[] = [
   /** Anthropic */
-  ...anthropicModels,
+  ...anthropicSpecs,
   /** AzureOpenAi */
-  ...azureOpenAiModels,
+  ...azureOpenAiSpecs,
   /** Cohere */
-  ...cohereModels,
+  ...cohereSpecs,
   /** Groq */
-  ...groqModels,
+  ...groqSpecs,
   /** Mistral */
-  ...mistralModels,
+  ...mistralSpecs,
   /** OpenAi */
-  ...openAiModels,
+  ...openAiSpecs,
   /** Replicate */
-  ...replicateModels,
+  ...replicateSpecs,
 ];
