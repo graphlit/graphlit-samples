@@ -7,6 +7,8 @@ import {
   ConversationResults,
   ConversationRoleTypes,
   GetConversationQuery,
+  Specification,
+  SpecificationResults,
 } from 'graphlit-client/dist/generated/graphql-types';
 
 import ChatPlaceholder from '@/components/ChatPlaceholder';
@@ -14,8 +16,16 @@ import ConversationList from '@/components/ConversationList';
 import { Message } from '@/components/Message';
 import PromptControls from '@/components/PromptControls';
 import { Sidebar } from '@/components/Sidebar';
+import { SpecificationSelect } from '@/components/SpecificationSelect';
 import { useLayout } from '@/context/Layout';
 import { ApiPromptResponse, FileData, Message as MessageType } from '@/types';
+import {
+  getConversations,
+  getSpecifications,
+  mergeDefaultSpecConfig,
+  mergeSpecsConfig,
+  seedSpecifications,
+} from '@/utils';
 
 export default function Home() {
   // Use the isSidebarOpen value from the Layout context
@@ -26,13 +36,18 @@ export default function Home() {
     ConversationResults['results'] | []
   >([]);
   const [conversationsLoading, setConversationsLoading] = useState(false);
-
   const [conversationId, setConversationId] = useState<string | null>(null);
   const [messages, setMessages] = useState<MessageType[]>([]);
 
   const [prompt, setPrompt] = useState<string>('');
   const [files, setFiles] = useState<FileData[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // State variables for handling conversation specifications
+  const [specifications, setSpecifications] = useState<
+    SpecificationResults['results'] | null
+  >(null);
+  const [specificationId, setSpecificationId] = useState<string | null>(null);
 
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
@@ -44,32 +59,70 @@ export default function Home() {
     }
   };
 
+  // Fetch conversations and specifications when the component mounts
+  useEffect(() => {
+    (async () => {
+      setConversationsLoading(true);
+
+      // Fetch available specifications
+      const specResults = await getSpecifications();
+
+      // If specifications are found, merge and set the default specification
+      if (specResults?.length) {
+        const defaultMerged = mergeDefaultSpecConfig(
+          specResults as Specification[]
+        );
+        const merged = mergeSpecsConfig(specResults as Specification[]);
+        setSpecificationId(defaultMerged.id);
+        setSpecifications(merged);
+      } else {
+        // If no specifications are found, seed new ones
+        const seedResults = await seedSpecifications();
+
+        if (seedResults?.length) {
+          const defaultMerged = mergeDefaultSpecConfig(
+            specResults as Specification[]
+          );
+          const merged = mergeSpecsConfig(seedResults as Specification[]);
+          setSpecificationId(defaultMerged.id);
+          setSpecifications(merged);
+        }
+      }
+
+      // Fetch conversations and update state
+      const conversationResults = await getConversations();
+      setConversations(conversationResults);
+      setConversationsLoading(false);
+    })();
+  }, []);
+
   // Scroll to the bottom whenever messages change
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
 
-  // Function to fetch the list of conversations
-  const getConversations = async () => {
-    setConversationsLoading(true);
+  // Handle specification selection change
+  const handleSpecificationChange = async (id: string) => {
+    setSpecificationId(id);
 
-    const response = await fetch('/api/conversation');
+    // Update the conversation's specification if a conversation is selected
+    if (conversationId) {
+      const response = await fetch(
+        `/api/conversation/${conversationId}/specification/${id}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
 
-    if (!response.ok) {
-      setConversationsLoading(false);
-      console.error('Error fetching conversations');
-      return;
+      if (!response.ok) {
+        console.error(response.statusText);
+        return;
+      }
     }
-
-    const data = (await response.json()) as ConversationResults;
-    setConversations(data.results);
-    setConversationsLoading(false);
   };
-
-  // Fetch conversations when the component mounts
-  useEffect(() => {
-    void getConversations();
-  }, []);
 
   // Handle file input changes and convert files to base64 format
   const handleFileChange = (files: File[]) => {
@@ -133,6 +186,10 @@ export default function Home() {
     if (conversationData) {
       setPrompt('');
       setFiles([]);
+      setSpecificationId(
+        conversationData?.specification?.id ??
+          mergeDefaultSpecConfig(specifications as Specification[]).id
+      );
       setConversationId(conversationData.id);
       setMessages(messages);
     }
@@ -202,6 +259,7 @@ export default function Home() {
         body: JSON.stringify({
           conversationId: conversationId,
           prompt: inputPrompt,
+          specificationId,
         }),
       });
 
@@ -252,6 +310,16 @@ export default function Home() {
         className="w-full flex flex-col relative"
         style={{ zIndex: 1, height: 'calc(100vh - 65px)' }}
       >
+        {specifications && specificationId && (
+          <div className="absolute flex m-4">
+            <SpecificationSelect
+              specifications={specifications as Specification[]}
+              specificationId={specificationId}
+              onChange={handleSpecificationChange}
+            />
+          </div>
+        )}
+
         {/* Chat placeholder */}
         {messages.length === 0 && <ChatPlaceholder />}
 

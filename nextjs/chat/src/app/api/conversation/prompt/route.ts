@@ -12,14 +12,25 @@ export async function POST(req: NextRequest) {
   const client = new Graphlit();
 
   // Send the prompt to the conversation
-  const promptResults = await client.promptConversation(
+  let promptResults = await client.promptConversation(
     data.prompt,
     data.conversationId
   );
 
+  const id = promptResults.promptConversation?.conversation?.id;
+
+  // Update new conversation with specification
+  if (!data.conversationId && id) {
+    // Set the conversation specification
+    promptResults = await client.updateConversation({
+      id,
+      specification: { id: data.specificationId },
+    });
+  }
+
   // Prepare the response object
   const response: ApiPromptResponse = {
-    conversationId: promptResults.promptConversation?.conversation?.id ?? null,
+    conversationId: id ?? null,
     promptResults,
   };
 

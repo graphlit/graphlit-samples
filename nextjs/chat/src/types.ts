@@ -31,6 +31,7 @@ export type ApiPromptFilesResponse = {
 export type ApiPromptRequest = {
   conversationId?: string;
   prompt: string;
+  specificationId: string;
 };
 
 export type ApiPromptResponse = {
