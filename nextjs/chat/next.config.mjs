@@ -18,6 +18,7 @@ if (!env.success) {
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  reactStrictMode: false,
   env: {
     GRAPHLIT_ENVIRONMENT_ID: process.env.GRAPHLIT_ENVIRONMENT_ID,
     GRAPHLIT_ORGANIZATION_ID: process.env.GRAPHLIT_ORGANIZATION_ID,

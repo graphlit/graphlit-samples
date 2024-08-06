@@ -57,20 +57,6 @@ export const seedSpecifications = async () => {
   return data.results;
 };
 
-// Find and return the model name from a given specification
-export const findModel = (specification: Specification) => {
-  // Return the first non-null model name found in the specification
-  return (
-    specification.anthropic?.model ??
-    specification.azureOpenAI?.model ??
-    specification.cohere?.model ??
-    specification.groq?.model ??
-    specification.mistral?.model ??
-    specification.openAI?.model ??
-    specification.replicate?.model
-  );
-};
-
 // Merge the fetched specifications with the predefined spec configurations
 export const mergeSpecsConfig = (specifications: Specification[]) => {
   return specConfigs.map((specConfig) => {

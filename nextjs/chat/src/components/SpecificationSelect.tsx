@@ -19,12 +19,13 @@ import {
   anthropicSpecs,
   azureOpenAiSpecs,
   cohereSpecs,
+  deepseekSpecs,
   groqSpecs,
   mistralSpecs,
   openAiSpecs,
   replicateSpecs,
+  serviceTypeNames,
 } from '@/constants';
-import { findModel } from '@/utils';
 
 // Define the props type for the SpecificationSelect component
 type SpecificationSelectProps = {
@@ -68,108 +69,108 @@ export function SpecificationSelect({
         selectedKeys={new Set([specificationId])}
         onSelectionChange={(keys) => handleChange(keys.currentKey)}
       >
-        {/* Render DropdownSection for each ModelServiceType */}
-        <DropdownSection title={ModelServiceTypes.Anthropic}>
+        <DropdownSection title={serviceTypeNames[ModelServiceTypes.Anthropic]}>
           {anthropicSpecs.map((specConfig) => {
             const spec = specifications.find(
               (s) => s.name === specConfig.name
             ) as Specification;
 
-            const model = findModel(spec);
-
             return (
               <DropdownItem key={spec.id} value={spec.id}>
-                {model}
+                {spec.name}
               </DropdownItem>
             );
           })}
         </DropdownSection>
-        <DropdownSection title={ModelServiceTypes.AzureOpenAi}>
+        <DropdownSection
+          title={serviceTypeNames[ModelServiceTypes.AzureOpenAi]}
+        >
           {azureOpenAiSpecs.map((specConfig) => {
             const spec = specifications.find(
               (s) => s.name === specConfig.name
             ) as Specification;
 
-            const model = findModel(spec);
-
             return (
               <DropdownItem key={spec.id} value={spec.id}>
-                {model}
+                {spec.name}
               </DropdownItem>
             );
           })}
         </DropdownSection>
-        <DropdownSection title={ModelServiceTypes.Cohere}>
+        <DropdownSection title={serviceTypeNames[ModelServiceTypes.Cohere]}>
           {cohereSpecs.map((specConfig) => {
             const spec = specifications.find(
               (s) => s.name === specConfig.name
             ) as Specification;
 
-            const model = findModel(spec);
-
             return (
               <DropdownItem key={spec.id} value={spec.id}>
-                {model}
+                {spec.name}
               </DropdownItem>
             );
           })}
         </DropdownSection>
-        <DropdownSection title={ModelServiceTypes.Groq}>
+        <DropdownSection title={serviceTypeNames[ModelServiceTypes.Deepseek]}>
+          {deepseekSpecs.map((specConfig) => {
+            const spec = specifications.find(
+              (s) => s.name === specConfig.name
+            ) as Specification;
+
+            return (
+              <DropdownItem key={spec.id} value={spec.id}>
+                {spec.name}
+              </DropdownItem>
+            );
+          })}
+        </DropdownSection>
+        <DropdownSection title={serviceTypeNames[ModelServiceTypes.Groq]}>
           {groqSpecs.map((specConfig) => {
             const spec = specifications.find(
               (s) => s.name === specConfig.name
             ) as Specification;
 
-            const model = findModel(spec);
-
             return (
               <DropdownItem key={spec.id} value={spec.id}>
-                {model}
+                {spec.name}
               </DropdownItem>
             );
           })}
         </DropdownSection>
-        <DropdownSection title={ModelServiceTypes.Mistral}>
+        <DropdownSection title={serviceTypeNames[ModelServiceTypes.Mistral]}>
           {mistralSpecs.map((specConfig) => {
             const spec = specifications.find(
               (s) => s.name === specConfig.name
             ) as Specification;
 
-            const model = findModel(spec);
-
             return (
               <DropdownItem key={spec.id} value={spec.id}>
-                {model}
+                {spec.name}
               </DropdownItem>
             );
           })}
         </DropdownSection>
-        <DropdownSection title={ModelServiceTypes.OpenAi}>
+        <DropdownSection title={serviceTypeNames[ModelServiceTypes.OpenAi]}>
           {openAiSpecs.map((specConfig) => {
             const spec = specifications.find(
               (s) => s.name === specConfig.name
             ) as Specification;
 
-            const model = findModel(spec);
-
             return (
               <DropdownItem key={spec.id} value={spec.id}>
-                {model}
+                {spec.name}
               </DropdownItem>
             );
           })}
         </DropdownSection>
-        <DropdownSection title={ModelServiceTypes.Replicate}>
+        <DropdownSection title={serviceTypeNames[ModelServiceTypes.Replicate]}>
           {replicateSpecs.map((specConfig) => {
             const spec = specifications.find(
               (s) => s.name === specConfig.name
             ) as Specification;
 
-            const model = findModel(spec);
-
             return (
               <DropdownItem key={spec.id} value={spec.id}>
-                {model}
+                {spec.name}
               </DropdownItem>
             );
           })}

@@ -73,7 +73,7 @@ export default function Home() {
           specResults as Specification[]
         );
         const merged = mergeSpecsConfig(specResults as Specification[]);
-        setSpecificationId(defaultMerged.id);
+        setSpecificationId(defaultMerged?.id);
         setSpecifications(merged);
       } else {
         // If no specifications are found, seed new ones
@@ -81,10 +81,11 @@ export default function Home() {
 
         if (seedResults?.length) {
           const defaultMerged = mergeDefaultSpecConfig(
-            specResults as Specification[]
+            seedResults as Specification[]
           );
           const merged = mergeSpecsConfig(seedResults as Specification[]);
-          setSpecificationId(defaultMerged.id);
+
+          setSpecificationId(defaultMerged?.id);
           setSpecifications(merged);
         }
       }
