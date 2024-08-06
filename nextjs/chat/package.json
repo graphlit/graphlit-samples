@@ -19,7 +19,6 @@
     "@fortawesome/fontawesome-svg-core": "^6",
     "@fortawesome/free-solid-svg-icons": "^6",
     "@fortawesome/react-fontawesome": "^0",
-    "@foundernest/namecase": "^1.0.5",
     "@nextui-org/react": "^2",
     "color": "^4",
     "dayjs": "^1",
