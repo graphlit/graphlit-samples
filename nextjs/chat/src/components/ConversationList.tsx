@@ -6,7 +6,7 @@ import dayjs from 'dayjs';
 import { ConversationResults } from 'graphlit-client/dist/generated/graphql-types';
 
 interface ConversationListProps {
-  conversationId: string | null;
+  conversationId?: string | null;
   conversations: ConversationResults['results'] | null | undefined;
   loading: boolean;
   onDeleteConversation: (id: string) => void;

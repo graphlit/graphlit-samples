@@ -6,6 +6,7 @@ import {
   ConversationMessage,
   ConversationResults,
   ConversationRoleTypes,
+  CreateConversationMutation,
   GetConversationQuery,
   Specification,
   SpecificationResults,
@@ -20,6 +21,7 @@ import { SpecificationSelect } from '@/components/SpecificationSelect';
 import { useLayout } from '@/context/Layout';
 import { ApiPromptResponse, FileData, Message as MessageType } from '@/types';
 import {
+  conversationName,
   getConversations,
   getSpecifications,
   mergeDefaultSpecConfig,
@@ -36,7 +38,9 @@ export default function Home() {
     ConversationResults['results'] | []
   >([]);
   const [conversationsLoading, setConversationsLoading] = useState(false);
-  const [conversationId, setConversationId] = useState<string | null>(null);
+  const [conversationId, setConversationId] = useState<
+    string | null | undefined
+  >(null);
   const [messages, setMessages] = useState<MessageType[]>([]);
 
   const [prompt, setPrompt] = useState<string>('');
@@ -252,33 +256,67 @@ export default function Home() {
 
     // Handle sending the prompt
     if (inputPrompt) {
+      let cId = conversationId;
+
+      // Create a new conversation if conversationId is not set
+      if (!cId) {
+        const conversationResponse = await fetch(`/api/conversation`, {
+          method: 'POST',
+          body: JSON.stringify({
+            name: conversationName(),
+            specificationId,
+          }),
+        });
+
+        if (!conversationResponse.ok) {
+          console.error(conversationResponse.statusText);
+          setIsSubmitting(false);
+          return;
+        }
+
+        const conversationData =
+          (await conversationResponse.json()) as CreateConversationMutation['createConversation'];
+
+        cId = conversationData?.id;
+      }
+
       const promptResponse = await fetch('/api/conversation/prompt', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          conversationId: conversationId,
+          conversationId: cId,
           prompt: inputPrompt,
           specificationId,
         }),
       });
 
       if (!promptResponse.ok) {
-        console.error(promptResponse.statusText);
+        const promptError = (await promptResponse.json()) as {
+          error?: string;
+        };
+
+        setMessages((m) => [
+          ...m,
+          {
+            message: promptError?.error ?? '',
+            role: ConversationRoleTypes.Assistant,
+          },
+        ]);
+
         setIsSubmitting(false);
         return;
       }
 
-      // Refresh conversation list if new conversation created
-      if (!conversationId) {
-        void getConversations();
-      }
-
       const promptData = (await promptResponse.json()) as ApiPromptResponse;
 
-      // Update conversation ID and add assistant's response to the chat
-      setConversationId(promptData.conversationId);
+      if (!conversationId && cId) {
+        setConversationId(cId);
+        const conversationsData = await getConversations();
+        setConversations(conversationsData);
+      }
+
       setMessages((m) => [
         ...m,
         {

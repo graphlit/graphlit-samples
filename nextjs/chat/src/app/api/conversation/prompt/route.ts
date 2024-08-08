@@ -11,34 +11,36 @@ export async function POST(req: NextRequest) {
   // Initialize the Graphlit client
   const client = new Graphlit();
 
-  // Send the prompt to the conversation
-  let promptResults = await client.promptConversation(
-    data.prompt,
-    data.conversationId
-  );
+  try {
+    // Send the prompt to the conversation
+    let promptResults = await client.promptConversation(
+      data.prompt,
+      data.conversationId
+    );
 
-  const id = promptResults.promptConversation?.conversation?.id;
+    const id = promptResults.promptConversation?.conversation?.id;
 
-  // Update new conversation with specification
-  if (!data.conversationId && id) {
-    // Set the conversation specification
-    promptResults = await client.updateConversation({
-      id,
-      specification: { id: data.specificationId },
+    // Prepare the response object
+    const response: ApiPromptResponse = {
+      conversationId: id ?? null,
+      promptResults,
+    };
+
+    // Return the response with status 200 and JSON content type
+    return new Response(JSON.stringify(response), {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  } catch (e) {
+    // Return the response with status 200 and JSON content type
+    // @ts-ignore
+    return new Response(JSON.stringify({ error: e?.message }), {
+      status: 500,
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
   }
-
-  // Prepare the response object
-  const response: ApiPromptResponse = {
-    conversationId: id ?? null,
-    promptResults,
-  };
-
-  // Return the response with status 200 and JSON content type
-  return new Response(JSON.stringify(response), {
-    status: 200,
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
 }
