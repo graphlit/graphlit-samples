@@ -28,9 +28,15 @@ export type ApiPromptFilesResponse = {
 };
 
 // Conversation
+export type ApiNewConversationRequest = {
+  name: string;
+  specificationId: string;
+};
+
 export type ApiPromptRequest = {
   conversationId?: string;
   prompt: string;
+  specificationId: string;
 };
 
 export type ApiPromptResponse = {
