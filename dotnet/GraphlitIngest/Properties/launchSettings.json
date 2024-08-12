@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "GraphlitParse": {
-      "commandName": "Project",
-      "commandLineArgs": "parse --uri https://unstrukplatform.blob.core.windows.net/test/main.docx"
-    }
-  }
-}
