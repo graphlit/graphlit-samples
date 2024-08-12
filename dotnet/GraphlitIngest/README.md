@@ -106,6 +106,8 @@ Chapters only applies to audio or video files, which have been transcribed.
 
 ## Example
 
+<img src="./images/screenshot.png" />
+
 ``` bash
 > graphlit-ingest parse -i "https://www.graphlit.com/blog/build-ai-applications-with-next-js-vercel-and-graphlit" -s Summary
 Initializing.
