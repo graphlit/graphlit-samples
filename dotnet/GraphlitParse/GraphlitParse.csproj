@@ -1,0 +1,60 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<Title>Graphlit Parse CLI</Title>
+		<Description>Command-line Application for the Graphlit Platform</Description>
+		<VersionPrefix>1.0.0</VersionPrefix>
+		<Authors>Unstruk Data Inc.</Authors>
+		<TargetFrameworks>net8.0</TargetFrameworks>
+		<RuntimeIdentifiers>win-x64;linux-x64</RuntimeIdentifiers>
+		<UseRidGraph>true</UseRidGraph>
+		<AssemblyName>graphlit-parse</AssemblyName>
+		<OutputType>Exe</OutputType>
+		<PackageId>GraphlitParse</PackageId>
+		<IsPackable>false</IsPackable>
+		<NoWarn>$(NoWarn);CS1591;CS1998;NU1603;NU1608;CA2254</NoWarn>
+		<RestorePackagesWithLockFile>false</RestorePackagesWithLockFile>
+		<RestoreLockedMode>false</RestoreLockedMode>
+		<DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<PublishReadyToRun>true</PublishReadyToRun>
+		<PublishSingleFile>true</PublishSingleFile>
+		<SelfContained>true</SelfContained>
+		<Product>Graphlit Parse CLI</Product>
+		<PackageProjectUrl>https://www.graphlit.com</PackageProjectUrl>
+		<PackageIcon>images/graphlit-logo.png</PackageIcon>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<DebugType>none</DebugType>
+		<DefineConstants>TRACE</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<DebugType>full</DebugType>
+		<DebugSymbols>true</DebugSymbols>
+		<DefineConstants>TRACE;DEBUG_BUILD</DefineConstants>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Content Include="appsettings.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
+		<PackageReference Include="CommandLineParser" Version="2.9.1" />
+		<PackageReference Include="Graphlit" Version="2024.8.11.1" />
+		<PackageReference Include="Mime" Version="3.6.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="images\graphlit-logo.png">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	</ItemGroup>
+
+</Project>

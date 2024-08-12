@@ -14,6 +14,8 @@ public class Program
 
         using var httpClient = new HttpClient();
 
+        httpClient.Timeout = TimeSpan.FromMinutes(30);
+
         var client = new Graphlit(httpClient, configuration.GetSection("ClientSettings")["GRAPHLIT_ORGANIZATION_ID"], configuration.GetSection("ClientSettings")["GRAPHLIT_ENVIRONMENT_ID"], configuration.GetSection("ClientSettings")["GRAPHLIT_JWT_SECRET"], configuration.GetSection("ClientSettings")["GRAPHLIT_OWNER_ID"]);
 
         var id = await IngestUriAsync(client.Client, args[0], new Uri(args[1]));
