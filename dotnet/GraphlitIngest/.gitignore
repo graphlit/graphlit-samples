@@ -396,5 +396,3 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
-/test/GraphlitClient.Tests/appsettings.json
-/src/schema.graphql
