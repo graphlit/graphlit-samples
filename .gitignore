@@ -6,3 +6,4 @@
 /dotnet/GraphlitParse/appsettings.json
 /dotnet/GraphlitIngest/appsettings.json
 /dotnet/GraphlitIngest/Properties/launchSettings.json
+/dotnet/GraphlitIngest/appsettings.Development.json

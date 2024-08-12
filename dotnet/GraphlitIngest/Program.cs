@@ -61,6 +61,9 @@ namespace GraphlitIngest
             IConfiguration configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json")
+#if DEBUG_BUILD
+                .AddJsonFile("appsettings.Development.json")
+#endif
                 .Build();
 
             using var httpClient = new HttpClient();
