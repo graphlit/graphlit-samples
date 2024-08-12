@@ -1,14 +1,22 @@
 ## Configuration
 - Copy appsettings.template.json to appsettings.json.
 - Assign your project credentials to GRAPHLIT_ORGANIZATION_ID, GRAPHLIT_ENVIRONMENT_ID, GRAPHLIT_JWT_SECRET
-- Optionally, assign your OpenAI (OPENAI_API_KEY) or Anthropic API keys (ANTHROPIC_API_KEY) if you want to use your own LLM accounts. Also, you can configure your preferred vision-enabled model be assigning ANTHROPIC_MODEL or OPENAI_MODEL._
+- Optionally, assign your OpenAI (OPENAI_API_KEY) or Anthropic API keys (ANTHROPIC_API_KEY) if you want to use your own LLM accounts. Also, you can configure your preferred vision-enabled model be assigning ANTHROPIC_MODEL or OPENAI_MODEL.
 
 ## Usage
 
-Parse document, audio or image files or web pages.
+Parse document, audio or image files or web pages with the Graphlit Platform.
+
+### Command-Line Examples
 
 ```
 graphlit-ingest parse -i "https://graphlitplatform.blob.core.windows.net/samples/Attention%20Is%20All%20You%20Need.1706.03762.pdf"
+
+graphlit-ingest parse -i "https://www.graphlit.com/blog/build-ai-applications-with-next-js-vercel-and-graphlit" -s Summary
+
+graphlit-ingest parse -i "https://graphlitplatform.blob.core.windows.net/samples/Unstructured%20Data%20is%20Dark%20Data%20Podcast.mp3" -s Chapters
+
+graphlit-ingest parse -i "https://graphlitplatform.blob.core.windows.net/samples/BERT.1810.04805.pdf" -f JSON -o c:\temp\document.json
 ```
 
 ### Command-Line Options
