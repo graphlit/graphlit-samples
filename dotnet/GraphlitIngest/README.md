@@ -1,11 +1,12 @@
 ## Configuration
+
 - Copy appsettings.template.json to appsettings.json.
 - Assign your project credentials to GRAPHLIT_ORGANIZATION_ID, GRAPHLIT_ENVIRONMENT_ID, GRAPHLIT_JWT_SECRET
 - Optionally, assign your OpenAI (OPENAI_API_KEY) or Anthropic API keys (ANTHROPIC_API_KEY) if you want to use your own LLM accounts. Also, you can configure your preferred vision-enabled model be assigning ANTHROPIC_MODEL or OPENAI_MODEL.
 
 ## Build
 
-Right-click on GraphlitIngest project, and select Publish.  Choose between win-x64 and linux-x64 publishing profiles.
+Right-click on GraphlitIngest project, and select Publish.  Choose between win-x64 and linux-x64 publishing profiles. Open Terminal in the published folder, i.e. bin\Release\net8.0\win-x64\publish\win-x64\.
 
 ## Usage
 
