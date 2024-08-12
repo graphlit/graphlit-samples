@@ -110,6 +110,9 @@ Chapters only applies to audio or video files, which have been transcribed.
 
 ``` bash
 > graphlit-ingest parse -i "https://www.graphlit.com/blog/build-ai-applications-with-next-js-vercel-and-graphlit" -s Summary
+```
+
+``` markdown
 Initializing.
 Created extraction specification [e4adcb15-1cd5-4648-8532-e1ff4c5a9e27].
 Created workflow [59498331-2ca8-4197-967a-aa2611f896d8].
