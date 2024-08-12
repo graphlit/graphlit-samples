@@ -9,7 +9,7 @@ Right-click on GraphlitIngest project, and select Publish.  Choose between win-x
 
 ## Usage
 
-Parse document, audio or image files or web pages with the Graphlit Platform.
+Parse document, audio or image files or web pages with the Graphlit Platform. Audio and video files are automatically transcribed. Images are analyzed with multimodal LLM, auto-labelled, extract text and generate image descriptions.
 
 ### Command-Line Examples
 
