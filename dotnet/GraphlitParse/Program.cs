@@ -10,6 +10,18 @@ using StrawberryShake;
 
 namespace GraphlitParse
 {
+    public enum PreparationTypes
+    {
+        Default,
+        LLM
+    }
+
+    public enum LLMTypes
+    {
+        Anthropic,
+        OpenAI
+    }
+
     public class Program : ProgramBase
     {
         #region Options
@@ -17,6 +29,12 @@ namespace GraphlitParse
         [Verb("parse", HelpText = "Parse content.")]
         private class ParseOptions
         {
+            [Option('l', "llm-type", Default = LLMTypes.Anthropic, HelpText = "LLM Type")]
+            public LLMTypes? LLMType { get; set; }
+
+            [Option('p', "preparation-type", Default = PreparationTypes.Default, HelpText = "Preparation Type")]
+            public PreparationTypes? PreparationType { get; set; }
+
             [Option('f', "output-format", Default = OutputFormats.Markdown, HelpText = "Output Format")]
             public OutputFormats? Format { get; set; }
 
@@ -77,9 +95,7 @@ namespace GraphlitParse
 
         private static async Task ParseContentAsync(IGraphlitClient client, IConfiguration configuration, HttpClient httpClient, ParseOptions options, string sessionId)
         {
-            Console.WriteLine("Initializing workflow.");
-
-            (var specification, var workflow) = await InitializeAsync(client, configuration);
+            (var specification, var workflow) = options.PreparationType == PreparationTypes.LLM ? await InitializeAsync(client, configuration, options.LLMType ?? LLMTypes.OpenAI) : default;
 
             string? id = null;
 
@@ -160,9 +176,11 @@ namespace GraphlitParse
 
         #region Helper methods
 
-        private static async Task<(EntityReferenceInput Specification, EntityReferenceInput Workflow)> InitializeAsync(IGraphlitClient client, IConfiguration configuration)
+        private static async Task<(EntityReferenceInput Specification, EntityReferenceInput Workflow)> InitializeAsync(IGraphlitClient client, IConfiguration configuration, LLMTypes llmType)
         {
-            var sid = await CreateSpecificationAsync(client, configuration) ?? throw new InvalidOperationException("Failed to create preparation specification.");
+            Console.WriteLine("Initializing.");
+
+            var sid = await CreateSpecificationAsync(client, configuration, llmType) ?? throw new InvalidOperationException("Failed to create preparation specification.");
 
             Console.WriteLine($"Created specification [{sid}].");
 
@@ -189,21 +207,49 @@ namespace GraphlitParse
                 await DeleteContentAsync(client, id);
         }
 
-        private static async Task<string?> CreateSpecificationAsync(IGraphlitClient client, IConfiguration configuration)
+        private static async Task<string?> CreateSpecificationAsync(IGraphlitClient client, IConfiguration configuration, LLMTypes llmType)
         {
-            string? key = configuration.GetSection("ModelSettings")["ANTHROPIC_API_KEY"];
+            SpecificationInput specification;
 
-            var specification = new SpecificationInput
+            switch (llmType)
             {
-                Name = "Preparation Specification",
-                Type = SpecificationTypes.Preparation,
-                ServiceType = ModelServiceTypes.Anthropic,
-                Anthropic = new AnthropicModelPropertiesInput
-                {
-                    Model = String.IsNullOrWhiteSpace(key) ? AnthropicModels.Claude35Sonnet : AnthropicModels.Custom,
-                    Key = key
-                }
-            };
+                case LLMTypes.OpenAI:
+                    {
+                        string? key = configuration.GetSection("ModelSettings")["OPENAI_API_KEY"];
+
+                        specification = new SpecificationInput
+                        {
+                            Name = "Preparation Specification",
+                            Type = SpecificationTypes.Preparation,
+                            ServiceType = ModelServiceTypes.OpenAi,
+                            OpenAI = new OpenAIModelPropertiesInput
+                            {
+                                Model = String.IsNullOrWhiteSpace(key) ? OpenAIModels.Gpt4o128k20240806 : OpenAIModels.Custom,
+                                Key = key
+                            }
+                        };
+                    }
+                    break;
+                case LLMTypes.Anthropic:
+                    {
+                        string? key = configuration.GetSection("ModelSettings")["ANTHROPIC_API_KEY"];
+
+                        specification = new SpecificationInput
+                        {
+                            Name = "Preparation Specification",
+                            Type = SpecificationTypes.Preparation,
+                            ServiceType = ModelServiceTypes.Anthropic,
+                            Anthropic = new AnthropicModelPropertiesInput
+                            {
+                                Model = String.IsNullOrWhiteSpace(key) ? AnthropicModels.Claude35Sonnet : AnthropicModels.Custom,
+                                Key = key
+                            }
+                        };
+                    }
+                    break;
+                default:
+                    throw new InvalidOperationException($"Unsupported LLM type [{llmType}].");
+            }
 
             var result = await client.CreateSpecification.ExecuteAsync(specification);
 

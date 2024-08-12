@@ -18,7 +18,7 @@ namespace GraphlitCLI
 
     public abstract class ProgramBase
     {
-        protected static async Task<string?> IngestUriAsync(IGraphlitClient client, Uri uri, EntityReferenceInput workflow, string sessionId)
+        protected static async Task<string?> IngestUriAsync(IGraphlitClient client, Uri uri, EntityReferenceInput? workflow, string sessionId)
         {
             var result = await client.IngestUri.ExecuteAsync(null, uri, null, true, workflow, null, sessionId);
 
@@ -29,7 +29,7 @@ namespace GraphlitCLI
             return response?.Id;
         }
 
-        protected static async Task<string?> IngestFileAsync(IGraphlitClient client, string filePath, EntityReferenceInput workflow, string sessionId)
+        protected static async Task<string?> IngestFileAsync(IGraphlitClient client, string filePath, EntityReferenceInput? workflow, string sessionId)
         {
             string fileName = Path.GetFileName(filePath);
             string name = Path.GetFileNameWithoutExtension(fileName);
