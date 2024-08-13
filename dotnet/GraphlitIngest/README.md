@@ -5,7 +5,13 @@
 
 ## Build
 
+### Using Visual Studio
+
 Right-click on GraphlitIngest project, and select Publish.  Choose between win-x64 and linux-x64 publishing profiles. Open Terminal in the published folder, i.e. bin\Release\net8.0\win-x64\publish\win-x64\.
+
+### Using VS Code
+
+Requires C# Dev Kit to be installed. Right-click on GraphlitIngest project, and select Build. Open project in Terminal, i.e. bin/Debug/net8.0/linux-x64.
 
 ## Usage
 
@@ -14,19 +20,19 @@ Parse document, audio or image files or web pages with the Graphlit Platform. Au
 ### Command-Line Examples
 
 ``` bash
-graphlit-ingest parse -i "https://graphlitplatform.blob.core.windows.net/samples/Attention%20Is%20All%20You%20Need.1706.03762.pdf"
+./graphlit-ingest parse -i "https://graphlitplatform.blob.core.windows.net/samples/Attention%20Is%20All%20You%20Need.1706.03762.pdf"
 
-graphlit-ingest parse -i "https://www.graphlit.com/blog/build-ai-applications-with-next-js-vercel-and-graphlit" -s Summary
+./graphlit-ingest parse -i "https://www.graphlit.com/blog/build-ai-applications-with-next-js-vercel-and-graphlit" -s Summary
 
-graphlit-ingest parse -i "https://graphlitplatform.blob.core.windows.net/samples/Unstructured%20Data%20is%20Dark%20Data%20Podcast.mp3" -s Chapters
+./graphlit-ingest parse -i "https://graphlitplatform.blob.core.windows.net/samples/Unstructured%20Data%20is%20Dark%20Data%20Podcast.mp3" -s Chapters
 
-graphlit-ingest parse -i "https://graphlitplatform.blob.core.windows.net/samples/BERT.1810.04805.pdf" -f JSON -o c:\temp\document.json
+./graphlit-ingest parse -i "https://graphlitplatform.blob.core.windows.net/samples/BERT.1810.04805.pdf" -f JSON -o c:\temp\document.json
 ```
 
 ### Command-Line Options
 
 ``` bash
-> graphlit-ingest parse --help
+> ./graphlit-ingest parse --help
 
   -s, --summarization-type    Summarization Type
 
@@ -109,7 +115,7 @@ Chapters only applies to audio or video files, which have been transcribed.
 <img src="./images/screenshot.png" />
 
 ``` bash
-> graphlit-ingest parse -i "https://www.graphlit.com/blog/build-ai-applications-with-next-js-vercel-and-graphlit" -s Summary
+> ./graphlit-ingest parse -i "https://www.graphlit.com/blog/build-ai-applications-with-next-js-vercel-and-graphlit" -s Summary
 ```
 
 ``` markdown
