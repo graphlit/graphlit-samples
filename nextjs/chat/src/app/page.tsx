@@ -30,10 +30,10 @@ import {
 } from '@/utils';
 
 export default function Home() {
-  // Use the isSidebarOpen value from the Layout context
+  // Access isSidebarOpen from the Layout context
   const { isSidebarOpen } = useLayout();
 
-  // State variables for handling conversations and chat functionality
+  // State for managing conversations and chat functionality
   const [conversations, setConversations] = useState<
     ConversationResults['results'] | []
   >([]);
@@ -47,7 +47,7 @@ export default function Home() {
   const [files, setFiles] = useState<FileData[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // State variables for handling conversation specifications
+  // State for managing conversation specifications
   const [specifications, setSpecifications] = useState<
     SpecificationResults['results'] | null
   >(null);
@@ -55,7 +55,7 @@ export default function Home() {
 
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
-  // Function to scroll to the bottom of the chat container
+  // Scroll to the bottom of the chat container
   const scrollToBottom = () => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop =
@@ -71,8 +71,8 @@ export default function Home() {
       // Fetch available specifications
       const specResults = await getSpecifications();
 
-      // If specifications are found, merge and set the default specification
       if (specResults?.length) {
+        // Merge and set the default specification
         const defaultMerged = mergeDefaultSpecConfig(
           specResults as Specification[]
         );
@@ -80,7 +80,7 @@ export default function Home() {
         setSpecificationId(defaultMerged?.id);
         setSpecifications(merged);
       } else {
-        // If no specifications are found, seed new ones
+        // Seed new specifications if none exist
         const seedResults = await seedSpecifications();
 
         if (seedResults?.length) {
@@ -94,14 +94,14 @@ export default function Home() {
         }
       }
 
-      // Fetch conversations and update state
+      // Fetch and set conversations
       const conversationResults = await getConversations();
       setConversations(conversationResults);
       setConversationsLoading(false);
     })();
   }, []);
 
-  // Scroll to the bottom whenever messages change
+  // Scroll to the bottom when messages change
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
@@ -110,7 +110,7 @@ export default function Home() {
   const handleSpecificationChange = async (id: string) => {
     setSpecificationId(id);
 
-    // Update the conversation's specification if a conversation is selected
+    // Update the conversation's specification if one is selected
     if (conversationId) {
       const response = await fetch(
         `/api/conversation/${conversationId}/specification/${id}`,
@@ -129,7 +129,7 @@ export default function Home() {
     }
   };
 
-  // Handle file input changes and convert files to base64 format
+  // Handle file input changes and convert files to base64
   const handleFileChange = (files: File[]) => {
     const fileReaders = files.map((file) => {
       const reader = new FileReader();
@@ -183,9 +183,10 @@ export default function Home() {
 
     const messageData = conversationData?.messages as ConversationMessage[];
 
-    const messages = messageData.map(({ message, role }) => ({
+    const messages = messageData.map(({ message, role, citations }) => ({
       message,
       role,
+      citations,
     }));
 
     if (conversationData) {
@@ -231,7 +232,7 @@ export default function Home() {
     setPrompt('');
     setFiles([]);
 
-    // Add the user message to the chat
+    // Add the user's message to the chat
     if (inputPrompt) {
       setMessages((m) => [
         ...m,
@@ -258,7 +259,7 @@ export default function Home() {
     if (inputPrompt) {
       let cId = conversationId;
 
-      // Create a new conversation if conversationId is not set
+      // Create a new conversation if none exists
       if (!cId) {
         const conversationResponse = await fetch(`/api/conversation`, {
           method: 'POST',
@@ -302,6 +303,8 @@ export default function Home() {
           {
             message: promptError?.error ?? '',
             role: ConversationRoleTypes.Assistant,
+            citations:
+              promptData.promptResults?.promptConversation?.message?.citations,
           },
         ]);
 
@@ -311,12 +314,14 @@ export default function Home() {
 
       const promptData = (await promptResponse.json()) as ApiPromptResponse;
 
+      // Update conversation state if a new conversation was created
       if (!conversationId && cId) {
         setConversationId(cId);
         const conversationsData = await getConversations();
         setConversations(conversationsData);
       }
 
+      // Add the assistant's response to the chat
       setMessages((m) => [
         ...m,
         {
@@ -324,6 +329,8 @@ export default function Home() {
             promptData.promptResults?.promptConversation?.message?.message ??
             '',
           role: ConversationRoleTypes.Assistant,
+          citations:
+            promptData.promptResults?.promptConversation?.message?.citations,
         },
       ]);
     }
@@ -349,6 +356,7 @@ export default function Home() {
         className="w-full flex flex-col relative"
         style={{ zIndex: 1, height: 'calc(100vh - 65px)' }}
       >
+        {/* Specification selection */}
         {specifications && specificationId && (
           <div className="absolute flex m-4">
             <SpecificationSelect
@@ -359,24 +367,30 @@ export default function Home() {
           </div>
         )}
 
-        {/* Chat placeholder */}
+        {/* Placeholder for empty chat */}
         {messages.length === 0 && <ChatPlaceholder />}
 
-        {/* Display messages */}
+        {/* Chat messages */}
         {messages.length > 0 && (
           <div
             className="w-full flex-grow overflow-y-auto m-auto pb-28"
             ref={chatContainerRef}
           >
             <div className="max-w-screen-md m-auto">
-              {messages.map(({ message, role }, index) => (
-                <Message key={index} message={message} role={role} />
+              {messages.map(({ message, role, citations }, index) => (
+                <Message
+                  key={index}
+                  message={message}
+                  citations={citations}
+                  role={role}
+                  index={index}
+                />
               ))}
             </div>
           </div>
         )}
 
-        {/* Prompt controls for input and file handling */}
+        {/* Input controls for prompt and files */}
         <div className="w-full absolute bottom-0">
           <div className="w-full max-w-screen-md m-auto bg-white">
             <PromptControls

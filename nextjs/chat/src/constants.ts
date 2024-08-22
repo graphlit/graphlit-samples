@@ -101,6 +101,7 @@ export const anthropicSpecs: SpecificationInput[] = [
     anthropic: { model }, // Model specific configuration for Anthropic
     // @ts-ignore
     name: `${serviceTypeNames[ModelServiceTypes.Anthropic]} ${modelNames[model]}`, // Name of the specification
+    strategy: { embedCitations: true },
   })
 );
 
@@ -116,6 +117,7 @@ export const azureOpenAiSpecs: SpecificationInput[] = [
     azureOpenAI: { model }, // Model specific configuration for Azure OpenAI
     // @ts-ignore
     name: `${serviceTypeNames[ModelServiceTypes.AzureOpenAi]} ${modelNames[model]}`, // Name of the specification
+    strategy: { embedCitations: true },
   })
 );
 
@@ -130,6 +132,7 @@ export const deepseekSpecs: SpecificationInput[] = [
     deepseek: { model }, // Model specific configuration for Cohere
     // @ts-ignore
     name: `${serviceTypeNames[ModelServiceTypes.Deepseek]} ${modelNames[model]}`, // Name of the specification
+    strategy: { embedCitations: true },
   })
 );
 
@@ -144,6 +147,7 @@ export const cohereSpecs: SpecificationInput[] = [
     cohere: { model }, // Model specific configuration for Cohere
     // @ts-ignore
     name: `${serviceTypeNames[ModelServiceTypes.Cohere]} ${modelNames[model]}`, // Name of the specification
+    strategy: { embedCitations: true },
   })
 );
 
@@ -159,6 +163,7 @@ export const groqSpecs: SpecificationInput[] = [
     groq: { model }, // Model specific configuration for Groq
     // @ts-ignore
     name: `${serviceTypeNames[ModelServiceTypes.Groq]} ${modelNames[model]}`, // Name of the specification
+    strategy: { embedCitations: true },
   })
 );
 
@@ -175,6 +180,7 @@ export const mistralSpecs: SpecificationInput[] = [
     mistral: { model }, // Model specific configuration for Mistral
     // @ts-ignore
     name: `${serviceTypeNames[ModelServiceTypes.Mistral]} ${modelNames[model]}`, // Name of the specification
+    strategy: { embedCitations: true },
   })
 );
 
@@ -202,6 +208,7 @@ export const openAiSpecs: SpecificationInput[] = [
     openAI: { model }, // Model specific configuration for OpenAI
     // @ts-ignore
     name: `${serviceTypeNames[ModelServiceTypes.OpenAi]} ${modelNames[model]}`, // Name of the specification
+    strategy: { embedCitations: true },
   })
 );
 
@@ -222,6 +229,7 @@ export const replicateSpecs: SpecificationInput[] = [
     replicate: { model }, // Model specific configuration for Replicate
     // @ts-ignore
     name: `${serviceTypeNames[ModelServiceTypes.Replicate]} ${modelNames[model]}`, // Name of the specification
+    strategy: { embedCitations: true },
   })
 );
 
