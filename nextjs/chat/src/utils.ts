@@ -1,97 +1,130 @@
+import { Types } from 'graphlit-client';
 import {
   ConversationResults,
   Specification,
   SpecificationResults,
 } from 'graphlit-client/dist/generated/graphql-types';
+import prettyBytes from 'pretty-bytes';
+
+import { CitationType } from '@/types';
 
 import { defaultSpec, specifications as specConfigs } from './constants';
 
-// Fetch all conversations from the API
+// Fetches a list of conversations from the API
 export const getConversations = async () => {
-  // Send a GET request to the /api/conversation endpoint
   const response = await fetch('/api/conversation');
-
-  // Check if the response is not ok (status code is not in the range 200-299)
   if (!response.ok) {
     console.error('Error fetching conversations');
     return;
   }
-
-  // Parse the response JSON and cast it to ConversationResults type
   const data = (await response.json()) as ConversationResults;
-  // Return the results property which contains the list of conversations
   return data.results;
 };
 
-// Fetch all specifications from the API
+// Fetches a list of specifications from the API
 export const getSpecifications = async () => {
-  // Send a GET request to the /api/specifications endpoint
   const response = await fetch('/api/specifications');
-
-  // Check if the response is not ok
   if (!response.ok) {
     console.error('Error fetching specifications');
     return;
   }
-
-  // Parse the response JSON and cast it to SpecificationResults type
   const data = (await response.json()) as SpecificationResults;
-  // Return the results property which contains the list of specifications
   return data.results;
 };
 
-// Seed new specifications by sending a POST request to the API
+// Seeds new specifications by sending a request to the API
 export const seedSpecifications = async () => {
-  // Send a POST request to the /api/specifications endpoint
   const response = await fetch('/api/specifications', { method: 'POST' });
-
-  // Check if the response is not ok
   if (!response.ok) {
     console.error('Error seeding specifications');
     return;
   }
-
-  // Parse the response JSON and cast it to SpecificationResults type
   const data = (await response.json()) as SpecificationResults;
-  // Return the results property which contains the list of newly seeded specifications
   return data.results;
 };
 
-// Merge the fetched specifications with the predefined spec configurations
+// Merges fetched specifications with predefined configurations
 export const mergeSpecsConfig = (specifications: Specification[]) => {
   return specConfigs.map((specConfig) => {
-    // Find and return the specification that matches the current specConfig name
     return specifications.find(
       (spec) => spec.name === specConfig.name
     ) as Specification;
   });
 };
 
-// Find and return the default specification based on the default model name
+// Retrieves the default specification from the fetched specifications
 export const mergeDefaultSpecConfig = (specifications: Specification[]) => {
   return specifications.find(
     (spec) => spec.name === defaultSpec.name
   ) as Specification;
 };
 
+// Generates a conversation name based on the current date and time
 export const conversationName = () => {
-  // Get the current date
   const date = new Date();
-
-  // Extract the year, month, and day
   const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+  const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
   let hours = date.getHours();
   const minutes = String(date.getMinutes()).padStart(2, '0');
   const seconds = String(date.getSeconds()).padStart(2, '0');
-
-  // Determine AM/PM and convert hours to 12-hour format
   const ampm = hours >= 12 ? 'PM' : 'AM';
   hours = hours % 12;
-  hours = hours ? hours : 12; // The hour '0' should be '12'
+  hours = hours ? hours : 12;
   // @ts-ignore
   hours = String(hours).padStart(2, '0');
 
   return `Conversation ${year}-${month}-${day} ${hours}:${minutes}:${seconds} ${ampm}`;
+};
+
+// Selects an emoji based on content and file types
+export const selectEmoji = (
+  contentType?: Types.Maybe<Types.ContentTypes>,
+  fileType?: Types.Maybe<Types.FileTypes>
+): string => {
+  const contentEmojiMap: { [key: string]: string } = {
+    FILE: '📄',
+    PAGE: '🌐',
+    MESSAGE: '💬',
+    TEXT: '📝',
+    POST: '📰',
+    EMAIL: '📧',
+    EVENT: '📅',
+    ISSUE: '🐛',
+  };
+
+  const fileEmojiMap: { [key: string]: string } = {
+    VIDEO: '🎥',
+    AUDIO: '🎵',
+    IMAGE: '🖼️',
+    DOCUMENT: '📃',
+    EMAIL: '📧',
+    CODE: '💻',
+    DATA: '📊',
+  };
+
+  if (contentType === 'FILE' && fileType) {
+    return fileEmojiMap[fileType] || '📄';
+  } else if (contentType) {
+    return contentEmojiMap[contentType] || '📄';
+  }
+
+  return '📄';
+};
+
+// Extracts key information from a citation for UI display
+export const getCitationParts = (citation: CitationType) => {
+  const emoji = selectEmoji(
+    citation?.content?.type,
+    citation?.content?.fileType
+  );
+
+  return {
+    emoji,
+    name: citation?.content?.name,
+    size: citation?.content?.fileSize
+      ? prettyBytes(citation?.content?.fileSize)
+      : undefined,
+    text: citation?.text,
+  };
 };

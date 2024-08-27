@@ -53,7 +53,7 @@ export function SpecificationSelect({
   return (
     <Dropdown>
       <DropdownTrigger>
-        <Button variant="light" className="capitalize w-full pr-10">
+        <Button variant="light" className="capitalize w-full pr-10 bg-white">
           {name}
           <div className="absolute right-4">
             <FontAwesomeIcon icon={faChevronDown} />

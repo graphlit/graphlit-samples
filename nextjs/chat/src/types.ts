@@ -44,9 +44,20 @@ export type ApiPromptResponse = {
   promptResults: Types.PromptConversationMutation | null;
 };
 
+export type CitationType =
+  | NonNullable<
+      NonNullable<
+        NonNullable<
+          Types.PromptConversationMutation['promptConversation']
+        >['message']
+      >['citations']
+    >[number]
+  | null;
+
 export type Message = {
   message: string | undefined;
   role: ConversationRoleTypes;
+  citations?: CitationType[] | null;
 };
 
 export type Conversation = {

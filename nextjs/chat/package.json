@@ -25,6 +25,7 @@
     "format": "^0",
     "graphlit-client": "^1",
     "next": "14",
+    "pretty-bytes": "^6",
     "react": "^18",
     "react-dom": "^18",
     "react-textarea-autosize": "^8",
