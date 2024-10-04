@@ -83,7 +83,7 @@ async def create_specification():
         serviceType=ModelServiceTypes.OPEN_AI,
         searchType=SearchTypes.VECTOR,
         openAI=OpenAIModelPropertiesInput(
-            model=OpenAIModels.GPT4_TURBO_128K,
+            model=OpenAIModels.GPT4O_128K,
             temperature=0.1,
             probability=0.2,
             completionTokenLimit=2048,

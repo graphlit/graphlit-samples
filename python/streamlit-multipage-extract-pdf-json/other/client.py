@@ -90,24 +90,18 @@ async def delete_workflow():
 
     st.session_state['workflow_id'] = None
 
-async def create_specification(name, schema):
+async def create_specification():
     input = SpecificationInput(
         name="Extraction",
         type=SpecificationTypes.EXTRACTION,
         serviceType=ModelServiceTypes.OPEN_AI,
         searchType=SearchTypes.VECTOR,
         openAI=OpenAIModelPropertiesInput(
-            model=OpenAIModels.GPT4_TURBO_128K,
+            model=OpenAIModels.GPT4O_MINI_128K,
             temperature=0.1,
             probability=0.2,
             completionTokenLimit=2048,
-        ),
-        tools=[
-            ToolDefinitionInput(
-                name=name,
-                schema=schema
-            )
-        ]
+        )
     )
 
     graphlit: Optional[Graphlit] = st.session_state['graphlit']
@@ -128,15 +122,23 @@ async def delete_specification():
 
     st.session_state['specification_id'] = None
 
-async def extract_contents():
+async def extract_contents(name, schema):
     graphlit: Optional[Graphlit] = st.session_state['graphlit']
 
     try:
+        tools=[
+            ToolDefinitionInput(
+                name=name,
+                schema=schema
+            )
+        ]
+
         response = await graphlit.client.extract_contents(
-            prompt="Extract data from text into JSON, using the tool provided. If no appropriate data is found, don't return any response.",
+            prompt="Extract data from text into JSON, using the tools provided. If no appropriate data is found, don't return any response.",
             specification=EntityReferenceInput(
                 id=st.session_state["specification_id"]
             ),
+            tools=tools,
             filter=ContentFilter(
                 id=st.session_state['content_id']
             ),
