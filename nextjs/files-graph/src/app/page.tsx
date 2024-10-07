@@ -23,11 +23,10 @@ import { ApiPromptResponse, FileData, Message as MessageType } from '@/types';
 import {
   conversationName,
   getConversations,
-  getSpecifications,
   mergeDefaultSpecConfig,
   mergeSpecsConfig,
   seedSpecifications,
-  updateSpecifications,
+  seedWorkflows,
 } from '@/utils';
 
 export default function Home() {
@@ -80,6 +79,8 @@ export default function Home() {
 
         setSpecificationId(defaultMerged?.id);
         setSpecifications(merged);
+
+        await seedWorkflows();
       }
 
       // Fetch and set conversations

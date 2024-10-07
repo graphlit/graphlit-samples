@@ -47,7 +47,7 @@ export function SpecificationSelect({
 
   // Memoize the current specification name for performance optimization
   const name = useMemo(() => {
-    return specifications.find((spec) => spec.id === specificationId)?.name;
+    return specifications.find((spec) => spec?.id === specificationId)?.name;
   }, [specifications, specificationId]);
 
   return (
@@ -72,7 +72,7 @@ export function SpecificationSelect({
         <DropdownSection title={serviceTypeNames[ModelServiceTypes.Anthropic]}>
           {anthropicSpecs.map((specConfig) => {
             const spec = specifications.find(
-              (s) => s.name === specConfig.name
+              (s) => s?.name === specConfig.name
             ) as Specification;
 
             return (
@@ -87,7 +87,7 @@ export function SpecificationSelect({
         >
           {azureOpenAiSpecs.map((specConfig) => {
             const spec = specifications.find(
-              (s) => s.name === specConfig.name
+              (s) => s?.name === specConfig.name
             ) as Specification;
 
             return (
@@ -100,7 +100,7 @@ export function SpecificationSelect({
         <DropdownSection title={serviceTypeNames[ModelServiceTypes.Cohere]}>
           {cohereSpecs.map((specConfig) => {
             const spec = specifications.find(
-              (s) => s.name === specConfig.name
+              (s) => s?.name === specConfig.name
             ) as Specification;
 
             return (
@@ -113,7 +113,7 @@ export function SpecificationSelect({
         <DropdownSection title={serviceTypeNames[ModelServiceTypes.Deepseek]}>
           {deepseekSpecs.map((specConfig) => {
             const spec = specifications.find(
-              (s) => s.name === specConfig.name
+              (s) => s?.name === specConfig.name
             ) as Specification;
 
             return (
@@ -126,7 +126,7 @@ export function SpecificationSelect({
         <DropdownSection title={serviceTypeNames[ModelServiceTypes.Groq]}>
           {groqSpecs.map((specConfig) => {
             const spec = specifications.find(
-              (s) => s.name === specConfig.name
+              (s) => s?.name === specConfig.name
             ) as Specification;
 
             return (
@@ -139,7 +139,7 @@ export function SpecificationSelect({
         <DropdownSection title={serviceTypeNames[ModelServiceTypes.Mistral]}>
           {mistralSpecs.map((specConfig) => {
             const spec = specifications.find(
-              (s) => s.name === specConfig.name
+              (s) => s?.name === specConfig.name
             ) as Specification;
 
             return (
@@ -152,7 +152,7 @@ export function SpecificationSelect({
         <DropdownSection title={serviceTypeNames[ModelServiceTypes.OpenAi]}>
           {openAiSpecs.map((specConfig) => {
             const spec = specifications.find(
-              (s) => s.name === specConfig.name
+              (s) => s?.name === specConfig.name
             ) as Specification;
 
             return (
@@ -165,7 +165,7 @@ export function SpecificationSelect({
         <DropdownSection title={serviceTypeNames[ModelServiceTypes.Replicate]}>
           {replicateSpecs.map((specConfig) => {
             const spec = specifications.find(
-              (s) => s.name === specConfig.name
+              (s) => s?.name === specConfig.name
             ) as Specification;
 
             return (

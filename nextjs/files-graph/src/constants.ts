@@ -8,7 +8,9 @@ import {
   MistralModels,
   ModelServiceTypes,
   OpenAiModels,
+  PromptStrategyTypes,
   ReplicateModels,
+  RetrievalStrategyTypes,
   SpecificationInput,
   SpecificationTypes,
 } from 'graphlit-client/dist/generated/graphql-types';
@@ -83,6 +85,9 @@ export const defaultSpec: SpecificationInput = {
   serviceType: ModelServiceTypes.OpenAi, // Service type
   openAI: { model: OpenAiModels.Gpt4O_128K }, // Model specific configuration for OpenAI
   name: `${serviceTypeNames[ModelServiceTypes.OpenAi]} ${modelNames[OpenAiModels.Gpt4O_128K]}`,
+  promptStrategy: {
+    type: PromptStrategyTypes.OptimizeSearch,
+  },
   graphStrategy: {
     type: GraphStrategyTypes.ExtractEntitiesGraph,
     generateGraph: true,
@@ -113,6 +118,9 @@ export const anthropicSpecs: SpecificationInput[] = [
     anthropic: { model }, // Model specific configuration for Anthropic
     // @ts-ignore
     name: `${serviceTypeNames[ModelServiceTypes.Anthropic]} ${modelNames[model]}`,
+    promptStrategy: {
+      type: PromptStrategyTypes.OptimizeSearch,
+    },
     graphStrategy: {
       type: GraphStrategyTypes.ExtractEntitiesGraph,
       generateGraph: true,
@@ -132,6 +140,9 @@ export const azureOpenAiSpecs: SpecificationInput[] = [
     azureOpenAI: { model }, // Model specific configuration for Azure OpenAI
     // @ts-ignore
     name: `${serviceTypeNames[ModelServiceTypes.AzureOpenAi]} ${modelNames[model]}`,
+    promptStrategy: {
+      type: PromptStrategyTypes.OptimizeSearch,
+    },
     graphStrategy: {
       type: GraphStrategyTypes.ExtractEntitiesGraph,
       generateGraph: true,
@@ -150,6 +161,9 @@ export const deepseekSpecs: SpecificationInput[] = [
     deepseek: { model }, // Model specific configuration for Cohere
     // @ts-ignore
     name: `${serviceTypeNames[ModelServiceTypes.Deepseek]} ${modelNames[model]}`,
+    promptStrategy: {
+      type: PromptStrategyTypes.OptimizeSearch,
+    },
     graphStrategy: {
       type: GraphStrategyTypes.ExtractEntitiesGraph,
       generateGraph: true,
@@ -168,6 +182,9 @@ export const cohereSpecs: SpecificationInput[] = [
     cohere: { model }, // Model specific configuration for Cohere
     // @ts-ignore
     name: `${serviceTypeNames[ModelServiceTypes.Cohere]} ${modelNames[model]}`,
+    promptStrategy: {
+      type: PromptStrategyTypes.OptimizeSearch,
+    },
     graphStrategy: {
       type: GraphStrategyTypes.ExtractEntitiesGraph,
       generateGraph: true,
@@ -187,6 +204,9 @@ export const groqSpecs: SpecificationInput[] = [
     groq: { model }, // Model specific configuration for Groq
     // @ts-ignore
     name: `${serviceTypeNames[ModelServiceTypes.Groq]} ${modelNames[model]}`,
+    promptStrategy: {
+      type: PromptStrategyTypes.OptimizeSearch,
+    },
     graphStrategy: {
       type: GraphStrategyTypes.ExtractEntitiesGraph,
       generateGraph: true,
@@ -207,6 +227,9 @@ export const mistralSpecs: SpecificationInput[] = [
     mistral: { model }, // Model specific configuration for Mistral
     // @ts-ignore
     name: `${serviceTypeNames[ModelServiceTypes.Mistral]} ${modelNames[model]}`,
+    promptStrategy: {
+      type: PromptStrategyTypes.OptimizeSearch,
+    },
     graphStrategy: {
       type: GraphStrategyTypes.ExtractEntitiesGraph,
       generateGraph: true,
@@ -238,6 +261,9 @@ export const openAiSpecs: SpecificationInput[] = [
     openAI: { model }, // Model specific configuration for OpenAI
     // @ts-ignore
     name: `${serviceTypeNames[ModelServiceTypes.OpenAi]} ${modelNames[model]}`,
+    promptStrategy: {
+      type: PromptStrategyTypes.OptimizeSearch,
+    },
     graphStrategy: {
       type: GraphStrategyTypes.ExtractEntitiesGraph,
       generateGraph: true,
@@ -262,6 +288,9 @@ export const replicateSpecs: SpecificationInput[] = [
     replicate: { model }, // Model specific configuration for Replicate
     // @ts-ignore
     name: `${serviceTypeNames[ModelServiceTypes.Replicate]} ${modelNames[model]}`,
+    promptStrategy: {
+      type: PromptStrategyTypes.OptimizeSearch,
+    },
     graphStrategy: {
       type: GraphStrategyTypes.ExtractEntitiesGraph,
       generateGraph: true,

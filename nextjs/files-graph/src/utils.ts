@@ -5,6 +5,7 @@ import {
   Specification,
   SpecificationResults,
   SpecificationTypes,
+  WorkflowResults,
 } from 'graphlit-client/dist/generated/graphql-types';
 import prettyBytes from 'pretty-bytes';
 import { async } from 'rxjs';
@@ -43,6 +44,16 @@ export const seedSpecifications = async () => {
     return;
   }
   const data = (await response.json()) as SpecificationResults;
+  return data.results;
+};
+
+export const seedWorkflows = async () => {
+  const response = await fetch('/api/workflows', { method: 'POST' });
+  if (!response.ok) {
+    console.error('Error fetching workflows');
+    return;
+  }
+  const data = (await response.json()) as WorkflowResults;
   return data.results;
 };
 
