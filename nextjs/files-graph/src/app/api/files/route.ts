@@ -21,7 +21,9 @@ export async function POST(req: NextRequest) {
   // Process each file by ingesting it into the Graphlit client
   const results = await Promise.allSettled(
     data.files.map(({ name, base64, mimeType }) => {
-      return client.ingestEncodedFile(name, base64, mimeType, undefined, true);
+      return client.ingestEncodedFile(name, base64, mimeType, undefined, true, {
+        id: data.workflowId,
+      });
     })
   );
 

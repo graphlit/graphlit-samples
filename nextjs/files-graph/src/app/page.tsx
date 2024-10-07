@@ -53,6 +53,9 @@ export default function Home() {
   >(null);
   const [specificationId, setSpecificationId] = useState<string | null>(null);
 
+  // State for workflow id
+  const [workflowId, setWorkflowId] = useState<string | null>(null);
+
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
   // Scroll to the bottom of the chat container
@@ -80,7 +83,9 @@ export default function Home() {
         setSpecificationId(defaultMerged?.id);
         setSpecifications(merged);
 
-        await seedWorkflows();
+        const workflow = await seedWorkflows();
+
+        setWorkflowId(workflow?.id || null);
       }
 
       // Fetch and set conversations
@@ -236,7 +241,7 @@ export default function Home() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ files: inputFiles }),
+        body: JSON.stringify({ files: inputFiles, workflowId }),
       });
 
       if (!fileResponse.ok) {

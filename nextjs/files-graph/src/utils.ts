@@ -5,10 +5,9 @@ import {
   Specification,
   SpecificationResults,
   SpecificationTypes,
-  WorkflowResults,
+  Workflow,
 } from 'graphlit-client/dist/generated/graphql-types';
 import prettyBytes from 'pretty-bytes';
-import { async } from 'rxjs';
 
 import { CitationType } from '@/types';
 
@@ -53,8 +52,7 @@ export const seedWorkflows = async () => {
     console.error('Error fetching workflows');
     return;
   }
-  const data = (await response.json()) as WorkflowResults;
-  return data.results;
+  return (await response.json()) as Workflow;
 };
 
 export const updateSpecifications = async (specifications: Specification[]) => {

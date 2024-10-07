@@ -20,6 +20,7 @@ export type FileResponseResult = {
 };
 
 export type ApiPromptFilesRequest = {
+  workflowId: string;
   files: FileData[];
 };
 

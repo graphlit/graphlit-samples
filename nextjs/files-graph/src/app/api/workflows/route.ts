@@ -12,9 +12,9 @@ import { extractionSpec } from '@/constants';
 export async function POST() {
   const client = new Graphlit();
 
-  const existingWorkflows = await client.queryWorkflows();
+  let existingWorkflows = await client.queryWorkflows();
 
-  const workflowMatch = existingWorkflows?.workflows?.results?.find(
+  let workflowMatch = existingWorkflows?.workflows?.results?.find(
     (workflow) => workflow?.name === 'Files Graph Entity Extraction'
   );
 
@@ -68,10 +68,16 @@ export async function POST() {
         ],
       },
     });
+
+    existingWorkflows = await client.queryWorkflows();
+
+    workflowMatch = existingWorkflows?.workflows?.results?.find(
+      (workflow) => workflow?.name === 'Files Graph Entity Extraction'
+    );
   }
 
   // Return the response with status 200 and JSON content type
-  return new Response(JSON.stringify(existingWorkflows.workflows), {
+  return new Response(JSON.stringify(workflowMatch), {
     status: 200,
     headers: {
       'Content-Type': 'application/json',
