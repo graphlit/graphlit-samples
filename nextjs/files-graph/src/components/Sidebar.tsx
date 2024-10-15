@@ -28,7 +28,7 @@ export function Sidebar({ children, isOpen, onNewConversation }: SidebarProps) {
             <Button
               isIconOnly
               onClick={onNewConversation}
-              className="rounded-md bg-gray-100"
+              className="rounded-md bg-primary text-white"
             >
               <FontAwesomeIcon icon={faPenToSquare} />
             </Button>

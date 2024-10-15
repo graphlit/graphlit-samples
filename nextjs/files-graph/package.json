@@ -16,12 +16,13 @@
     "format": "prettier --write ."
   },
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^6",
-    "@fortawesome/free-solid-svg-icons": "^6",
+    "@fortawesome/fontawesome-svg-core": "^6.6.0",
+    "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@fortawesome/react-fontawesome": "^0",
     "@nextui-org/react": "^2",
     "color": "^4",
     "dayjs": "^1",
+    "echarts": "^5.5.1",
     "format": "^0",
     "graphlit-client": "^1",
     "next": "14",

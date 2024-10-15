@@ -11,6 +11,8 @@ import { useWindowSize } from 'usehooks-ts';
 interface LayoutContextType {
   isSidebarOpen: boolean;
   setSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isGraphbarOpen: boolean;
+  setGraphbarOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 // Create the Layout context
@@ -20,11 +22,13 @@ const LayoutContext = createContext<LayoutContextType | undefined>(undefined);
 export const LayoutProvider = ({ children }: { children: ReactNode }) => {
   const { width = 0 } = useWindowSize();
   const [isSidebarOpen, setSidebarOpen] = useState(true);
+  const [isGraphbarOpen, setGraphbarOpen] = useState(false);
 
   useEffect(() => {
     // Close the sidebar if the window width is less than 768px
     if (width < 768) {
       setSidebarOpen(false);
+      setGraphbarOpen(false);
     }
   }, [width]);
 
@@ -33,6 +37,8 @@ export const LayoutProvider = ({ children }: { children: ReactNode }) => {
       value={{
         isSidebarOpen,
         setSidebarOpen,
+        isGraphbarOpen,
+        setGraphbarOpen,
       }}
     >
       {children}

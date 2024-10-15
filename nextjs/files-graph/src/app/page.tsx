@@ -14,6 +14,7 @@ import {
 
 import ChatPlaceholder from '@/components/ChatPlaceholder';
 import ConversationList from '@/components/ConversationList';
+import { Graphbar } from '@/components/Graphbar';
 import { Message } from '@/components/Message';
 import PromptControls from '@/components/PromptControls';
 import { Sidebar } from '@/components/Sidebar';
@@ -31,7 +32,7 @@ import {
 
 export default function Home() {
   // Access isSidebarOpen from the Layout context
-  const { isSidebarOpen } = useLayout();
+  const { isGraphbarOpen, isSidebarOpen, setGraphbarOpen } = useLayout();
 
   // State for managing conversations and chat functionality
   const [conversations, setConversations] = useState<
@@ -299,6 +300,7 @@ export default function Home() {
             role: ConversationRoleTypes.Assistant,
             citations:
               promptData.promptResults?.promptConversation?.message?.citations,
+            graph: promptData.promptResults?.promptConversation?.graph,
           },
         ]);
 
@@ -325,6 +327,7 @@ export default function Home() {
           role: ConversationRoleTypes.Assistant,
           citations:
             promptData.promptResults?.promptConversation?.message?.citations,
+          graph: promptData.promptResults?.promptConversation?.graph,
         },
       ]);
     }
@@ -347,8 +350,18 @@ export default function Home() {
 
       {/* Main content */}
       <main
-        className="w-full flex flex-col relative"
-        style={{ zIndex: 1, height: 'calc(100vh - 65px)' }}
+        className="flex flex-col relative transition-all duration-300"
+        style={{
+          zIndex: 1,
+          height: 'calc(100vh - 65px)',
+          width: isGraphbarOpen
+            ? isSidebarOpen
+              ? 'calc(100% - 820px)' // Both Graphbar and Sidebar are open
+              : 'calc(100% - 460px)' // Only Graphbar is open
+            : isSidebarOpen
+              ? 'calc(100% - 360px)' // Only Sidebar is open
+              : '100%', // Neither Graphbar nor Sidebar is open
+        }}
       >
         {/* Specification selection */}
         {specifications && specificationId && (
@@ -399,6 +412,12 @@ export default function Home() {
           </div>
         </div>
       </main>
+
+      <Graphbar
+        isOpen={isGraphbarOpen}
+        toggleDrawer={() => setGraphbarOpen(!isGraphbarOpen)}
+        messages={messages}
+      />
     </>
   );
 }
