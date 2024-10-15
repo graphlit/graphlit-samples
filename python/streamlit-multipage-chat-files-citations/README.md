@@ -8,7 +8,7 @@ You can view the Streamlit application [here](https://graphlit-samples-chat-file
 - **Prerequisite:** [Sign up for Graphlit 🆓](https://docs.graphlit.dev/getting-started/signup)
 - **Step 1:** Generate Graphlit project token.
 - **Step 2:** Browse for a file to upload and ingest.
-- **Step 3:** Enter a prompt to ask about the file using [OpenAI GPT-4 Turbo 128k](https://platform.openai.com/docs/models/gpt-4-and-gpt-4-turbo) LLM.
+- **Step 3:** Enter a prompt to ask about the file using [OpenAI GPT-4o Mini 128k](https://platform.openai.com/docs/models/gpt-4o-mini) LLM.
 
 [Support on Discord](https://discord.gg/ygFmfjy3Qx)            
 [API Reference](https://docs.graphlit.dev/graphlit-data-api/api-reference)     

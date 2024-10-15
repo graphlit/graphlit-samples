@@ -403,7 +403,7 @@ namespace GraphlitIngest
                     {
                           new PreparationWorkflowJobInput
                           {
-                               Connector = new FilePreparationConnectorInput { Type = FilePreparationServiceTypes.ModelDocument, ModelDocument = new ModelDocumentPreparationInputProperties { Specification = preparationSpecification } }
+                               Connector = new FilePreparationConnectorInput { Type = FilePreparationServiceTypes.ModelDocument, ModelDocument = new ModelDocumentPreparationPropertiesInput { Specification = preparationSpecification } }
                           }
                     } : null
                 },

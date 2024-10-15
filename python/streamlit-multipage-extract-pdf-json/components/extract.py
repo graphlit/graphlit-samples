@@ -10,7 +10,7 @@ async def handle_extract():
         st.session_state["specification_id"] = None
 
     if st.session_state['specification_id'] is None:
-        error_message = await client.create_specification("extractJSON", st.session_state["schema"])
+        error_message = await client.create_specification()
 
         if error_message is not None:
             st.error(f"Failed to create specification. {error_message}")
@@ -18,7 +18,7 @@ async def handle_extract():
             start_time = time.time()
 
             with st.spinner('Extracting JSON... Please wait.'):
-                response, error_message = await client.extract_contents()
+                response, error_message = await client.extract_contents("extractJSON", st.session_state["schema"])
             
                 if error_message is not None:
                     st.error(f"Failed to extract JSON. {error_message}")
