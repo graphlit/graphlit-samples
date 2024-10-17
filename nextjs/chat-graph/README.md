@@ -1,15 +1,15 @@
 <br /><br />
 
 <p align="center">
-  <img src="./public/images/graphlit-logo.svg" alt="Graphlit Files Graph Logo" width="70">
+  <img src="./public/images/graphlit-logo.svg" alt="Graphlit Chat Graph Logo" width="70">
 </p>
 
-<h3 align="center"><b>Graphlit Files Graph</b></h3>
+<h3 align="center"><b>Graphlit Chat Graph</b></h3>
 
 <p>
       <img
         src="./public/images/screenshot.png"
-        alt="Graphlit Files Graph Screen"
+        alt="Graphlit Chat Graph Screen"
         width="100%"
       />
 </p>
@@ -31,7 +31,7 @@ Clone the repository:
 
 ```bash
 git clone git@github.com:graphlit/graphlit-samples.git
-cd nextjs/files-graph
+cd nextjs/chat-graph
 ```
 
 Install packages:
@@ -45,6 +45,7 @@ First, copy the `.env.example` file to `.env` and fill in the required environme
 - `GRAPHLIT_ORGANIZATION_ID`
 - `GRAPHLIT_ENVIRONMENT_ID`
 - `GRAPHLIT_JWT_SECRET`
+- `NEXT_PUBLIC_ALLOW_FILE_UPLOADS`
 
 ```bash
 cp .env.example .env
@@ -60,7 +61,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Deploy on Vercel
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fgraphlit%2Fgraphlit-samples%2Ftree%2Fmain%2Fnextjs%2Ffiles-graph&env=GRAPHLIT_ORGANIZATION_ID,GRAPHLIT_ENVIRONMENT_ID,GRAPHLIT_JWT_SECRET&project-name=graphlit-files-graph)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fgraphlit%2Fgraphlit-samples%2Ftree%2Fmain%2Fnextjs%2Fchat-graph&env=GRAPHLIT_ORGANIZATION_ID,GRAPHLIT_ENVIRONMENT_ID,GRAPHLIT_JWT_SECRET&project-name=graphlit-chat-graph)
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 

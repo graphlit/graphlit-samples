@@ -15,7 +15,7 @@ export async function POST() {
   let existingWorkflows = await client.queryWorkflows();
 
   let workflowMatch = existingWorkflows?.workflows?.results?.find(
-    (workflow) => workflow?.name === 'Files Graph Entity Extraction'
+    (workflow) => workflow?.name === 'Chat Graph Entity Extraction'
   );
 
   if (!workflowMatch) {
@@ -37,7 +37,7 @@ export async function POST() {
     }
 
     await client.createWorkflow({
-      name: 'Files Graph Entity Extraction',
+      name: 'Chat Graph Entity Extraction',
       ingestion: {
         if: {
           types: [ContentTypes.File],
@@ -72,7 +72,7 @@ export async function POST() {
     existingWorkflows = await client.queryWorkflows();
 
     workflowMatch = existingWorkflows?.workflows?.results?.find(
-      (workflow) => workflow?.name === 'Files Graph Entity Extraction'
+      (workflow) => workflow?.name === 'Chat Graph Entity Extraction'
     );
   }
 

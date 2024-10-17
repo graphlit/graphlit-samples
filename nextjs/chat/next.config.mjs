@@ -7,6 +7,7 @@ const envSchema = z.object({
   GRAPHLIT_ENVIRONMENT_ID: z.string(),
   GRAPHLIT_ORGANIZATION_ID: z.string(),
   GRAPHLIT_JWT_SECRET: z.string(),
+  NEXT_PUBLIC_ALLOW_FILE_UPLOADS: z.string(),
 });
 
 const env = envSchema.safeParse(process.env);
@@ -23,6 +24,7 @@ const nextConfig = {
     GRAPHLIT_ENVIRONMENT_ID: process.env.GRAPHLIT_ENVIRONMENT_ID,
     GRAPHLIT_ORGANIZATION_ID: process.env.GRAPHLIT_ORGANIZATION_ID,
     GRAPHLIT_JWT_SECRET: process.env.GRAPHLIT_JWT_SECRET,
+    ALLOW_FILE_UPLOADS: process.env.NEXT_PUBLIC_ALLOW_FILE_UPLOADS,
   },
 };
 
