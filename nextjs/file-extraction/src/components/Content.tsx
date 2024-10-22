@@ -2,8 +2,8 @@ import { FC, useState } from 'react';
 import { Maybe } from '@graphql-tools/utils';
 import { Tab, Tabs } from '@nextui-org/react';
 import { GetContentQuery } from 'graphlit-client/dist/generated/graphql-types';
+import Markdown from 'markdown-to-jsx';
 import { CopyBlock, dracula } from 'react-code-blocks';
-import Markdown from 'react-markdown';
 
 interface ContentProps {
   markdown?: Maybe<string>;
@@ -20,7 +20,11 @@ const Content: FC<ContentProps> = ({ markdown, json }) => {
       onSelectionChange={setActiveTab}
     >
       <Tab key="markdown" title="Markdown">
-        <div className="h-[600px] overflow-y-scroll bg-gray-50 p-4 rounded-xl">
+        <div
+          id="markdown"
+          className="h-[600px] overflow-y-scroll p-4 rounded-xl"
+        >
+          {/*<Markdown remarkPlugins={[remarkGfm]}>{markdown}</Markdown>*/}
           <Markdown>{markdown}</Markdown>
         </div>
       </Tab>
