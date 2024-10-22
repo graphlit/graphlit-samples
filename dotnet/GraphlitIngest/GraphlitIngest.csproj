@@ -58,7 +58,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Graphlit" Version="2024.10.9.1" />
+		<PackageReference Include="Graphlit" Version="2024.10.21.1" />
 	</ItemGroup>
 
 	<ItemGroup>
