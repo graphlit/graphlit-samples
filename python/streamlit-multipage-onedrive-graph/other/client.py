@@ -7,6 +7,8 @@ async def query_onedrive_folders():
     graphlit: Optional[Graphlit] = st.session_state['graphlit']
 
     input = OneDriveFoldersInput(
+        clientId=st.secrets["default"]["client_id"],
+        clientSecret=st.secrets["default"]["client_secret"],
         refreshToken=st.session_state['refresh_token']
     )
 
@@ -26,6 +28,8 @@ async def create_feed(folder_id):
         site=SiteFeedPropertiesInput(
             type=FeedServiceTypes.ONE_DRIVE,
             oneDrive=OneDriveFeedPropertiesInput(
+                clientId=st.secrets["default"]["client_id"],
+                clientSecret=st.secrets["default"]["client_secret"],
                 refreshToken=st.session_state['refresh_token'],
                 folderId=folder_id
             )
@@ -102,10 +106,7 @@ async def create_workflow():
                 ),
                 ExtractionWorkflowJobInput(
                     connector=EntityExtractionConnectorInput(
-                        type=EntityExtractionServiceTypes.OPEN_AI_IMAGE,
-                        openAIImage=OpenAIImageExtractionPropertiesInput(
-                            detailLevel=OpenAIVisionDetailLevels.HIGH
-                        )
+                        type=EntityExtractionServiceTypes.MODEL_IMAGE
                     )
                 )
             ]

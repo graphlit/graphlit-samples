@@ -8,6 +8,8 @@ async def query_sharepoint_libraries():
 
     input = SharePointLibrariesInput(
         authenticationType=SharePointAuthenticationTypes.USER,
+        clientId=st.secrets["default"]["client_id"],
+        clientSecret=st.secrets["default"]["client_secret"],
         refreshToken=st.session_state['refresh_token']
     )
 
@@ -23,6 +25,8 @@ async def query_sharepoint_folders(libraryId):
 
     input = SharePointFoldersInput(
         authenticationType=SharePointAuthenticationTypes.USER,
+        clientId=st.secrets["default"]["client_id"],
+        clientSecret=st.secrets["default"]["client_secret"],
         refreshToken=st.session_state['refresh_token']
     )
 
@@ -43,6 +47,8 @@ async def create_feed(account_name, library_id, folder_id):
             type=FeedServiceTypes.SHARE_POINT,
             sharePoint=SharePointFeedPropertiesInput(
                 authenticationType=SharePointAuthenticationTypes.USER,
+                clientId=st.secrets["default"]["client_id"],
+                clientSecret=st.secrets["default"]["client_secret"],
                 refreshToken=st.session_state['refresh_token'],
                 accountName=account_name,
                 libraryId=library_id,
@@ -121,10 +127,7 @@ async def create_workflow():
                 ),
                 ExtractionWorkflowJobInput(
                     connector=EntityExtractionConnectorInput(
-                        type=EntityExtractionServiceTypes.OPEN_AI_IMAGE,
-                        openAIImage=OpenAIImageExtractionPropertiesInput(
-                            detailLevel=OpenAIVisionDetailLevels.HIGH
-                        )
+                        type=EntityExtractionServiceTypes.MODEL_IMAGE
                     )
                 )
             ]
