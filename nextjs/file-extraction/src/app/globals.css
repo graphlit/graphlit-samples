@@ -6,3 +6,146 @@ body {
   min-height: 100vh;
   overflow-y: scroll;
 }
+
+/* Container styles */
+#markdown {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  line-height: 1.8;
+  background-color: #f9f9f9;
+  color: #333;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  font-family: 'Arial', 'Helvetica Neue', sans-serif;
+  border: 1px solid #e0e0e0;
+}
+
+/* Headings */
+#markdown h1,
+#markdown h2,
+#markdown h3 {
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+#markdown h1 {
+  font-size: 2rem;
+}
+
+#markdown h2 {
+  font-size: 1.75rem;
+}
+
+#markdown h3 {
+  font-size: 1.5rem;
+}
+
+/* Paragraphs and text */
+#markdown p {
+  margin: 1rem 0;
+  font-size: 1rem;
+  color: #4a4a4a;
+}
+
+/* Blockquotes */
+#markdown blockquote {
+  margin: 1.5rem 0;
+  padding: 0.5rem 1rem;
+  border-left: 4px solid #3498db;
+  background-color: #eaf6fb;
+  color: #2c7da0;
+  font-style: italic;
+}
+
+/* Lists */
+#markdown ul {
+  padding-left: 1.5rem;
+  list-style-type: disc;
+}
+
+#markdown ol {
+  padding-left: 1.5rem;
+  list-style-type: decimal;
+}
+
+#markdown li {
+  margin-bottom: 0.5rem;
+}
+
+/* Links */
+#markdown a {
+  color: #3498db;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+#markdown a:hover {
+  color: #1d6f9f;
+  text-decoration: underline;
+}
+
+/* Code blocks */
+#markdown pre {
+  background-color: #f4f4f4;
+  color: #2c3e50;
+  padding: 1rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 1rem 0;
+  border: 1px solid #e0e0e0;
+}
+
+#markdown code {
+  background-color: rgba(27, 31, 35, 0.05);
+  color: #c7254e;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: 'Source Code Pro', monospace;
+}
+
+/* Horizontal rules */
+#markdown hr {
+  border: none;
+  border-top: 1px solid #e0e0e0;
+  margin: 1.5rem 0;
+}
+
+/* Images */
+#markdown img {
+  max-width: 100%;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Table Styles */
+#markdown table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  font-size: 1rem;
+  background-color: #ffffff;
+}
+
+#markdown th,
+#markdown td {
+  padding: 12px 15px;
+  border: 1px solid #e0e0e0;
+  text-align: left;
+}
+
+#markdown th {
+  background-color: #555;
+  color: white;
+  font-weight: bold;
+}
+
+#markdown tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+#markdown tr:hover {
+  background-color: #e0f7fa;
+}

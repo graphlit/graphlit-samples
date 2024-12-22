@@ -191,13 +191,7 @@ else:
                             temperature=0.1,
                             probability=0.2,
                             completionTokenLimit=2048,
-                        ),
-                        tools=[
-                            ToolDefinitionInput(
-                                name="{name}",
-                                schema="{schema}"
-                            )
-                        ]
+                        )
                     )
                     
                     response = await graphlit.client.create_specification(input)
