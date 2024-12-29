@@ -119,9 +119,9 @@ async def publish_contents(prompt):
             ),
         )
 
-        if response.publish_contents is None:
+        if response.publish_contents is None or response.publish_contents.content is None:
             return None, None
         
-        return response.publish_contents.markdown, None
+        return response.publish_contents.content.markdown, None
     except GraphQLClientError as e:
         return None, str(e)
