@@ -4,12 +4,12 @@
   <img src="./public/images/graphlit-logo.svg" alt="Graphlit Ask Logo" width="70">
 </p>
 
-<h3 align="center"><b>Graphlit Ask</b></h3>
+<h3 align="center"><b>Ask Graphlit</b></h3>
 
 <p>
       <img
-        src="./public/images/screenshot.png"
-        alt="Graphlit Ask Screen"
+        src="./public/images/screenshot.jpeg"
+        alt="Ask Graphlit Screen"
         width="100%"
       />
 </p>
