@@ -8,7 +8,9 @@ import {
   NavbarContent,
   Navbar as NextUINavbar,
 } from '@nextui-org/navbar';
+import { Tooltip } from '@nextui-org/tooltip';
 
+import { DiscordIcon } from '@/components/icons/DiscordIcon';
 import { GithubIcon } from '@/components/icons/GithubIcon';
 
 export function Navbar() {
@@ -34,13 +36,25 @@ export function Navbar() {
         className="hidden sm:flex basis-1/5 sm:basis-full"
         justify="end"
       >
-        <NextLink
-          target="_blank"
-          aria-label="Github"
-          href="https://github.com/graphlit/graphlit-samples/tree/main/nextjs/ask"
-        >
-          <GithubIcon className="text-default-500" />
-        </NextLink>
+        <Tooltip content="Join our Discord community">
+          <NextLink
+            target="_blank"
+            aria-label="Discord"
+            className="mr-3"
+            href="https://discord.gg/ygFmfjy3Qx"
+          >
+            <DiscordIcon className="text-default-500" />
+          </NextLink>
+        </Tooltip>
+        <Tooltip content="View source on GitHub">
+          <NextLink
+            target="_blank"
+            aria-label="Github"
+            href="https://github.com/graphlit/graphlit-samples/tree/main/nextjs/ask"
+          >
+            <GithubIcon className="text-default-500" />
+          </NextLink>
+        </Tooltip>
       </NavbarContent>
     </NextUINavbar>
   );

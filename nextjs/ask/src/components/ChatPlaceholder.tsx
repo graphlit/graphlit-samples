@@ -8,9 +8,9 @@ const ChatPlaceholder = () => (
     <div>
       <div className="flex justify-center">
         <Image
-          src="/images/graphlit-logo.svg"
-          width={40}
-          height={20}
+          src="/images/graphlit-fun-logo-256.png"
+          width={256}
+          height={256}
           alt="Graphlit logo"
         />
       </div>

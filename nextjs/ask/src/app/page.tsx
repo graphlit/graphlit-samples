@@ -170,6 +170,12 @@ export default function Home() {
             />
           </div>
         </div>
+
+        <div className="w-full text-center py-2">
+          <p className="text-sm text-gray-500">
+            Ask Graphlit can make mistakes. Check important info.
+          </p>
+        </div>
       </main>
     </>
   );
