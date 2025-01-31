@@ -10,42 +10,47 @@ This is a demo project showing how to integrate Uppy file uploader with Next.js.
 - Multiple file upload support
 - Built with Next.js
 
-## Getting Started
+### Requirements
 
-1. Clone this repository
-2. Install dependencies:
-   ```bash
-   npm install
-   # or
-   yarn install
-   ```
-3. Run the development server:
-   ```bash
-   npm run dev
-   # or
-   yarn dev
-   ```
-4. Open [http://localhost:3000](http://localhost:3000) in your browser
+- Node.js 18.17 and above
+
+### Run locally
+
+Clone the repository:
+
+```bash
+git clone git@github.com:graphlit/graphlit-samples.git
+cd nextjs/uppy
+```
+
+Install packages:
+
+```bash
+npm i
+```
+
+First, copy the `.env.example` file to `.env` and fill in the required environment variables:
+
+- `GRAPHLIT_ORGANIZATION_ID`
+- `GRAPHLIT_ENVIRONMENT_ID`
+- `GRAPHLIT_JWT_SECRET`
+
+```bash
+cp .env.example .env
+```
+
+Run the development server:
+
+```bash
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) in your browser
 
 ## Deploy on Vercel
 
-You can deploy this project to Vercel with one click:
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fgraphlit%2Fgraphlit-samples%2Ftree%2Fmain%2Fnextjs%2Fuppy&env=GRAPHLIT_ORGANIZATION_ID,GRAPHLIT_ENVIRONMENT_ID,GRAPHLIT_JWT_SECRET&project-name=graphlit-uppy)
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FYourUsername%2Fuppy-demo)
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-## Environment Variables
-
-Create a `.env.local` file in the root directory and add the following variables:
-```
-NEXT_PUBLIC_UPLOAD_URL=your-upload-endpoint
-```
-
-## Tech Stack
-
-- [Next.js](https://nextjs.org/)
-- [Uppy](https://uppy.io/)
-- [React](https://reactjs.org/)
-
-## License
-
-MIT
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
