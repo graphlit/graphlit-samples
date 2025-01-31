@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
     // Send the prompt to the conversation
     let promptResults = await client.askGraphlit(
       data.prompt,
-      SdkTypes.Python,
+      undefined,
       data.conversationId
     );
 

@@ -13,7 +13,7 @@ import { Layout } from '@/components/Layout';
 config.autoAddCss = false;
 
 export const metadata: Metadata = {
-  title: 'Graphlit Chat Sample',
+  title: 'Ask Graphlit Sample',
   description: '',
   icons: {
     icon: '/images/favicon.ico',

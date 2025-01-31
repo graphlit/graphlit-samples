@@ -23,7 +23,7 @@
     "color": "^4",
     "dayjs": "^1",
     "format": "^0",
-    "graphlit-client": "^1.0.20250104001",
+    "graphlit-client": "^1.0.20250105001",
     "next": "14",
     "pretty-bytes": "^6",
     "react": "^18",
