@@ -373,7 +373,7 @@ export default function Home() {
         {/* Chat messages */}
         {messages.length > 0 && (
           <div
-            className="w-full flex-grow overflow-y-auto m-auto pb-28"
+            className="w-full flex-grow overflow-y-auto m-auto pb-28 pt-8"
             ref={chatContainerRef}
           >
             <div className="max-w-screen-md m-auto">
