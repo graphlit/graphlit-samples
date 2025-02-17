@@ -43,6 +43,16 @@ First, copy the `.env.example` file to `.env` and fill in the required environme
 cp .env.example .env
 ```
 
+To enable Google Drive file picking, fill in the required environment variables:
+
+- `NEXT_PUBLIC_GOOGLE_DRIVE_CLIENT_ID`
+- `NEXT_PUBLIC_GOOGLE_DRIVE_APP_ID`
+- `NEXT_PUBLIC_GOOGLE_DRIVE_API_KEY`
+
+The [https://uppy.io/docs/google-drive-picker/#use](Uppy documentation) has more information on how to provision these API credentials.
+
+You can enable other Companion plugins in a similar method to the Google Drive Picker.
+
 Run the development server:
 
 ```bash
