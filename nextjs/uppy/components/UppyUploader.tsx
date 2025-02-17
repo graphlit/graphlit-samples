@@ -4,10 +4,11 @@ import { useEffect, useState } from "react";
 import Uppy from "@uppy/core";
 import { Dashboard } from "@uppy/react";
 import Tus from "@uppy/tus";
-import { COMPANION_URL, COMPANION_ALLOWED_HOSTS } from '@uppy/transloadit';
 // Configure desired Companion plugins
 // https://uppy.io/docs/dropbox/
 import Dropbox from '@uppy/dropbox';
+// https://uppy.io/docs/google-drive-picker/
+import GoogleDrivePicker from '@uppy/google-drive-picker';
 import "@uppy/core/dist/style.css";
 import "@uppy/dashboard/dist/style.css";
 
@@ -22,10 +23,17 @@ export default function UppyUploader() {
         const response = await fetch("/api/auth");
         const { token } = await response.json();
 
+        setStatus("Fetched JWT");
+
         const newUppy = new Uppy({ autoProceed: false })
           .use(Dropbox, {
-            companionUrl: COMPANION_URL,
-            companionAllowedHosts: COMPANION_ALLOWED_HOSTS,
+            companionUrl: "https://companion.graphlit.io"
+          })
+          .use(GoogleDrivePicker, {
+            companionUrl: "https://companion.graphlit.io",
+            clientId: process.env.NEXT_PUBLIC_GOOGLE_DRIVE_CLIENT_ID || "",
+            appId: process.env.NEXT_PUBLIC_GOOGLE_DRIVE_APP_ID || "",
+            apiKey: process.env.NEXT_PUBLIC_GOOGLE_DRIVE_API_KEY || ""
           })
           .use(Tus, {
             endpoint: "https://tus-scus.graphlit.io/api/v1/tus",
