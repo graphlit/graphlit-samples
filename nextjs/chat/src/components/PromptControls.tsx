@@ -73,26 +73,24 @@ const PromptControls = ({
           </div>
         )}
         <div className="flex items-center space-x-2 rounded-md p-3">
-          {process.env.ALLOW_FILE_UPLOADS === 'true' && (
-            <div>
-              {/* Hidden file input for uploading files */}
-              <input
-                type="file"
-                className="hidden"
-                id="file-input"
-                multiple
-                onChange={handleChange}
-                ref={fileInputRef}
-                disabled={isSubmitting}
-              />
-              <label
-                htmlFor="file-input"
-                className="flex items-center justify-center w-10 h-10 bg-gray-200 text-gray-700 rounded-full cursor-pointer hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <FontAwesomeIcon icon={faPlus} />
-              </label>
-            </div>
-          )}
+          <div>
+            {/* Hidden file input for uploading files */}
+            <input
+              type="file"
+              className="hidden"
+              id="file-input"
+              multiple
+              onChange={handleChange}
+              ref={fileInputRef}
+              disabled={isSubmitting}
+            />
+            <label
+              htmlFor="file-input"
+              className="flex items-center justify-center w-10 h-10 bg-gray-200 text-gray-700 rounded-full cursor-pointer hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <FontAwesomeIcon icon={faPlus} />
+            </label>
+          </div>
           <div className="w-full">
             {/* Input field for the prompt */}
             <input
