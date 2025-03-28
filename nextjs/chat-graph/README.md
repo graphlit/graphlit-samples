@@ -45,7 +45,6 @@ First, copy the `.env.example` file to `.env` and fill in the required environme
 - `GRAPHLIT_ORGANIZATION_ID`
 - `GRAPHLIT_ENVIRONMENT_ID`
 - `GRAPHLIT_JWT_SECRET`
-- `NEXT_PUBLIC_ALLOW_FILE_UPLOADS`
 
 ```bash
 cp .env.example .env
