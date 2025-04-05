@@ -17,7 +17,7 @@ With integrated web scraping, Graphlit ingests existing websites by sitemap. Wit
 
 We offer a wide variety of [Google Colab Notebooks](/python/Notebook%20Examples/), showing the capabilities of the Graphlit Platform.
 
-We also provide [Streamlit Applications](/python/Streamlit%20Applications/), which demonstrate file upload and ingestion, web crawling and other UI-driven operations.
+We also provide [Streamlit](/python/Streamlit/) applications, which demonstrate file upload and ingestion, web crawling and other UI-driven operations.
 
 ## Node.js
 [![npm version](https://badge.fury.io/js/graphlit-client.svg)](https://badge.fury.io/js/graphlit-client) 
