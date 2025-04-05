@@ -25,7 +25,9 @@ export default function UppyUploader() {
 
         setStatus("Fetched JWT");
 
-        const newUppy = new Uppy({ autoProceed: false })
+        const newUppy = new Uppy({ 
+            autoProceed: false
+          })
           .use(Dropbox, {
             companionUrl: "https://companion.graphlit.io"
           })
@@ -41,10 +43,14 @@ export default function UppyUploader() {
               Authorization: `Bearer ${token}`,
             },
           });
-
+        
         newUppy.on("file-added", (file) => {
           if (file.size)
             setStatus(`Selected: ${file.name} (${(file.size / 1024).toFixed(2)} KB)`);
+
+          //newUppy.setFileMeta(file.id, {
+          //  workflowId: "TODO",
+          //});
         });
 
         newUppy.on("upload-progress", (file, progress) => {
